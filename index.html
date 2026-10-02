@@ -499,6 +499,12 @@ nav.tabs { background: none; border: 0; padding: 0; }
 .menu summary.btn { font-size: 0.875rem; line-height: 1.5; display: inline-block; padding: 7px 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--fg); background: var(--surface); }
 .strip .stat:first-child .value { font-size: 1.4rem; line-height: 1.2; }
 
+.linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; }
+.blockers { margin-top: 8px; display: grid; gap: 8px; }
+.blockers .items { box-shadow: none; }
+.step { grid-template-columns: 22px minmax(0, 1fr) auto; }
+.step .item-main { min-width: 0; }
+
 /* Mobile: sidebar becomes a top bar */
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }
@@ -800,17 +806,17 @@ nav.tabs { background: none; border: 0; padding: 0; }
   ];
   // Lifecycle checklists: each step names its owner, and is done only with evidence
   const TEMPLATES = {
-    onboarding: { label: 'Onboarding', blurb: 'From signed offer to a verified first week.', steps: [['Signed offer matches the HRIS record', 'People Ops'], ['Payroll record created and accepted', 'Payroll'], ['I-9 Section 2 completed and timeliness documented', 'People Ops'], ['Accounts and equipment ready on day one', 'IT'], ['Benefits enrollment invite sent', 'Benefits']] },
+    onboarding: { label: 'Onboarding', blurb: 'From signed offer to a verified first day and first week.', steps: [['Signed offer matches the HRIS record', 'People Ops'], ['Payroll record created and accepted', 'Payroll'], ['Systems and tools approved by the manager and provisioned', 'IT'], ['Computer handed off and signed for', 'IT'], ['First day confirmed: start time, location, manager and first-week plan', 'People Ops'], ['I-9 Section 2 completed and timeliness documented', 'People Ops'], ['Benefits enrollment invite sent', 'Benefits']] },
     offboarding: { label: 'Offboarding', blurb: 'Last day, final pay, access and handoff.', steps: [['Last day and final pay terms confirmed', 'People Ops'], ['Final check prorated to the last day', 'Payroll'], ['System access removed and confirmed', 'IT'], ['Shared files and drives reassigned', 'IT'], ['Coverage end date sent to the carrier', 'Benefits']] },
     change: { label: 'Employee change', blurb: 'Promotions, transfers and pay changes.', steps: [['Approval and effective date on file', 'People Ops'], ['HRIS updated with the effective date', 'People Ops'], ['Payroll reflects the change on the right run', 'Payroll'], ['Access and role updated', 'IT'], ['Employee and manager notified', 'People Ops']] }
   };
   const WF_SEED = [
-    { id: 'W1', tpl: 'onboarding', emp: 'E119', eff: '2026-10-05', links: [['dq-offer-E119'], ['int-1', 'pay-E119'], ['ob-i9-119'], [], []], done: [null, null, null, 'Laptop delivered Oct 2; IT ticket 4411', 'Enrollment invite sent Oct 5; coverage starts Nov 1'] },
+    { id: 'W1', tpl: 'onboarding', emp: 'E119', eff: '2026-10-05', links: [['dq-offer-E119'], ['int-1', 'pay-E119'], [], [], [], ['ob-i9-119'], []], done: [null, null, 'Manager approved Salesforce, Gong and Slack; IT provisioned all three Oct 2 (ticket 4410)', null, 'Oct 5, 9:30 am at the NYC office with her manager; first-week plan sent Oct 2', null, 'Enrollment invite sent Oct 5; coverage starts Nov 1'] },
     { id: 'W2', tpl: 'offboarding', emp: 'E117', eff: '2026-10-09', links: [[], ['pay-E117'], ['dq-access-E117'], ['int-2'], []], done: ['Resignation letter on file; last day confirmed Sep 25', null, null, null, 'Termination sent in the Oct 9 carrier file; coverage ends Oct 31'] }
   ];
 
   /* ---------- state (saved in this browser) ---------- */
-  const STORE = 'people-ops-control-room-site-v1';
+  const STORE = 'people-ops-control-room-site-v2';
   const KEPT = ['asOf', 'role', 'resolved', 'owner', 'log', 'reviews', 'fixes', 'requests', 'workflows', 'seq', 'introHidden'];
   const fresh = () => ({ resolved: {}, owner: {}, log: [], reviews: {}, fixes: {}, requests: JSON.parse(JSON.stringify(REQ_SEED)), workflows: JSON.parse(JSON.stringify(WF_SEED)), seq: { req: 106, wf: 3 } });
   const state = Object.assign({ asOf: '2026-10-13', tab: 'plan', role: 'People Ops', srcFilter: 'all', showResolved: false, exceptionsOnly: true, resolving: null, formErr: '', rcOpen: {}, reqFilter: 'Active', newReq: false, newWf: null, openReq: null, introHidden: false }, fresh());
@@ -1492,11 +1498,12 @@ nav.tabs { background: none; border: 0; padding: 0; }
           <div class="item-main">
             <b>${esc(title)}</b>
             <span class="src">Owner: ${esc(state.owner[id] || owner)}</span>
-            ${!done && links.length ? `<p class="why">${openLinks.length ? `Blocked until ${openLinks.length} linked finding${openLinks.length > 1 ? 's are' : ' is'} resolved${seeLinks.length ? `: ${openLinks.filter(l => canSee(classOf(l))).map(l => esc(l.title)).join('; ')}` : ''}` : 'Linked findings are resolved. Record the evidence to close this step.'}</p>` : ''}
+            ${!done && links.length ? `<p class="why">${openLinks.length ? `Blocked until ${openLinks.length} linked finding${openLinks.length > 1 ? 's are' : ' is'} resolved${seeLinks.length ? `: ${openLinks.filter(l => canSee(classOf(l))).map(l => `<button class="linkish" data-action="show-blockers" data-id="${id}">${esc(l.title)}</button>`).join('; ')}` : ''}` : 'Linked findings are resolved. Record the evidence to close this step.'}</p>` : ''}
+            ${!done && openLinks.length && (state.openStep === id || openLinks.some(l => l.id === state.resolving)) ? `<div class="blockers"><p class="why">Resolve these here. When they’re cleared, this step unlocks for verification.</p><ul class="items">${sortItems(openLinks).map(l => itemHTML(l, { inGroup: true })).join('')}</ul></div>` : ''}
             ${!canSee(stepCls(wf.tpl, i)) ? (done ? `<p class="note"><b>Verified</b> <span class="restricted">· evidence visible to People Ops only</span></p>` : '') : pre ? `<p class="note"><b>Verified:</b> ${esc(pre)}</p>` : res ? `<p class="note"><b>Verified</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : ''}
             ${state.resolving === id ? resolveForm({ id, ob: true }) : ''}
           </div>
-          <div class="actions">${pre ? '' : res ? `<button class="btn" data-action="undo" data-id="${id}">Reopen</button>` : state.resolving === id ? '' : openLinks.length ? `<button class="btn" disabled title="Resolve the linked findings first">Blocked</button>` : `<button class="btn" data-action="resolve" data-id="${id}">Verify</button>`}</div>
+          <div class="actions">${pre ? '' : res ? `<button class="btn" data-action="undo" data-id="${id}">Reopen</button>` : state.resolving === id ? '' : openLinks.length ? `<button class="btn" data-action="show-blockers" data-id="${id}" aria-expanded="${state.openStep === id}">${state.openStep === id ? 'Hide blockers' : `Fix ${openLinks.length} blocker${openLinks.length > 1 ? 's' : ''}`}</button>` : `<button class="btn primary" data-action="resolve" data-id="${id}">Verify</button>`}</div>
         </div>`;
       }).join('');
       return `<div class="card">
@@ -1611,6 +1618,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
     if (act === 'peek') { state.openReq = state.openReq === a.dataset.id ? null : a.dataset.id; if (state.openReq) logEvent('Viewed private case', a.dataset.id, `${a.dataset.id} details opened`); render(); }
     if (act === 'start-req') { const r = state.requests.find(x => x.id === a.dataset.id); r.status = 'In progress'; logEvent('Started', r.id, titleOf(r.id)); render(); }
     if (act === 'reopen-req') { const r = state.requests.find(x => x.id === a.dataset.id); r.status = 'In progress'; delete state.resolved[r.id]; logEvent('Reopened', r.id, titleOf(r.id)); render(); }
+    if (act === 'show-blockers') { state.openStep = state.openStep === a.dataset.id ? null : a.dataset.id; state.resolving = null; state.formErr = ''; render(); return; }
     if (act === 'new-wf') { state.newWf = a.dataset.tpl; render(); }
     if (act === 'cancel-wf') { state.newWf = null; render(); }
     if (act === 'export') exportState();
@@ -1630,7 +1638,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
       logEvent('Request opened', r.id, `${titleOf(r.id)} → ${reqOwner(r)}`); render(); return;
     }
     if (kind === 'newwf') {
-      const wf = { id: 'W' + state.seq.wf++, tpl: state.newWf, emp: form.emp.value, eff: form.eff.value || state.asOf, links: [[], [], [], [], []], done: [null, null, null, null, null] };
+      const wf = { id: 'W' + state.seq.wf++, tpl: state.newWf, emp: form.emp.value, eff: form.eff.value || state.asOf, links: TEMPLATES[state.newWf].steps.map(() => []), done: TEMPLATES[state.newWf].steps.map(() => null) };
       state.workflows.unshift(wf); state.newWf = null;
       logEvent('Checklist started', wf.id, `${TEMPLATES[wf.tpl].label} for ${byId[wf.emp].name}`); render(); return;
     }
