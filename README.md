@@ -2,7 +2,7 @@
 
 A working sketch of how I'd run People Operations in the first 90 days: a plan with verified outcomes, plus the tools that support it.
 
-**Live site:** https://adammarks1990.github.io/people-ops-first-90/
+**Live site:** https://adammarks1990.github.io/people-ops-internal-site-test/
 
 ## What's inside
 
