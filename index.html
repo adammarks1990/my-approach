@@ -505,6 +505,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
 .step { grid-template-columns: 22px minmax(0, 1fr) auto; }
 .step .item-main { min-width: 0; }
 
+.note.reopened { background: var(--warn-soft); }
+.note.reopened b { color: var(--warn); }
+
 /* Mobile: sidebar becomes a top bar */
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }
@@ -817,8 +820,8 @@ nav.tabs { background: none; border: 0; padding: 0; }
 
   /* ---------- state (saved in this browser) ---------- */
   const STORE = 'people-ops-control-room-site-v2';
-  const KEPT = ['asOf', 'role', 'resolved', 'owner', 'log', 'reviews', 'fixes', 'requests', 'workflows', 'seq', 'introHidden'];
-  const fresh = () => ({ resolved: {}, owner: {}, log: [], reviews: {}, fixes: {}, requests: JSON.parse(JSON.stringify(REQ_SEED)), workflows: JSON.parse(JSON.stringify(WF_SEED)), seq: { req: 106, wf: 3 } });
+  const KEPT = ['asOf', 'role', 'resolved', 'owner', 'log', 'reviews', 'fixes', 'requests', 'workflows', 'seq', 'introHidden', 'reopened'];
+  const fresh = () => ({ resolved: {}, owner: {}, log: [], reviews: {}, fixes: {}, reopened: {}, requests: JSON.parse(JSON.stringify(REQ_SEED)), workflows: JSON.parse(JSON.stringify(WF_SEED)), seq: { req: 106, wf: 3 } });
   const state = Object.assign({ asOf: '2026-10-13', tab: 'plan', role: 'People Ops', srcFilter: 'all', showResolved: false, exceptionsOnly: true, resolving: null, formErr: '', rcOpen: {}, reqFilter: 'Active', newReq: false, newWf: null, openReq: null, introHidden: false }, fresh());
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -848,6 +851,22 @@ nav.tabs { background: none; border: 0; padding: 0; }
     if (/^wa-|^ob-i9/.test(id)) return 'immig';
     return null;
   }
+  // Items that start out done can be reopened when something new comes up
+  const seedDone = (id, val) => (state.reopened && state.reopened[id]) ? null : val;
+  const reopenBtn = id => state.reopening === id ? '' : `<button class="btn" data-action="reopen" data-id="${id}">Reopen</button>`;
+  function reopenForm(id) {
+    return `<form class="resolve-form" data-form="${id}" data-kind="reopen">
+      <label for="reopen-${id}" class="muted">What changed? Why is this open again?</label>
+      <textarea id="reopen-${id}" name="note" placeholder="e.g. Employee reported the new laptop was never set up for VPN"></textarea>
+      <div class="actions" style="justify-content:flex-start"><button type="submit" class="btn primary">Reopen</button><button type="button" class="btn" data-action="cancel">Cancel</button></div>
+      ${state.formErr ? `<span class="err" role="alert">${esc(state.formErr)}</span>` : ''}
+    </form>`;
+  }
+  const reopenedNote = (id, isDone) => {
+    const r = state.reopened && state.reopened[id];
+    if (!r || isDone) return state.reopening === id ? reopenForm(id) : '';
+    return `<p class="note reopened"><b>Reopened</b> <span class="muted">(${byWho(r)})</span><br>${esc(r.note)}</p>`;
+  };
   const byWho = res => `recorded in the ${esc(res.by || 'People Ops')} view${res.owner && res.owner !== res.by ? ` · accountable owner: ${esc(res.owner)}` : ''}${res.ts ? ` · ${esc(res.ts)}` : ''}`;
   const isResolved = id => !!state.resolved[id];
   const ownerOf = it => state.owner[it.id] || it.owner;
@@ -948,7 +967,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
 
   function obligations() {
     const asOf = state.asOf;
-    const list = OBLIGATIONS.map(o => ({ ...o, kind: 'ob' }));
+    const list = OBLIGATIONS.map(o => ({ ...o, done: seedDone(o.id, o.done), kind: 'ob' }));
     WORK_AUTH.forEach(w => {
       const e = byId[w.emp];
       const left = daysBetween(asOf, w.expires);
@@ -1088,6 +1107,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
         <p class="muted">${esc(it.detail)}</p>
         ${it.why && !res ? `<p class="why">${esc(it.why)}</p>` : ''}
         ${res ? `<p class="note"><b>${it.ob ? 'Done' : 'Resolved'}</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : ''}
+        ${reopenedNote(it.id, !!res)}
         ${state.resolving === it.id ? (it.review ? reviewForm(it) : resolveForm(it)) : ''}
       </div>
       <div class="item-meta">
@@ -1097,7 +1117,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
         </div>
         <div class="actions">
           ${opts.hideSource || SRC_TAB[it.src] === 'ops' ? '' : `<button class="btn link" data-action="goto" data-tab="${SRC_TAB[it.src]}">Open in tool</button>`}
-          ${res ? `<button class="btn" data-action="undo" data-id="${it.id}">Reopen</button>`
+          ${res ? reopenBtn(it.id)
             : state.resolving === it.id ? '' : `<button class="btn" data-action="resolve" data-id="${it.id}">${it.ob ? 'Mark done' : it.review ? 'Review' : 'Resolve'}</button>`}
         </div>
       </div>
@@ -1271,13 +1291,14 @@ nav.tabs { background: none; border: 0; padding: 0; }
           <p class="muted">${esc(o.sub)}</p>
           ${o.why && !o.isDone ? `<p class="why">${esc(o.why)}</p>` : ''}
           ${evidence ? `<p class="note"><b>Proof</b>${res ? ` <span class="muted">(${byWho(res)})</span>` : ''}<br>${esc(evidence)}</p>` : ''}` : `<h3 class="restricted">${CLS_LABEL[classOf(o)]} item, visible to People Ops only</h3>`}
+          ${reopenedNote(o.id, o.isDone)}
           ${state.resolving === o.id ? resolveForm(item) : ''}
         </div>
         <div class="item-meta">
           <div class="meta-row"><span>${o.isDone ? 'Status' : o.kind === 'wa' ? 'Expires' : 'Due'}</span><span class="cal-left">${o.isDone ? 'complete' : o.left < 0 ? `${-o.left}d ${o.kind === 'wa' ? 'ago' : 'overdue'}` : o.left === 0 ? 'today' : `in ${o.left}d`}</span></div>
           <div class="meta-row"><label for="own-${o.id}" class="muted">Owner</label>
             <select id="own-${o.id}" data-owner="${o.id}">${OWNERS.map(w => `<option${w === (state.owner[o.id] || o.owner) ? ' selected' : ''}>${w}</option>`).join('')}</select></div>
-          <div class="actions">${o.done ? '' : res ? `<button class="btn" data-action="undo" data-id="${o.id}">Reopen</button>` : state.resolving === o.id ? '' : `<button class="btn" data-action="resolve" data-id="${o.id}">Mark done</button>`}</div>
+          <div class="actions">${o.isDone ? reopenBtn(o.id) : state.resolving === o.id ? '' : `<button class="btn" data-action="resolve" data-id="${o.id}">Mark done</button>`}</div>
         </div>
       </div>`;
     };
@@ -1329,7 +1350,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
   }
 
   function planStatus(m) {
-    if (m.done || isResolved(m.id)) return { label: 'Done', cls: 'ok' };
+    if (seedDone(m.id, m.done) || isResolved(m.id)) return { label: 'Done', cls: 'ok' };
     const left = daysBetween(state.asOf, m.due);
     if (left < 0) return { label: 'Overdue', cls: 'crit' };
     const day = daysBetween(PLAN_START, state.asOf) + 1;
@@ -1349,7 +1370,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
         <span class="muted">${done} of ${ms.length} verified</span><div class="bar"><span style="width:${Math.round(done / ms.length * 100)}%"></span></div></div>`;
     }).join('');
     const rows = [1, 2, 3].map(p => `<div class="cal-group"><h3>${esc(PHASES[p])}</h3><ul class="items">${PLAN.filter(m => m.phase === p).map(m => {
-      const st = planStatus(m); const res = state.resolved[m.id]; const ev = m.done || (res && res.note);
+      const st = planStatus(m); const res = state.resolved[m.id]; const ev = seedDone(m.id, m.done) || (res && res.note);
       const left = daysBetween(state.asOf, m.due);
       return `<li class="item${st.label === 'Done' ? ' is-resolved' : ''}">
         <div class="item-main">
@@ -1358,6 +1379,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
           <p class="muted">${esc(m.outcome)}</p>
           ${m.link && st.label !== 'Done' ? `<p class="why">Live: ${linkNote[m.link]()}</p>` : ''}
           ${ev ? `<p class="note"><b>Evidence</b>${res ? ` <span class="muted">(${byWho(res)})</span>` : ''}<br>${esc(ev)}</p>` : ''}
+          ${reopenedNote(m.id, st.label === 'Done')}
           ${state.resolving === m.id ? resolveForm({ id: m.id, ob: true }) : ''}
         </div>
         <div class="item-meta">
@@ -1366,7 +1388,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
             <select id="own-${m.id}" data-owner="${m.id}">${OWNERS.map(o => `<option${o === (state.owner[m.id] || m.owner) ? ' selected' : ''}>${o}</option>`).join('')}</select></div>
           <div class="actions">
             ${m.link ? `<button class="btn link" data-action="goto" data-tab="${m.link}">Open tool</button>` : ''}
-            ${m.done ? '' : res ? `<button class="btn" data-action="undo" data-id="${m.id}">Reopen</button>` : state.resolving === m.id ? '' : `<button class="btn" data-action="resolve" data-id="${m.id}">Mark done</button>`}
+            ${st.label === 'Done' ? reopenBtn(m.id) : state.resolving === m.id ? '' : `<button class="btn" data-action="resolve" data-id="${m.id}">Mark done</button>`}
           </div>
         </div></li>`;
     }).join('')}</ul></div>`).join('');
@@ -1420,6 +1442,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
           <p class="muted">${restricted ? (isPO ? (open ? `${esc(e.name)} (${r.emp}): ${esc(r.subject)}. ${esc(r.detail)}` : 'Requester and details are visible only to the assigned People Ops partner.') : 'Details are visible only to the assigned People Ops partner.') : hiddenCat ? `<span class="restricted">Details visible to ${rcls === 'comp' ? 'People Ops and Finance' : 'People Ops and Benefits'} only in this simulated view.</span>` : `${esc(e.name)} (${r.emp}) · ${esc(r.detail)}`}</p>
           ${linked && !restricted && !hiddenCat ? `<p class="why">Linked finding: ${esc(linked.title)} · ${isResolved(linked.id) ? 'resolved' : 'still open'}</p>` : ''}
           ${res && canSee(REQ_CLS[r.cat] || null) ? `<p class="note"><b>Closed</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : res ? '<p class="note"><b>Closed</b></p>' : ''}
+          ${reopenedNote(r.id, r.status === 'Closed')}
           ${state.resolving === r.id ? resolveForm({ id: r.id }) : ''}
         </div>
         <div class="item-meta">
@@ -1429,7 +1452,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
           <div class="actions">
             ${restricted && isPO && r.status !== 'Closed' ? `<button class="btn link" data-action="peek" data-id="${r.id}">${open ? 'Hide details' : 'View details'}</button>` : ''}
             ${r.status === 'Open' ? `<button class="btn" data-action="start-req" data-id="${r.id}">Start</button>` : ''}
-            ${r.status === 'Closed' ? `<button class="btn" data-action="reopen-req" data-id="${r.id}">Reopen</button>` : state.resolving === r.id ? '' : `<button class="btn" data-action="resolve" data-id="${r.id}">Close</button>`}
+            ${r.status === 'Closed' ? reopenBtn(r.id) : state.resolving === r.id ? '' : `<button class="btn" data-action="resolve" data-id="${r.id}">Close</button>`}
           </div>
         </div></li>`;
     };
@@ -1487,9 +1510,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
     </form>` : '';
     const wfHTML = state.workflows.map(wf => {
       const tp = TEMPLATES[wf.tpl]; const e = byId[wf.emp];
-      const doneN = tp.steps.filter((_, i) => wf.done[i] || isResolved(stepId(wf, i))).length;
+      const doneN = tp.steps.filter((_, i) => seedDone(stepId(wf, i), wf.done[i]) || isResolved(stepId(wf, i))).length;
       const steps = tp.steps.map(([title, owner], i) => {
-        const id = stepId(wf, i); const res = state.resolved[id]; const pre = wf.done[i]; const done = !!(pre || res);
+        const id = stepId(wf, i); const res = state.resolved[id]; const pre = seedDone(id, wf.done[i]); const done = !!(pre || res);
         const links = (wf.links[i] || []).map(l => byIdAll[l]).filter(Boolean);
         const openLinks = links.filter(l => !isResolved(l.id));
         const seeLinks = links.filter(l => canSee(classOf(l)));
@@ -1501,9 +1524,10 @@ nav.tabs { background: none; border: 0; padding: 0; }
             ${!done && links.length ? `<p class="why">${openLinks.length ? `Blocked until ${openLinks.length} linked finding${openLinks.length > 1 ? 's are' : ' is'} resolved${seeLinks.length ? `: ${openLinks.filter(l => canSee(classOf(l))).map(l => `<button class="linkish" data-action="show-blockers" data-id="${id}">${esc(l.title)}</button>`).join('; ')}` : ''}` : 'Linked findings are resolved. Record the evidence to close this step.'}</p>` : ''}
             ${!done && openLinks.length && (state.openStep === id || openLinks.some(l => l.id === state.resolving)) ? `<div class="blockers"><p class="why">Resolve these here. When they’re cleared, this step unlocks for verification.</p><ul class="items">${sortItems(openLinks).map(l => itemHTML(l, { inGroup: true })).join('')}</ul></div>` : ''}
             ${!canSee(stepCls(wf.tpl, i)) ? (done ? `<p class="note"><b>Verified</b> <span class="restricted">· evidence visible to People Ops only</span></p>` : '') : pre ? `<p class="note"><b>Verified:</b> ${esc(pre)}</p>` : res ? `<p class="note"><b>Verified</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : ''}
+            ${reopenedNote(id, done)}
             ${state.resolving === id ? resolveForm({ id, ob: true }) : ''}
           </div>
-          <div class="actions">${pre ? '' : res ? `<button class="btn" data-action="undo" data-id="${id}">Reopen</button>` : state.resolving === id ? '' : openLinks.length ? `<button class="btn" data-action="show-blockers" data-id="${id}" aria-expanded="${state.openStep === id}">${state.openStep === id ? 'Hide blockers' : `Fix ${openLinks.length} blocker${openLinks.length > 1 ? 's' : ''}`}</button>` : `<button class="btn primary" data-action="resolve" data-id="${id}">Verify</button>`}</div>
+          <div class="actions">${done ? reopenBtn(id) : state.resolving === id ? '' : openLinks.length ? `<button class="btn" data-action="show-blockers" data-id="${id}" aria-expanded="${state.openStep === id}">${state.openStep === id ? 'Hide blockers' : `Fix ${openLinks.length} blocker${openLinks.length > 1 ? 's' : ''}`}</button>` : `<button class="btn primary" data-action="resolve" data-id="${id}">Verify</button>`}</div>
         </div>`;
       }).join('');
       return `<div class="card">
@@ -1537,7 +1561,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
     const rq = document.getElementById('c-requests'); const act = state.requests.filter(r => r.status !== 'Closed');
     rq.textContent = act.length; rq.className = 'count' + (act.some(r => daysBetween(state.asOf, reqDue(r)) < 0) ? ' hot' : '');
     const lc = document.getElementById('c-lifecycle');
-    const openSteps = state.workflows.reduce((n, wf) => n + TEMPLATES[wf.tpl].steps.filter((_, i) => !(wf.done[i] || isResolved(stepId(wf, i)))).length, 0);
+    const openSteps = state.workflows.reduce((n, wf) => n + TEMPLATES[wf.tpl].steps.filter((_, i) => !(seedDone(stepId(wf, i), wf.done[i]) || isResolved(stepId(wf, i)))).length, 0);
     lc.textContent = openSteps; lc.className = 'count';
     const pl = document.getElementById('c-plan');
     const late = PLAN.filter(m => planStatus(m).label === 'Overdue').length;
@@ -1599,7 +1623,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
     const act = a.dataset.action;
     if (act === 'goto') setTab(a.dataset.tab);
     if (act === 'resolve') { state.resolving = a.dataset.id; state.formErr = ''; render(); }
+    if (act === 'cancel') { state.reopening = null; }
     if (act === 'cancel') { state.resolving = null; state.formErr = ''; render(); }
+    if (act === 'reopen') { state.reopening = a.dataset.id; state.resolving = null; state.formErr = ''; render(); const ta = document.getElementById('reopen-' + a.dataset.id); if (ta) ta.focus(); return; }
     if (act === 'undo') {
       const id = a.dataset.id;
       logEvent('Reopened', id, titleOf(id)); delete state.resolved[id];
@@ -1641,6 +1667,16 @@ nav.tabs { background: none; border: 0; padding: 0; }
       const wf = { id: 'W' + state.seq.wf++, tpl: state.newWf, emp: form.emp.value, eff: form.eff.value || state.asOf, links: TEMPLATES[state.newWf].steps.map(() => []), done: TEMPLATES[state.newWf].steps.map(() => null) };
       state.workflows.unshift(wf); state.newWf = null;
       logEvent('Checklist started', wf.id, `${TEMPLATES[wf.tpl].label} for ${byId[wf.emp].name}`); render(); return;
+    }
+    if (kind === 'reopen') {
+      const why = form.note.value.trim();
+      if (!why) return fail('Add a short note on what changed, so the reopen has a record.');
+      state.reopened[id] = { note: why, by: state.role, owner: state.owner[id] || findOwnerDefault(id), ts: nowStamp() };
+      delete state.resolved[id];
+      const rq = state.requests.find(r => r.id === id); if (rq) rq.status = 'In progress';
+      if (state.reviews[id]) { delete state.fixes[id]; state.reviews[id].stage = 'reopened'; state.reviews[id].history.push({ stage: 'reopened', ts: nowStamp(), role: state.role, note: why }); }
+      logEvent('Reopened', id, `${titleOf(id)}: ${why}`);
+      state.reopening = null; state.formErr = ''; render(); return;
     }
     const note = form.note.value.trim();
     if (!note) return fail('Add a short note so the next person knows what was done.');
