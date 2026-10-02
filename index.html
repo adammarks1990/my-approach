@@ -13,7 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232C47C9'/%3E%3Cpath d='M9 22V10h7a4 4 0 010 8h-4v4z M12 15h4a1.5 1.5 0 000-3h-4z' fill='white'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: an operations console. Header with the as-of date, four tool tabs, one working surface per tool. */
 :root {
@@ -219,10 +219,6 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
 }
 
 /* Intro tour */
-.intro { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--r); padding: 18px 20px; display: grid; gap: 10px; margin-top: 20px; }
-.intro ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
-.intro .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
-.intro button.linkish { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
 /* Forms */
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
 .form-grid .full { grid-column: 1 / -1; }
@@ -246,6 +242,29 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
 .pb { padding: 12px 0; border-top: 1px solid var(--line); display: grid; gap: 4px; }
 .pb:first-child { border-top: 0; }
 .site-foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; }
+
+/* Masthead (clean header) */
+.masthead { display: grid; gap: 10px; padding-top: 4px; }
+.mast-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.lede { color: var(--muted); max-width: 68ch; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 6px; font-size: 0.875rem; color: var(--muted); }
+.tool { display: inline-flex; align-items: center; gap: 8px; }
+.tool input, .tool select { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 8px; color: var(--fg); font-size: 0.875rem; }
+.tool input { font-family: var(--font-data); }
+.tour { position: relative; }
+.tour summary, .menu summary { cursor: pointer; list-style: none; color: var(--accent); }
+.tour summary::-webkit-details-marker, .menu summary::-webkit-details-marker { display: none; }
+.tour summary::after { content: " →"; }
+.tour[open] summary::after { content: " ×"; }
+.tour ol { position: absolute; z-index: 20; top: 28px; left: 0; width: min(440px, 86vw); margin: 0; padding: 14px 16px 14px 34px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 8px 24px rgba(0,0,0,.12); display: grid; gap: 6px; color: var(--fg); }
+.menu { position: relative; margin-left: auto; }
+.menu summary { color: var(--muted); border: 1px solid var(--line); border-radius: var(--r); padding: 2px 10px; background: var(--surface); font-size: 1rem; line-height: 1.4; }
+.menu-pop { position: absolute; right: 0; top: 34px; z-index: 20; min-width: 200px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 6px; display: grid; }
+.menu-item { text-align: left; background: none; border: 0; padding: 8px 10px; border-radius: 4px; cursor: pointer; color: var(--fg); }
+.menu-item:hover { background: var(--surface-2); }
+.menu-note { font-size: 0.78rem; color: var(--muted); padding: 4px 10px 6px; }
+.tabs { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+@media (max-width: 640px) { .menu { margin-left: 0; } .menu-pop { right: auto; left: 0; } .tour ol { left: -10px; } }
 
 /* Theme toggle */
 .topbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
@@ -288,87 +307,303 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
 @media (max-width: 760px) { .phase-strip { grid-template-columns: minmax(0, 1fr); } }
 .scope { font-size: 0.875rem; color: var(--muted); border-left: 3px solid var(--warn); padding: 6px 12px; background: var(--warn-soft); border-radius: 0 var(--r) var(--r) 0; }
 .scope b { color: var(--fg); }
+
+/* ================= Clean workspace theme ================= */
+:root {
+  --bg: #F6F7F9; --surface: #FFFFFF; --surface-2: #F2F4F7; --line: #E6E8EC; --line-2: #EEF0F3;
+  --fg: #111827; --muted: #6B7280; --faint: #9CA3AF;
+  --accent: #E0562E; --accent-soft: #FDEEE8; --accent-ink: #B9401D;
+  --crit: #C2362B; --crit-soft: #FDECEA; --warn: #9A5B00; --warn-soft: #FEF4E2;
+  --ok: #16794C; --ok-soft: #E6F5EC; --info: #475467; --info-soft: #EEF1F5;
+  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px; --rl: 14px; --shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1115; --surface: #171A20; --surface-2: #1E222A; --line: #2A2F38; --line-2: #232830;
+    --fg: #EEF0F3; --muted: #9AA3AF; --faint: #6B7280;
+    --accent: #FF7A50; --accent-soft: #3A2119; --accent-ink: #FF9B78;
+    --crit: #FF8A80; --crit-soft: #3A1C1A; --warn: #F2B65C; --warn-soft: #362812;
+    --ok: #6FD39C; --ok-soft: #13301F; --info: #B4BCC8; --info-soft: #222833;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1115; --surface: #171A20; --surface-2: #1E222A; --line: #2A2F38; --line-2: #232830;
+  --fg: #EEF0F3; --muted: #9AA3AF; --faint: #6B7280;
+  --accent: #FF7A50; --accent-soft: #3A2119; --accent-ink: #FF9B78;
+  --crit: #FF8A80; --crit-soft: #3A1C1A; --warn: #F2B65C; --warn-soft: #362812;
+  --ok: #6FD39C; --ok-soft: #13301F; --info: #B4BCC8; --info-soft: #222833;
+  --shadow: none; color-scheme: dark;
+}
+body { font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+.mono, .num { font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
+
+/* App shell */
+.app { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
+.side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 22px 16px; display: flex; flex-direction: column; gap: 6px; }
+.brand { display: flex; gap: 12px; align-items: center; padding: 0 6px 14px; }
+.brand b { display: block; font-size: 1.05rem; letter-spacing: -0.01em; }
+.brand small { display: block; color: var(--muted); font-size: 0.78rem; }
+.mark { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 1.05rem; flex: none; }
+.side-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); padding: 14px 10px 6px; }
+.tabs { display: grid; gap: 2px; margin: 0; border: 0; overflow: visible; }
+.tab { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 9px 10px; border: 0; border-radius: 9px; background: none; color: var(--muted); font-weight: 500; font-size: 0.92rem; cursor: pointer; }
+.tab svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.tab-label { flex: 1; }
+.tab:hover { background: var(--surface-2); color: var(--fg); }
+.tab[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-ink); border: 0; }
+.count { font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; background: var(--surface-2); color: var(--muted); padding: 1px 8px; border-radius: 99px; }
+.tab[aria-selected="true"] .count { background: var(--surface); }
+.count.hot { background: var(--crit-soft); color: var(--crit); }
+.side-controls { margin-top: auto; display: grid; gap: 10px; padding-top: 10px; }
+.ctl { display: grid; gap: 4px; padding: 0 10px; font-size: 0.8rem; color: var(--muted); }
+.ctl input, .ctl select { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; color: var(--fg); font-family: var(--font-body); }
+.ctl-note { font-size: 0.74rem; color: var(--faint); padding: 0 10px; }
+.side-foot { display: flex; gap: 10px; align-items: center; padding: 14px 8px 0; margin-top: 10px; border-top: 1px solid var(--line); }
+.side-foot b { display: block; font-size: 0.88rem; }
+.side-foot small { color: var(--muted); font-size: 0.76rem; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--surface-2); color: var(--muted); display: grid; place-items: center; font-size: 0.75rem; font-weight: 600; flex: none; }
+
+.main { min-width: 0; display: flex; flex-direction: column; }
+.topnav { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 36px; background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.crumb { color: var(--muted); font-size: 0.92rem; }
+.crumb b { color: var(--fg); font-weight: 600; }
+.crumb span { margin: 0 4px; color: var(--faint); }
+.bar-actions { display: flex; align-items: center; gap: 8px; }
+.content { width: 100%; max-width: 1120px; margin: 0 auto; padding: 32px 36px 56px; display: grid; gap: 28px; }
+.sample { font-size: 0.75rem; font-weight: 500; color: var(--muted); background: var(--surface-2); padding: 3px 10px; border-radius: 99px; }
+
+/* Buttons */
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 9px; padding: 7px 14px; font-size: 0.875rem; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); }
+.btn:hover { border-color: var(--faint); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { filter: brightness(0.96); }
+.btn.ghost { box-shadow: none; }
+.btn.link { border-color: transparent; background: none; box-shadow: none; color: var(--accent-ink); padding-inline: 6px; }
+.theme-btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 9px; padding: 7px 12px; font-size: 0.85rem; box-shadow: var(--shadow); }
+.theme-btn span { display: none; }
+.menu { position: relative; }
+.menu summary { list-style: none; }
+.menu summary::-webkit-details-marker { display: none; }
+.menu-pop { position: absolute; right: 0; top: 42px; z-index: 30; min-width: 210px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(16,24,40,.14); padding: 6px; display: grid; }
+.menu-item { text-align: left; background: none; border: 0; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: var(--fg); font-size: 0.9rem; }
+.menu-item:hover { background: var(--surface-2); }
+.menu-note { font-size: 0.76rem; color: var(--muted); padding: 4px 10px 6px; }
+
+/* Cards and page headings */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--rl); padding: 22px 24px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+.panel { margin-top: 0; gap: 24px; }
+.panel-head { gap: 8px; max-width: 70ch; }
+.panel-head h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.panel-head p { font-size: 1rem; }
+.kicker, .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+h2 { font-size: 1.15rem; font-weight: 600; }
+h3 { font-size: 1rem; font-weight: 600; }
+.section { gap: 14px; }
+.section-head h2 { font-size: 1.15rem; }
+
+/* Intro */
+.intro { border-left: 0; gap: 14px; margin-top: 0; }
+.intro-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.intro h2 { font-size: 1.35rem; margin-top: 4px; }
+.tour-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: t; }
+.tour-steps li { background: var(--surface-2); border-radius: 12px; padding: 14px; display: grid; gap: 4px; font-size: 0.88rem; counter-increment: t; }
+.tour-steps li::before { content: counter(t); width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
+.tour-steps span { color: var(--muted); }
+@media (max-width: 1000px) { .tour-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* KPI cards */
+.strip, .totals { background: none; border: 0; gap: 16px; }
+.strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.totals { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.stat, .totals .stat { background: var(--surface); border: 1px solid var(--line) !important; border-radius: var(--rl); padding: 18px 20px; box-shadow: var(--shadow); gap: 6px; }
+.stat .label { font-size: 0.8rem; letter-spacing: 0; text-transform: none; color: var(--muted); font-weight: 500; }
+.stat .value { font-family: var(--font-display); font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em; }
+.totals .stat .value { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
+.stat .sub { font-size: 0.8rem; }
+@media (max-width: 860px) { .strip, .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Lists */
+.items { border-radius: var(--rl); box-shadow: var(--shadow); border-color: var(--line); overflow: hidden; }
+.item { padding: 18px 22px; border-top: 1px solid var(--line-2); grid-template-columns: minmax(0, 1fr) 230px; }
+.item:hover { background: color-mix(in srgb, var(--surface-2) 45%, var(--surface)); }
+.item-main { gap: 5px; }
+.item-main h3 { font-size: 0.98rem; }
+.item-main p.muted { font-size: 0.9rem; }
+.item-meta { gap: 6px; }
+.meta-row { font-size: 0.84rem; align-items: center; }
+.meta-row select { background: transparent; border: 1px solid transparent; border-radius: 7px; padding: 3px 6px; color: var(--fg); text-align: right; cursor: pointer; }
+.meta-row select:hover { border-color: var(--line); background: var(--surface-2); }
+.meta-row .mono { font-family: var(--font-body); }
+.pill { font-size: 0.72rem; font-weight: 600; letter-spacing: 0; text-transform: none; padding: 2px 9px; border-radius: 99px; }
+.pill.accent { background: var(--accent-soft); color: var(--accent-ink); }
+.lock { text-transform: none; letter-spacing: 0; border-radius: 99px; padding: 2px 9px; font-size: 0.72rem; }
+.src { font-size: 0.78rem; }
+.why { font-size: 0.8rem; }
+.note { border-radius: 9px; font-size: 0.86rem; }
+.empty { padding: 32px 20px; }
+.chip-btn { border-radius: 99px; padding: 6px 13px; font-size: 0.84rem; border-color: var(--line); color: var(--muted); }
+.chip-btn:hover { color: var(--fg); }
+.chip-btn[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--surface); }
+.owners { font-size: 0.85rem; }
+.owners b { font-family: var(--font-body); }
+
+/* Tables */
+.table-wrap { border-radius: var(--rl); box-shadow: var(--shadow); }
+table { font-size: 0.88rem; }
+th, td { padding: 12px 16px; border-top: 1px solid var(--line-2); }
+thead th { font-size: 0.76rem; letter-spacing: 0; text-transform: none; font-weight: 600; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--line); }
+tfoot td { background: var(--surface-2); }
+td .id { font-family: var(--font-body); }
+tbody tr.flag td { background: color-mix(in srgb, var(--crit-soft) 40%, transparent); }
+tbody tr.flag-warn td { background: color-mix(in srgb, var(--warn-soft) 40%, transparent); }
+
+/* Calendar, plan, practice, groups */
+.cal-group > h3 { font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); }
+.cal-row { padding: 16px 22px; border-top: 1px solid var(--line-2); }
+.cal-date { font-family: var(--font-body); }
+.cal-date .day { font-size: 1.5rem; font-weight: 700; }
+.cal-left { font-family: var(--font-body); }
+.phase { border-radius: var(--rl); padding: 18px 20px; box-shadow: var(--shadow); }
+.phase.here { border-color: var(--accent); background: var(--accent-soft); }
+.bar span, .phase .bar span, .card .bar span { background: var(--accent); }
+.bar { height: 6px; }
+.practice { border: 0; background: var(--surface-2); border-radius: var(--rl); padding: 20px 22px; }
+.practice h3 { letter-spacing: 0.06em; font-size: 0.72rem; font-weight: 600; }
+.rc { border-radius: var(--rl); border-left-width: 1px; box-shadow: var(--shadow); padding: 20px 22px; position: relative; }
+.rc::before { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 3px; border-radius: 0 3px 3px 0; background: var(--crit); }
+.rc.done::before { background: var(--ok); }
+.rc-fix { border-radius: 9px; }
+.rc details summary { color: var(--accent-ink); }
+.scope { border-radius: 10px; border-left-width: 3px; }
+.log { border-radius: var(--rl); box-shadow: var(--shadow); }
+.log li { border-top: 1px solid var(--line-2); padding: 11px 20px; }
+.log .ts { font-family: var(--font-body); }
+.rollout { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 28px; }
+.steps li { border-radius: var(--rl); padding: 16px; box-shadow: var(--shadow); }
+.steps li.here { border-color: var(--accent); background: var(--accent-soft); }
+.field input, .field select, .field textarea, .search input, .resolve-form textarea { border-radius: 9px; border-color: var(--line); background: var(--surface); color: var(--fg); }
+.field input:focus, .field select:focus, .field textarea:focus, .search input:focus, .resolve-form textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 40%, transparent); outline-offset: 1px; border-color: var(--accent); }
+.search input { padding: 11px 14px; font-size: 0.95rem; }
+.tick.on { background: var(--ok); border-color: var(--ok); }
+.step { padding: 14px 0; border-top: 1px solid var(--line-2); }
+.cards .card { gap: 8px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.site-foot { margin-top: 8px; padding-top: 20px; font-size: 0.8rem; }
+
+nav.tabs { background: none; border: 0; padding: 0; }
+.menu summary.btn { font-size: 0.875rem; line-height: 1.5; display: inline-block; padding: 7px 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--fg); background: var(--surface); }
+.strip .stat:first-child .value { font-size: 1.4rem; line-height: 1.2; }
+
+/* Mobile: sidebar becomes a top bar */
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px 10px; }
+  .brand { padding-bottom: 6px; }
+  .side-label { display: none; }
+  .tabs { display: flex; overflow-x: auto; gap: 4px; padding-bottom: 4px; scrollbar-width: none; }
+  .tab { width: auto; flex: none; padding: 7px 11px; }
+  .tab svg { display: none; }
+  .side-controls { margin-top: 6px; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .side-controls .ctl-note { grid-column: 1 / -1; }
+  .ctl { padding: 0; }
+  .ctl-note { padding: 0; }
+  .side-foot { display: none; }
+  .topnav { position: static; padding: 10px 16px; }
+  .topnav .sample { display: none; }
+  .content { padding: 20px 16px 40px; gap: 22px; }
+  .panel-head h2 { font-size: 1.6rem; }
+  .item { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .card { padding: 18px; }
+  .tour-steps { grid-template-columns: minmax(0, 1fr); }
+}
 </style>
-<style>html,body{margin:0;padding:0}</style>
+<style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark mode"></button>
-  </div>
-  <header class="top">
-    <div class="top-title">
-      <span class="eyebrow">People Operations · first 90 days</span>
-      <h1>People Ops Control Room</h1>
-      <p class="muted">A working sketch of how I’d run People Operations in the first 90 days: a plan with verified outcomes, and the tools that support it, from payroll and benefits reconciliation to compliance deadlines, data quality, requests and employee lifecycle checklists.</p>
-      <span class="sample">Fictional data · runs entirely in your browser</span>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><span class="mark" aria-hidden="true">P</span><div><b>People Ops</b><small>First 90 days</small></div></div>
+    <p class="side-label">Workspace</p>
+    <nav class="tabs" role="tablist" aria-label="Sections" aria-orientation="vertical">
+      <button class="tab" role="tab" id="tab-plan" data-tab="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="tab-label">90-day plan</span><span class="count" id="c-plan"></span></button>
+      <button class="tab" role="tab" id="tab-ops" data-tab="ops"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tab-label">Operations</span><span class="count" id="c-ops"></span></button>
+      <button class="tab" role="tab" id="tab-recon" data-tab="recon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V10M12 20V4M18 20v-7"/></svg><span class="tab-label">Reconciliation</span><span class="count" id="c-recon"></span></button>
+      <button class="tab" role="tab" id="tab-calendar" data-tab="calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tab-label">Obligations</span><span class="count" id="c-calendar"></span></button>
+      <button class="tab" role="tab" id="tab-quality" data-tab="quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg><span class="tab-label">Data &amp; controls</span><span class="count" id="c-quality"></span></button>
+      <button class="tab" role="tab" id="tab-requests" data-tab="requests"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H4z"/><path d="M4 13h5l1.5 2h3L15 13h5"/></svg><span class="tab-label">Requests</span><span class="count" id="c-requests"></span></button>
+      <button class="tab" role="tab" id="tab-lifecycle" data-tab="lifecycle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg><span class="tab-label">Lifecycle</span><span class="count" id="c-lifecycle"></span></button>
+    </nav>
+    <div class="side-controls">
+      <p class="side-label">Demo controls</p>
+      <label class="ctl"><span>Scenario date</span><input type="date" id="asof" value="2026-10-13"></label>
+      <label class="ctl"><span>Simulated view</span><select id="role"><option>People Ops</option><option>Finance</option><option>Manager</option></select></label>
+      <p class="ctl-note">Role views are a display filter for this demo, not access control.</p>
     </div>
-    <div class="controls">
-      <div class="asof">
-        <label for="asof">As of</label>
-        <input type="date" id="asof" value="2026-10-13">
-        <small>Two days before the Oct 15 payroll.</small>
-      </div>
-      <div class="asof">
-        <label for="role">Viewing as</label>
-        <select id="role">
-          <option>People Ops</option>
-          <option>Finance</option>
-          <option>Manager</option>
-        </select>
-        <small>Hides fields this role shouldn't see.</small>
-      </div>
-      <div class="asof">
-        <label>Your progress</label>
-        <div class="actions" style="justify-content:flex-start">
-          <button class="btn" data-action="export">Export</button>
-          <button class="btn" data-action="import">Restore</button>
-          <button class="btn" data-action="reset">Reset</button>
-        </div>
+    <div class="side-foot"><span class="avatar" aria-hidden="true">AM</span><div><b id="author-name">Adam Marks</b><small>Interview follow-up</small></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topnav">
+      <p class="crumb">Workspace <span aria-hidden="true">/</span> <b id="crumb">90-day plan</b></p>
+      <div class="bar-actions">
+        <span class="sample">Fictional data</span>
+        <button class="btn ghost" data-action="tour">Tour</button>
+        <details class="menu">
+          <summary class="btn ghost" aria-label="Progress options">Progress</summary>
+          <div class="menu-pop">
+            <button class="menu-item" data-action="export">Export progress</button>
+            <button class="menu-item" data-action="import">Restore from file</button>
+            <button class="menu-item" data-action="reset">Reset demo</button>
+            <p class="menu-note">Saved in this browser only.</p>
+          </div>
+        </details>
+        <button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark mode"></button>
         <input type="file" id="import-file" accept="application/json,.json" hidden>
-        <small>Saved in this browser. Export to keep a copy.</small>
       </div>
+    </header>
+
+    <div class="content">
+      <section class="intro card" id="intro" hidden>
+        <div class="intro-head">
+          <div>
+            <span class="kicker">Start here</span>
+            <h2>A three-minute tour</h2>
+          </div>
+          <button class="btn ghost" data-action="hide-intro">Hide</button>
+        </div>
+        <p class="muted">An interactive first-90-day plan for People Operations, with the working tools behind it. Scenario: the Oct 1–15 payroll, planned for release Oct 14.</p>
+        <ol class="tour-steps">
+          <li><b>90-day plan</b><span>What gets done when, and what counts as proof that it’s done.</span></li>
+          <li><b>Operations</b><span>The Oct 15 payroll is blocked. See which findings are behind it and how they link.</span></li>
+          <li><b>Reconciliation</b><span>Fix Daniel Brooks’s missed promotion: request the correction, then verify the amount.</span></li>
+          <li><b>Requests</b><span>Submit an accommodation request and see how it’s routed privately.</span></li>
+        </ol>
+      </section>
+
+      <main id="panel" class="panel" role="tabpanel"></main>
+
+      <section class="rollout" id="rollout" aria-labelledby="rollout-h">
+        <h2 id="rollout-h">Where these sit in the build order</h2>
+        <ol class="steps">
+          <li class="here"><b>Days 1–30</b>Operations view, reconciliation, obligations calendar and data-quality checks. Protect people and get visibility while learning the operation.</li>
+          <li class="here"><b>Days 31–60</b>Request intake with private routing, written playbooks and verified lifecycle checklists. This is the standardization step.</li>
+          <li><b>Days 61–90</b>Metrics agreed with Finance, automated checks and alerts, and a review of access and role-based views.</li>
+          <li><b>After 90 days</b>Self-service and an AI assistant, once playbooks are reliable and request data shows the most common questions.</li>
+        </ol>
+        <p class="muted">Build or configure: most of this lives inside the existing HRIS, payroll provider, ticketing tool and Slack. The first step is finding which of these capabilities already exist and which are underused.</p>
+      </section>
+
+      <footer class="site-foot">
+        <span>Prepared by Adam Marks · An independent case study, not affiliated with or endorsed by Whop.</span>
+        <span>All names, figures and policies are fictional. Filing dates use stated assumptions and are not legal or tax advice.</span>
+      </footer>
     </div>
-  </header>
-
-  <section class="intro" id="intro" hidden>
-    <div class="row"><h2>A three-minute tour</h2><button class="linkish" data-action="hide-intro">Hide</button></div>
-    <ol>
-      <li><b>90-day plan:</b> what gets done when, and what counts as proof that it’s done.</li>
-      <li><b>Operations view:</b> the Oct 15 payroll is blocked. See which findings are behind it and how they link together.</li>
-      <li><b>Reconciliation:</b> fix Daniel Brooks’s missed promotion. Request the correction, then verify the corrected amount.</li>
-      <li><b>Requests:</b> submit an accommodation request and see that its subject stays private.</li>
-    </ol>
-    <p class="muted">Try “Viewing as” to see what Finance or a manager would see, or move the “As of” date to watch deadlines turn urgent.</p>
-  </section>
-
-  <nav class="tabs" role="tablist" aria-label="Tools">
-    <button class="tab" role="tab" id="tab-plan" data-tab="plan">90-day plan <span class="count" id="c-plan"></span></button>
-    <button class="tab" role="tab" id="tab-ops" data-tab="ops">Operations view <span class="count" id="c-ops"></span></button>
-    <button class="tab" role="tab" id="tab-recon" data-tab="recon">Reconciliation <span class="count" id="c-recon"></span></button>
-    <button class="tab" role="tab" id="tab-calendar" data-tab="calendar">Obligations calendar <span class="count" id="c-calendar"></span></button>
-    <button class="tab" role="tab" id="tab-quality" data-tab="quality">Data &amp; controls <span class="count" id="c-quality"></span></button>
-    <button class="tab" role="tab" id="tab-requests" data-tab="requests">Requests <span class="count" id="c-requests"></span></button>
-    <button class="tab" role="tab" id="tab-lifecycle" data-tab="lifecycle">Lifecycle <span class="count" id="c-lifecycle"></span></button>
-  </nav>
-
-  <main id="panel" class="panel" role="tabpanel"></main>
-
-  <section class="rollout" aria-labelledby="rollout-h">
-    <h2 id="rollout-h">Where these sit in the build order</h2>
-    <ol class="steps">
-      <li class="here"><b>Days 1–30</b>Operations view, reconciliation, obligations calendar and data-quality checks. Protect people and get visibility while learning the operation.</li>
-      <li class="here"><b>Days 31–60</b>Request intake with private routing, written playbooks and verified lifecycle checklists. This is the standardization step.</li>
-      <li><b>Days 61–90</b>Metrics agreed with Finance, automated checks and alerts, and a review of access and role-based views.</li>
-      <li><b>After 90 days</b>Self-service and an AI assistant, once playbooks are reliable and request data shows the most common questions.</li>
-    </ol>
-    <p class="muted">Build or configure: most of this lives inside the existing HRIS, payroll provider, ticketing tool and Slack. The first step is finding which of these capabilities already exist and which are underused.</p>
-  </section>
-
-  <footer class="site-foot">
-    <span>Prepared by <b id="author-name">Adam Marks</b> · An independent case study, not affiliated with or endorsed by Whop.</span>
-    <span>All names, figures and policies are fictional. Filing dates use stated assumptions and are not legal or tax advice.</span>
-  </footer>
+  </div>
 </div>
 
 <script>
@@ -468,7 +703,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     { id: 'ob-5500', impact: 'high', due: '2026-10-15', cat: 'Filing', owner: 'Benefits', title: 'Form 5500 for the 2025 health and welfare plan', sub: 'Assumes the plan must file and an extension (Form 5558) was filed. Small insured or unfunded welfare plans under 100 participants may be exempt: confirm with the broker. Save the filing confirmation.' },
     { id: 'ob-access', impact: 'med', due: '2026-10-15', cat: 'Access review', owner: 'People Ops', title: 'Quarterly HRIS and payroll access review', sub: 'Confirm every admin still needs access; remove departed users.' },
     { id: 'ob-broker', impact: 'med', due: '2026-10-20', cat: 'Vendor', owner: 'Benefits', title: 'Decide 2027 medical renewal with broker', sub: 'Needed before open enrollment materials can be finalized.' },
-    { id: 'ob-cutoff', impact: 'med', due: '2026-10-23', cat: 'Payroll', owner: 'Payroll', title: 'Change cutoff for the Oct 30 payroll', sub: 'Hires, exits and pay changes after this date move to the next run.' },
+    { id: 'ob-cutoff', impact: 'med', due: '2026-10-23', cat: 'Payroll', owner: 'Payroll', title: 'Change cutoff for the Oct 30 payroll', sub: 'Changes received after the cutoff need Payroll review for this run or an off-cycle payment; required pay deadlines still apply.' },
     { id: 'ob-oe', impact: 'med', due: '2026-10-26', cat: 'Benefits', owner: 'Benefits', title: 'Send open enrollment guide to employees', sub: 'Enrollment window runs Nov 2 to Nov 16.' },
     { id: 'ob-941', impact: 'high', due: '2026-11-02', cat: 'Filing', owner: 'Payroll', title: 'Federal Form 941 for Q3, filed by payroll provider', sub: 'Oct 31 falls on a Saturday, so Nov 2. If all deposits were made on time and in full, the IRS allows until Nov 10. Save the provider’s filing confirmation.' },
     { id: 'ob-nys45', impact: 'high', due: '2026-11-02', cat: 'Filing', owner: 'Payroll', title: 'New York NYS-45 for Q3, filed by payroll provider', sub: 'Oct 31 falls on a Saturday. Save the provider’s filing confirmation.' },
@@ -507,7 +742,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     { id: 'm5', phase: 1, due: '2026-10-30', owner: 'People Ops', title: 'Confirm owners for inherited processes', outcome: 'Every recurring task has a named owner and a backup.' },
     { id: 'm6', phase: 2, due: '2026-11-13', owner: 'People Ops', title: 'Set the source of truth and owner for each key field', outcome: 'Field ownership table agreed with Finance and IT.', link: 'quality' },
     { id: 'm7', phase: 2, due: '2026-11-20', owner: 'People Ops', title: 'Open one request intake, with restricted routing for sensitive cases', outcome: 'One front door; accommodation, leave and conduct cases visible only to assigned People Ops staff.' },
-    { id: 'm8', phase: 2, due: '2026-11-27', owner: 'People Ops', title: 'Write onboarding and offboarding playbooks with verified steps', outcome: 'Each step names who verifies it and against what evidence, so offboarding stops halfway less often.' },
+    { id: 'm8', phase: 2, due: '2026-11-27', owner: 'People Ops', title: 'Write onboarding and offboarding playbooks with verified steps', outcome: 'Each step names who verifies it and against what evidence, so every departure has a confirmed handoff, access review and payroll review.' },
     { id: 'm9', phase: 3, due: '2026-12-11', owner: 'Finance', title: 'Agree metric definitions with Finance', outcome: 'Headcount, attrition and cost defined once and used in both teams’ reports.' },
     { id: 'm10', phase: 3, due: '2026-12-18', owner: 'IT', title: 'Automate the nightly data-quality check and sync-failure alerts', outcome: 'Failed integrations alert an owner the same day instead of surfacing at payroll.' },
     { id: 'm11', phase: 3, due: '2026-12-22', owner: 'People Ops', title: 'Review admin access and role-based views', outcome: 'Comp, benefits and immigration data visible only to roles that need them.' },
@@ -520,7 +755,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     ['Employee ID', 'HRIS', 'People Ops', 'Never changes; every system joins on it, never on name', '—'],
     ['Employment status and last day', 'HRIS', 'People Ops', 'Effective date required; drives the payroll stop and access removal', 'Departed but still has access'],
     ['Base pay', 'HRIS compensation record', 'People Ops, approved by Finance', 'Approval and effective date required before payroll', 'Signed offer vs HRIS; Salary outside band'],
-    ['Work location and tax state', 'HRIS', 'People Ops', 'Payroll mirrors HRIS; a change triggers a withholding review', 'Work location vs tax state'],
+    ['Work location and tax state', 'HRIS (location); payroll provider (withholding)', 'People Ops, with Payroll', 'A location change triggers Payroll’s withholding review; location alone doesn’t decide the taxing state', 'Work location vs withholding state'],
     ['Pay register', 'Payroll provider', 'Payroll', 'Reconciled before every release', 'Payroll reconciliation'],
     ['Benefits enrollment', 'Benefits platform', 'Benefits', 'Carrier invoice and deduction checked monthly', 'Benefits reconciliation'],
     ['System access', 'Identity provider', 'IT', 'Removal confirmed complete, not just requested', 'Departed but still has access'],
@@ -528,8 +763,8 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   ];
 
   // Which roles can see which kinds of data
-  const ROLES = { 'People Ops': ['comp', 'immig', 'ben'], 'Finance': ['comp'], 'Manager': [] };
-  const CLS_LABEL = { comp: 'Compensation', immig: 'Immigration', ben: 'Benefits' };
+  const ROLES = { 'People Ops': ['comp', 'immig', 'ben', 'private'], 'Finance': ['comp'], 'Manager': [] };
+  const CLS_LABEL = { comp: 'Compensation', immig: 'Immigration', ben: 'Benefits', private: 'Private case' };
   function classOf(it) {
     if (it.kind === 'wa' || /^ob-i9/.test(it.id)) return 'immig';
     if (it.src === 'pay' || /^dq-(offer|band|tax)/.test(it.id)) return 'comp';
@@ -565,7 +800,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   ];
   // Lifecycle checklists: each step names its owner, and is done only with evidence
   const TEMPLATES = {
-    onboarding: { label: 'Onboarding', blurb: 'From signed offer to a verified first week.', steps: [['Signed offer matches the HRIS record', 'People Ops'], ['Payroll record created and accepted', 'Payroll'], ['I-9 Section 2 completed by the third business day', 'People Ops'], ['Accounts and equipment ready on day one', 'IT'], ['Benefits enrollment invite sent', 'Benefits']] },
+    onboarding: { label: 'Onboarding', blurb: 'From signed offer to a verified first week.', steps: [['Signed offer matches the HRIS record', 'People Ops'], ['Payroll record created and accepted', 'Payroll'], ['I-9 Section 2 completed and timeliness documented', 'People Ops'], ['Accounts and equipment ready on day one', 'IT'], ['Benefits enrollment invite sent', 'Benefits']] },
     offboarding: { label: 'Offboarding', blurb: 'Last day, final pay, access and handoff.', steps: [['Last day and final pay terms confirmed', 'People Ops'], ['Final check prorated to the last day', 'Payroll'], ['System access removed and confirmed', 'IT'], ['Shared files and drives reassigned', 'IT'], ['Coverage end date sent to the carrier', 'Benefits']] },
     change: { label: 'Employee change', blurb: 'Promotions, transfers and pay changes.', steps: [['Approval and effective date on file', 'People Ops'], ['HRIS updated with the effective date', 'People Ops'], ['Payroll reflects the change on the right run', 'Payroll'], ['Access and role updated', 'IT'], ['Employee and manager notified', 'People Ops']] }
   };
@@ -590,10 +825,24 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   const nowStamp = () => new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   function logEvent(action, id, detail) {
     const ts = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-    state.log.unshift({ ts, asOf: state.asOf, role: state.role, action, id, detail: detail || '' });
+    state.log.unshift({ ts, asOf: state.asOf, role: state.role, action, id, detail: detail || '', cls: clsOfId(id) });
     state.log = state.log.slice(0, 200);
   }
   const canSee = cls => !cls || ROLES[state.role].includes(cls);
+  // Visibility class for any id: findings, obligations, requests, checklist steps
+  const REQ_CLS = { 'Payroll': 'comp', 'Benefits': 'ben', 'Accommodation': 'private', 'Leave': 'private', 'Employee relations': 'private' };
+  const STEP_CLS = { Payroll: 'comp', Benefits: 'ben' };
+  function stepCls(tpl, i) { const [title, owner] = TEMPLATES[tpl].steps[i]; return /I-9/.test(title) ? 'immig' : (STEP_CLS[owner] || null); }
+  function clsOfId(id) {
+    if (!id) return null;
+    const rq = state.requests.find(r => r.id === id); if (rq) return REQ_CLS[rq.cat] || null;
+    const m = /^(W\d+)-s(\d+)$/.exec(id); if (m) { const wf = state.workflows.find(w => w.id === m[1]); return wf ? stepCls(wf.tpl, +m[2]) : null; }
+    if (/^pay-|^dq-(offer|band|tax)/.test(id)) return 'comp';
+    if (/^ben-/.test(id) || id === 'int-3') return 'ben';
+    if (/^wa-|^ob-i9/.test(id)) return 'immig';
+    return null;
+  }
+  const byWho = res => `recorded in the ${esc(res.by || 'People Ops')} view${res.owner && res.owner !== res.by ? ` · accountable owner: ${esc(res.owner)}` : ''}${res.ts ? ` · ${esc(res.ts)}` : ''}`;
   const isResolved = id => !!state.resolved[id];
   const ownerOf = it => state.owner[it.id] || it.owner;
 
@@ -725,7 +974,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     const asOf = state.asOf;
     const rules = [
       { key: 'access', name: 'Departed but still has system access', systems: 'HRIS ↔ Identity provider', checked: EMP.length, findings: [] },
-      { key: 'tax', name: 'Work location differs from payroll tax state', systems: 'HRIS ↔ Payroll', checked: EMP.length, findings: [] },
+      { key: 'tax', name: 'Work location differs from withholding state', systems: 'HRIS ↔ Payroll', checked: EMP.length, findings: [] },
       { key: 'payroll', name: 'Active in HRIS, missing in payroll', systems: 'HRIS ↔ Payroll', checked: EMP.length, findings: [] },
       { key: 'offer', name: 'Signed offer and HRIS salary disagree', systems: 'Applicant tracking ↔ HRIS', checked: 3, findings: [] },
       { key: 'band', name: 'Salary outside pay band', systems: 'HRIS ↔ Comp bands', checked: EMP.length, findings: [] },
@@ -740,7 +989,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
       const n = daysBetween(termE117, asOf);
       add('access', { id: 'dq-access-E117', sev: 'crit', owner: 'IT', due: asOf, dueLabel: 'Due', emp: 'E117', title: 'Aisha Bello still has Google Workspace and Slack access', detail: `Last day was Oct 9, ${n} day${n === 1 ? '' : 's'} ago. Access should end on the last day.` });
     }
-    add('tax', { id: 'dq-tax-E106', sev: 'crit', owner: 'Payroll', due: PERIOD.release, dueLabel: 'Before release', emp: 'E106', title: 'Kwame Mensah: payroll withholds for the wrong state', detail: 'HRIS work location is Denver, CO. Payroll withholds New York income tax. Fix before the Oct 15 run and review prior periods for amended withholding.' });
+    add('tax', { id: 'dq-tax-E106', sev: 'crit', owner: 'Payroll', due: PERIOD.release, dueLabel: 'Before release', emp: 'E106', title: 'Kwame Mensah: work location and withholding state differ', detail: 'HRIS work location is Denver, CO; payroll withholds New York income tax. Payroll must confirm the correct treatment before release (New York can tax some remote work for a New York employer) and document any correction, including prior periods.' });
     if (t(asOf) >= t('2026-10-05')) add('payroll', { id: 'dq-payroll-E119', sev: 'crit', owner: 'Payroll', due: PERIOD.release, dueLabel: 'Due', emp: 'E119', title: 'Camila Duarte has no payroll record', detail: 'Active in HRIS since Oct 5. The payroll record was rejected on creation, so she will not be paid on Oct 15.' });
     add('offer', { id: 'dq-offer-E119', sev: 'warn', owner: 'People Ops', due: null, emp: 'E119', title: 'Camila Duarte: offer says $90,000, HRIS says $92,000', detail: 'Check the signed offer letter, then correct the system that is wrong before her payroll record is rebuilt.' });
     add('band', { id: 'dq-band-E109', sev: 'warn', owner: 'People Ops', due: null, emp: 'E109', title: 'Grace Liu is above the band maximum', detail: '$205,000 against an L5 band maximum of $200,000. No exception approval on file.' });
@@ -832,7 +1081,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
         <h3>${esc(it.title)}</h3>
         <p class="muted">${esc(it.detail)}</p>
         ${it.why && !res ? `<p class="why">${esc(it.why)}</p>` : ''}
-        ${res ? `<p class="note"><b>${it.ob ? 'Done' : 'Resolved'} by ${esc(res.owner)}${res.ts ? ` · ${esc(res.ts)}` : ''}:</b> ${esc(res.note)}</p>` : ''}
+        ${res ? `<p class="note"><b>${it.ob ? 'Done' : 'Resolved'}</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : ''}
         ${state.resolving === it.id ? (it.review ? reviewForm(it) : resolveForm(it)) : ''}
       </div>
       <div class="item-meta">
@@ -885,7 +1134,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
       </div>`;
     }).join('');
     const logHTML = state.log.length
-      ? `<ul class="log">${state.log.slice(0, 12).map(l => `<li><span class="ts">${esc(l.ts)}</span><span><b>${esc(l.action)}</b> · ${esc(l.detail)} <span class="muted">(as ${esc(l.role)}, demo date ${esc(fmt(l.asOf))})</span></span></li>`).join('')}</ul>`
+      ? `<ul class="log">${state.log.slice(0, 12).map(l => { const c = l.cls !== undefined ? l.cls : clsOfId(l.id); const ok = canSee(c); return `<li><span class="ts">${esc(l.ts)}</span><span><b>${esc(l.action)}</b> · ${ok ? esc(l.detail) : `<span class="restricted">${esc(CLS_LABEL[c])} item; details hidden in this view</span>`} <span class="muted">(${esc(l.role)} view, scenario date ${esc(fmt(l.asOf))})</span></span></li>`; }).join('')}</ul>`
       : '<div class="items"><p class="empty">No activity yet. Resolving, reopening or reassigning an item records a dated entry here.</p></div>';
     return `
       <div class="panel-head">
@@ -923,9 +1172,12 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     const prows = rows.slice().sort((a, b) => (a.sev ? SEV[a.sev].rank : 9) - (b.sev ? SEV[b.sev].rank : 9));
     const shownP = state.exceptionsOnly ? prows.filter(r => r.sev) : prows;
     const variance = r2(totals.actual - totals.expected);
+    const acceptedRows = rows.filter(r => state.reviews[r.id] && state.reviews[r.id].stage === 'explained' && isResolved(r.id));
+    const accepted = r2(acceptedRows.reduce((s2, r) => s2 + ((r.actual || 0) - r.expected), 0));
+    const unexplained = r2(variance - accepted);
     const explained = r2(totals.expected - totals.prior);
     const statusPill = r => {
-      if (r.sev && isResolved(r.id)) return `<span class="pill ok">${r.corrected ? 'Corrected' : 'Resolved'}</span>`;
+      if (r.sev && isResolved(r.id)) return `<span class="pill ok">${r.corrected ? 'Corrected' : state.reviews[r.id] && state.reviews[r.id].stage === 'explained' ? 'Accepted with approval' : 'Resolved'}</span>`;
       if (r.sev) return `<span class="pill ${r.sev}">${r.status}</span>`;
       return `<span class="pill info">${r.status === 'match' ? 'Matches' : r.status}</span>`;
     };
@@ -938,7 +1190,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
         <td class="num">${r.prior ? money(r.prior) : '—'}</td><td class="num">${money(r.expected)}</td>
         <td class="num">${r.actual === undefined ? '<span class="var-pos">Not on register</span>' : money(r.actual)}${r.corrected ? `<div class="id">was ${r.original === undefined ? 'missing' : money(r.original)}</div>` : ''}</td>
         <td class="num ${diff > 0.5 ? 'var-pos' : diff < -0.5 ? 'var-neg' : ''}">${Math.abs(diff) < 0.5 ? '—' : (diff > 0 ? '+' : '−') + money(Math.abs(diff))}</td>
-        <td>${statusPill(r)}</td><td class="basis">${esc(r.basis)}</td></tr>`;
+        <td>${statusPill(r)}</td><td class="basis">${state.reviews[r.id] && state.reviews[r.id].stage === 'explained' && isResolved(r.id) ? esc('Approved difference on file: ' + state.reviews[r.id].history.filter(h => h.stage === 'explained').slice(-1)[0].note) : esc(r.basis)}</td></tr>`;
       }).join('')}</tbody>
       <tfoot><tr><td>${state.exceptionsOnly ? 'All employees' : 'Total'}</td><td class="num">${money(totals.prior)}</td><td class="num">${money(totals.expected)}</td><td class="num">${money(totals.actual)}</td><td class="num ${variance > 0 ? 'var-pos' : ''}">${variance >= 0 ? '+' : '−'}${money(Math.abs(variance))}</td><td colspan="2"></td></tr></tfoot>
     </table></div>`;
@@ -961,11 +1213,11 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
         <p class="muted">Before each payroll release, the preliminary register is compared to the last run plus every approved change since. Benefits are checked three ways: who is enrolled, who the carrier is billing, and what payroll deducts.</p>
       </div>
       <div class="totals">
-        <div class="stat"><span class="label">Sep 30 run</span><span class="value">${money(totals.prior)}</span></div>
+        <div class="stat"><span class="label">Sep 30 run</span><span class="value">${money(totals.prior)}</span><span class="sub">computed baseline</span></div>
         <div class="stat"><span class="label">Approved changes</span><span class="value">${explained >= 0 ? '+' : '−'}${money(Math.abs(explained))}</span><span class="sub">${CHANGES.length} changes on file</span></div>
         <div class="stat"><span class="label">Expected Oct 15</span><span class="value">${money(totals.expected)}</span></div>
         <div class="stat"><span class="label">Register Oct 15</span><span class="value">${money(totals.actual)}</span></div>
-        <div class="stat"><span class="label">Unexplained</span><span class="value" style="color:var(--crit)">${variance >= 0 ? '+' : '−'}${money(Math.abs(variance))}</span><span class="sub">net; errors offset each other</span></div>
+        <div class="stat"><span class="label">Unexplained</span><span class="value" style="color:${Math.abs(unexplained) < 0.5 ? 'var(--ok)' : 'var(--crit)'}">${unexplained >= 0 ? '+' : '−'}${money(Math.abs(unexplained))}</span><span class="sub">${accepted ? `net, after ${money(accepted)} accepted with approval` : 'net; errors can offset each other'}</span></div>
       </div>
       <div class="filters"><label class="toggle" style="margin-left:0"><input type="checkbox" id="exceptions-only" ${state.exceptionsOnly ? 'checked' : ''}> Show exceptions only</label></div>
       <div class="section">
@@ -1012,7 +1264,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
           ${canSee(classOf(o)) ? `<h3>${esc(o.title)}</h3>
           <p class="muted">${esc(o.sub)}</p>
           ${o.why && !o.isDone ? `<p class="why">${esc(o.why)}</p>` : ''}
-          ${evidence ? `<p class="note"><b>Proof:</b> ${esc(evidence)}${res && res.ts ? ` <span class="muted">· ${esc(res.ts)}</span>` : ''}</p>` : ''}` : `<h3 class="restricted">${CLS_LABEL[classOf(o)]} item, visible to People Ops only</h3>`}
+          ${evidence ? `<p class="note"><b>Proof</b>${res ? ` <span class="muted">(${byWho(res)})</span>` : ''}<br>${esc(evidence)}</p>` : ''}` : `<h3 class="restricted">${CLS_LABEL[classOf(o)]} item, visible to People Ops only</h3>`}
           ${state.resolving === o.id ? resolveForm(item) : ''}
         </div>
         <div class="item-meta">
@@ -1032,7 +1284,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     return `
       <div class="panel-head">
         <h2>Obligations calendar</h2>
-        <p class="muted">Every recurring deadline in one place, each with an owner and proof of completion. Work authorization alerts fire at 180, 90 and 30 days before expiration, so nothing depends on someone remembering.</p>
+        <p class="muted">Every recurring deadline in one place, each with an owner and proof of completion. Sample work-authorization review alerts appear at 180, 90 and 30 days before expiration, so nothing depends on someone remembering.</p>
       </div>
       ${html}
       ${practice('A shared calendar with a standard template per obligation (owner, source requirement, where proof is saved), plus reminders to Slack. Work authorization dates come from the HRIS. Dates follow IRS, SSA and USCIS rules under the assumptions noted on each item; actual filings depend on the plans, states and countries involved and get confirmed with advisers.',
@@ -1046,7 +1298,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     return `
       <div class="panel-head">
         <h2>Data quality</h2>
-        <p class="muted">A nightly comparison of the HRIS against payroll, the applicant tracking system and the identity provider. Dashboards and automation come later; this makes sure the data under them is right first.</p>
+        <p class="muted">Sample findings from a proposed nightly comparison of the HRIS against payroll, the applicant tracking system and the identity provider. Dashboards and automation come later; this makes sure the data under them is right first.</p>
       </div>
       <div class="table-wrap"><table>
         <thead><tr><th>Rule</th><th>Systems compared</th><th class="num">Records checked</th><th class="num">Open findings</th></tr></thead>
@@ -1099,7 +1351,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
           <h3>${esc(m.title)}</h3>
           <p class="muted">${esc(m.outcome)}</p>
           ${m.link && st.label !== 'Done' ? `<p class="why">Live: ${linkNote[m.link]()}</p>` : ''}
-          ${ev ? `<p class="note"><b>Evidence${res && res.ts ? ` · ${esc(res.ts)}` : ''}:</b> ${esc(ev)}</p>` : ''}
+          ${ev ? `<p class="note"><b>Evidence</b>${res ? ` <span class="muted">(${byWho(res)})</span>` : ''}<br>${esc(ev)}</p>` : ''}
           ${state.resolving === m.id ? resolveForm({ id: m.id, ob: true }) : ''}
         </div>
         <div class="item-meta">
@@ -1151,16 +1403,17 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     const row = r => {
       const restricted = isRestrictedReq(r); const due = reqDue(r); const left = daysBetween(state.asOf, due);
       const e = byId[r.emp]; const linked = r.link && C.all.find(i => i.id === r.link);
-      const subject = restricted ? `Restricted case · ${r.cat}` : r.subject;
+      const rcls = REQ_CLS[r.cat] || null; const hiddenCat = !restricted && !canSee(rcls);
+      const subject = restricted ? `Restricted case · ${r.cat}` : hiddenCat ? `${r.cat} request` : r.subject;
       const open = state.openReq === r.id;
       const res = state.resolved[r.id];
       return `<li class="item${r.status === 'Closed' ? ' is-resolved' : ''}">
         <div class="item-main">
           <div class="item-top"><span class="pill ${r.status === 'Closed' ? 'ok' : r.status === 'In progress' ? 'accent' : 'info'}">${r.status}</span><span class="src">${r.id} · ${restricted ? 'Private routing' : esc(r.cat)}</span>${restricted ? '<span class="lock">Restricted</span>' : ''}</div>
           <h3${restricted ? ' class="restricted"' : ''}>${esc(subject)}</h3>
-          <p class="muted">${restricted ? (isPO ? (open ? `${esc(e.name)} (${r.emp}): ${esc(r.subject)}. ${esc(r.detail)}` : 'Requester and details are visible only to the assigned People Ops partner.') : 'Details are visible only to the assigned People Ops partner.') : `${esc(e.name)} (${r.emp}) · ${esc(r.detail)}`}</p>
-          ${linked && !restricted ? `<p class="why">Linked finding: ${esc(linked.title)} · ${isResolved(linked.id) ? 'resolved' : 'still open'}</p>` : ''}
-          ${res ? `<p class="note"><b>Closed by ${esc(res.owner)}${res.ts ? ` · ${esc(res.ts)}` : ''}:</b> ${esc(res.note)}</p>` : ''}
+          <p class="muted">${restricted ? (isPO ? (open ? `${esc(e.name)} (${r.emp}): ${esc(r.subject)}. ${esc(r.detail)}` : 'Requester and details are visible only to the assigned People Ops partner.') : 'Details are visible only to the assigned People Ops partner.') : hiddenCat ? `<span class="restricted">Details visible to ${rcls === 'comp' ? 'People Ops and Finance' : 'People Ops and Benefits'} only in this simulated view.</span>` : `${esc(e.name)} (${r.emp}) · ${esc(r.detail)}`}</p>
+          ${linked && !restricted && !hiddenCat ? `<p class="why">Linked finding: ${esc(linked.title)} · ${isResolved(linked.id) ? 'resolved' : 'still open'}</p>` : ''}
+          ${res && canSee(REQ_CLS[r.cat] || null) ? `<p class="note"><b>Closed</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : res ? '<p class="note"><b>Closed</b></p>' : ''}
           ${state.resolving === r.id ? resolveForm({ id: r.id }) : ''}
         </div>
         <div class="item-meta">
@@ -1189,7 +1442,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     return `
       <div class="panel-head">
         <h2>Requests</h2>
-        <p class="muted">One front door for People Ops questions. Guidance first, then a request that routes to the right owner with a response target. Sensitive cases route privately.</p>
+        <p class="muted">One front door for People Ops questions. Guidance first, then a request that routes to the right owner with a response target. Sensitive cases route privately (simulated here).</p>
       </div>
       <div class="strip">
         <div class="stat"><span class="label">Open requests</span><span class="value">${active.length}</span><span class="sub">across ${new Set(active.map(reqOwner)).size} owners</span></div>
@@ -1217,7 +1470,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   const stepId = (wf, i) => `${wf.id}-s${i}`;
   function renderLifecycle(C) {
     const byIdAll = Object.fromEntries(C.all.map(i => [i.id, i]));
-    const tplCards = Object.entries(TEMPLATES).map(([k, tp]) => `<div class="card"><span class="eyebrow">${tp.steps.length} verified steps</span><h3>${tp.label}</h3><p class="muted">${tp.blurb}</p><div><button class="btn" data-action="new-wf" data-tpl="${k}">Start ${tp.label.toLowerCase()}</button></div></div>`).join('');
+    const tplCards = Object.entries(TEMPLATES).map(([k, tp]) => `<div class="card"><span class="eyebrow">${tp.steps.length} verification steps</span><h3>${tp.label}</h3><p class="muted">${tp.blurb}</p><div><button class="btn" data-action="new-wf" data-tpl="${k}">Start ${tp.label.toLowerCase()}</button></div></div>`).join('');
     const form = state.newWf ? `<form class="card" data-form="newwf" data-kind="newwf">
       <h3>Start ${TEMPLATES[state.newWf].label.toLowerCase()}</h3>
       <div class="form-grid">
@@ -1239,11 +1492,11 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
           <div class="item-main">
             <b>${esc(title)}</b>
             <span class="src">Owner: ${esc(state.owner[id] || owner)}</span>
-            ${!done && seeLinks.length ? `<p class="why">${openLinks.length ? `Blocked by ${openLinks.length} open finding${openLinks.length > 1 ? 's' : ''}: ${openLinks.filter(l => canSee(classOf(l))).map(l => esc(l.title)).join('; ')}` : 'Linked findings are resolved. Record the evidence to close this step.'}</p>` : ''}
-            ${pre ? `<p class="note"><b>Verified:</b> ${esc(pre)}</p>` : res ? `<p class="note"><b>Verified by ${esc(res.owner)} · ${esc(res.ts)}:</b> ${esc(res.note)}</p>` : ''}
+            ${!done && links.length ? `<p class="why">${openLinks.length ? `Blocked until ${openLinks.length} linked finding${openLinks.length > 1 ? 's are' : ' is'} resolved${seeLinks.length ? `: ${openLinks.filter(l => canSee(classOf(l))).map(l => esc(l.title)).join('; ')}` : ''}` : 'Linked findings are resolved. Record the evidence to close this step.'}</p>` : ''}
+            ${!canSee(stepCls(wf.tpl, i)) ? (done ? `<p class="note"><b>Verified</b> <span class="restricted">· evidence visible to People Ops only</span></p>` : '') : pre ? `<p class="note"><b>Verified:</b> ${esc(pre)}</p>` : res ? `<p class="note"><b>Verified</b> <span class="muted">(${byWho(res)})</span><br>${esc(res.note)}</p>` : ''}
             ${state.resolving === id ? resolveForm({ id, ob: true }) : ''}
           </div>
-          <div class="actions">${pre ? '' : res ? `<button class="btn" data-action="undo" data-id="${id}">Reopen</button>` : state.resolving === id ? '' : `<button class="btn" data-action="resolve" data-id="${id}">Verify</button>`}</div>
+          <div class="actions">${pre ? '' : res ? `<button class="btn" data-action="undo" data-id="${id}">Reopen</button>` : state.resolving === id ? '' : openLinks.length ? `<button class="btn" disabled title="Resolve the linked findings first">Blocked</button>` : `<button class="btn" data-action="resolve" data-id="${id}">Verify</button>`}</div>
         </div>`;
       }).join('');
       return `<div class="card">
@@ -1292,7 +1545,10 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     const panel = document.getElementById('panel');
     panel.setAttribute('aria-labelledby', 'tab-' + state.tab);
     panel.innerHTML = ({ plan: renderPlan, ops: renderOps, recon: renderRecon, calendar: renderCalendar, quality: renderQuality, requests: renderRequests, lifecycle: renderLifecycle })[state.tab](C);
-    document.getElementById('intro').hidden = !!state.introHidden;
+    const tabBtn = document.getElementById('tab-' + state.tab);
+    document.getElementById('crumb').textContent = tabBtn.querySelector('.tab-label').textContent;
+    document.getElementById('rollout').hidden = state.tab !== 'plan';
+    document.getElementById('intro').hidden = !!state.introHidden || state.tab !== 'plan';
     document.getElementById('asof').value = state.asOf;
     document.getElementById('role').value = state.role;
     save();
@@ -1324,6 +1580,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   }
 
   document.addEventListener('click', e => {
+    document.querySelectorAll('details.menu[open], details.tour[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-item')) d.open = false; });
     const tab = e.target.closest('.tab');
     if (tab) { setTab(tab.dataset.tab); return; }
     const f = e.target.closest('[data-filter]');
@@ -1348,6 +1605,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
       render();
     }
     if (act === 'hide-intro') { state.introHidden = true; render(); }
+    if (act === 'tour') { state.introHidden = false; setTab('plan'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     if (act === 'new-req') { state.newReq = true; state.formErr = ''; const q = document.getElementById('pb-q'); state.newReqSubject = q ? q.value : ''; render(); const sub = document.getElementById('nr-sub'); if (sub) sub.focus(); }
     if (act === 'cancel-req') { state.newReq = false; state.formErr = ''; render(); }
     if (act === 'peek') { state.openReq = state.openReq === a.dataset.id ? null : a.dataset.id; if (state.openReq) logEvent('Viewed private case', a.dataset.id, `${a.dataset.id} details opened`); render(); }
@@ -1378,6 +1636,12 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     }
     const note = form.note.value.trim();
     if (!note) return fail('Add a short note so the next person knows what was done.');
+    const sm = /^(W\d+)-s(\d+)$/.exec(id);
+    if (sm) {
+      const wf = state.workflows.find(w => w.id === sm[1]); const all = compute().all;
+      const blocking = (wf.links[+sm[2]] || []).filter(l => all.some(i => i.id === l) && !isResolved(l));
+      if (blocking.length) return fail('This step is blocked until its linked findings are resolved.');
+    }
     const ts = nowStamp();
     if (kind === 'review') {
       const it = compute().all.find(i => i.id === id);
@@ -1393,16 +1657,16 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
         if (Math.abs(amt - it.review.expected) > 0.005) return fail(`${money(amt)} still differs from the expected ${money(it.review.expected)}. Keep the correction open.`);
         rv.stage = 'verified'; rv.history.push({ stage: 'verified', ts, role: state.role, note, amount: amt });
         state.fixes[id] = r2(amt);
-        state.resolved[id] = { note: `Corrected to ${money(amt)}. ${note}`, owner: state.owner[id] || findOwnerDefault(id), ts };
+        state.resolved[id] = { note: `Corrected to ${money(amt)}. ${note}`, owner: state.owner[id] || findOwnerDefault(id), by: state.role, ts };
         logEvent('Correction verified', id, `${titleOf(id)}: ${money(amt)}`);
       } else {
         rv.stage = 'explained'; rv.history.push({ stage: 'explained', ts, role: state.role, note });
-        state.resolved[id] = { note: `Approval found; difference accepted. ${note}`, owner: state.owner[id] || findOwnerDefault(id), ts };
+        state.resolved[id] = { note: `Approval found; difference accepted. ${note}`, owner: state.owner[id] || findOwnerDefault(id), by: state.role, ts };
         logEvent('Difference accepted', id, `${titleOf(id)}: ${note}`);
       }
       state.resolving = null; state.formErr = ''; render(); return;
     }
-    state.resolved[id] = { note, owner: state.owner[id] || findOwnerDefault(id), ts };
+    state.resolved[id] = { note, owner: state.owner[id] || findOwnerDefault(id), by: state.role, ts };
     const rq = state.requests.find(r => r.id === id);
     if (rq) { rq.status = 'Closed'; if (state.openReq === id) state.openReq = null; }
     logEvent(rq ? 'Request closed' : 'Resolved', id, `${titleOf(id)}: ${note}`);
@@ -1441,9 +1705,10 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
   }, true);
   document.addEventListener('keydown', e => {
     const tab = e.target.closest && e.target.closest('.tab');
-    if (!tab || !['ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+    if (!tab || !['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
+    e.preventDefault();
     const tabs = [...document.querySelectorAll('.tab')];
-    const i = tabs.indexOf(tab) + (e.key === 'ArrowRight' ? 1 : -1);
+    const i = tabs.indexOf(tab) + (['ArrowRight', 'ArrowDown'].includes(e.key) ? 1 : -1);
     const next = tabs[(i + tabs.length) % tabs.length];
     next.focus(); setTab(next.dataset.tab);
   });
@@ -1452,8 +1717,7 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
     state.tab = tab; state.resolving = null; state.formErr = '';
     try { history.replaceState(null, '', '#' + tab); } catch (_) {}
     render();
-    const tabsEl = document.querySelector('.tabs');
-    if (tabsEl.getBoundingClientRect().top < 0) window.scrollTo({ top: tabsEl.offsetTop - 8 });
+    if (window.scrollY > 0) window.scrollTo({ top: 0 });
   }
 
   /* ---------- light / dark toggle ---------- */
