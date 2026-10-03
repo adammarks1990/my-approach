@@ -11,6 +11,7 @@
 <meta property="og:description" content="A working sketch of the first 90 days in People Operations: a verified plan, payroll and benefits reconciliation, compliance deadlines, data quality, requests and lifecycle checklists. Fictional data.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232C47C9'/%3E%3Cpath d='M9 22V10h7a4 4 0 010 8h-4v4z M12 15h4a1.5 1.5 0 000-3h-4z' fill='white'/%3E%3C/svg%3E">
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yrxwwyrec6");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -530,6 +531,98 @@ nav.tabs { background: none; border: 0; padding: 0; }
   .card { padding: 18px; }
   .tour-steps { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- Workforce & cost planner ---------- */
+:root { --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --budline: #3A3F48; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --budline: #E6E8EC; } }
+:root[data-theme="dark"] { --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --budline: #E6E8EC; }
+.wf-controls { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; }
+.wf-controls .btn.primary { margin-left: auto; }
+.segctl { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 2px; }
+.seg-btn { border: 0; background: none; font: inherit; font-size: 0.88rem; font-weight: 500; color: var(--muted); padding: 6px 14px; border-radius: 7px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.seg-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink, inherit); box-shadow: 0 1px 2px rgba(0,0,0,.08); font-weight: 600; }
+.seg-btn em { font-style: normal; font-size: 0.7rem; color: var(--accent-ink); background: var(--accent-soft); padding: 1px 6px; border-radius: 99px; }
+.ctl-inline { display: inline-flex; gap: 8px; align-items: center; font-size: 0.85rem; color: var(--muted); }
+.ctl-inline select { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font: inherit; color: inherit; }
+.wf-delay { display: grid; grid-template-columns: auto minmax(120px, 260px) 1fr; gap: 6px 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--rl); padding: 12px 18px; font-size: 0.9rem; }
+.wf-delay input[type=range] { accent-color: var(--accent); width: 100%; }
+.alert { border-radius: var(--rl); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: 0.9rem; border: 1px solid; }
+.alert.crit { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 35%, transparent); color: var(--crit); }
+.alert.warn { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, transparent); color: var(--warn); }
+.alert .btn { margin-left: auto; }
+.drawer .alert .btn { margin-left: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; color: var(--muted); }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.sw.s1, .seg.s1 { background: var(--s1); } .sw.s2, .seg.s2 { background: var(--s2); } .sw.s3, .seg.s3 { background: var(--s3); } .sw.s4, .seg.s4 { background: var(--s4); } .sw.s5, .seg.s5 { background: var(--s5); }
+.sw.dash { width: 16px; height: 0; border-top: 2px dashed var(--budline); border-radius: 0; }
+.sw.line { width: 16px; height: 0; border-radius: 0; }
+.sw.line.sel { border-top: 2px solid var(--accent); } .sw.line.base { border-top: 2px dashed var(--muted); }
+.wchart { display: grid; grid-template-columns: 48px minmax(0, 1fr); height: 240px; padding-bottom: 22px; }
+.wchart.hc { height: 170px; }
+.yax { position: relative; font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.yax span { position: absolute; right: 8px; transform: translateY(50%); white-space: nowrap; }
+.plot { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end; border-bottom: 1px solid var(--line); }
+.plot .grid { position: absolute; left: 0; right: 0; border-top: 1px solid var(--line-2, var(--line)); pointer-events: none; }
+.wcol { position: relative; height: 100%; border: 0; background: none; padding: 0 3px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; font: inherit; color: inherit; border-radius: 6px; }
+.wcol:hover, .wcol:focus-visible { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.wcol:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.wcol.on { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.stack { width: min(100%, 34px); height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; gap: 2px; }
+.seg { display: block; width: 100%; flex: none; }
+.stack .seg:last-child { border-radius: 4px 4px 0 0; }
+.bud { position: absolute; left: 2px; right: 2px; border-top: 2px dashed var(--budline); pointer-events: none; }
+.xl { position: absolute; bottom: -20px; left: 0; right: 0; text-align: center; font-size: 0.72rem; color: var(--muted); }
+.wcol.on .xl { color: var(--accent-ink); font-weight: 600; }
+.hc .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.hc-sel { fill: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.hc-base { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.wcol.ghost { z-index: 1; }
+.wf-tip { position: absolute; z-index: 60; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.14); padding: 10px 12px; font-size: 0.8rem; min-width: 200px; pointer-events: none; display: grid; gap: 3px; }
+.wf-tip .row { display: flex; justify-content: space-between; gap: 14px; font-variant-numeric: tabular-nums; }
+.wf-tip .row span:first-child { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
+.wf-tip .row.tot { border-top: 1px solid var(--line); padding-top: 4px; margin-top: 2px; font-weight: 600; }
+.wf-tip .row.tot span:first-child { color: inherit; }
+.drivers { list-style: none; margin: 0; padding: 0; display: grid; }
+.drivers li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line-2, var(--line)); font-size: 0.92rem; }
+.drivers li:first-child { border-top: 0; }
+.drivers small { display: block; color: var(--muted); font-size: 0.8rem; }
+.drivers b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ok-text { color: var(--ok); }
+.muted-row td { opacity: 0.6; }
+tr.hl td { background: var(--accent-soft); }
+td.act { text-align: right; white-space: nowrap; }
+.empty-note { color: var(--muted); font-size: 0.9rem; margin: 0 0 10px; }
+.card.ref { background: var(--surface-2); box-shadow: none; }
+.eq { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; font-size: 0.9rem; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 0.9rem; }
+.overrides { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.overrides summary { cursor: pointer; font-weight: 500; font-size: 0.9rem; }
+.overrides .form-grid { margin-top: 12px; }
+.impact { font-size: 0.9rem; background: var(--surface-2); border-radius: 10px; padding: 10px 14px; }
+.drawer-back { position: fixed; inset: 0; background: rgba(10, 12, 16, .38); z-index: 70; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100vw); background: var(--surface); z-index: 71; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; box-shadow: -12px 0 32px rgba(0,0,0,.18); }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.drawer-head h3 { margin: 0; font-size: 1.05rem; }
+.drawer-body { overflow-y: auto; padding: 18px 20px; display: grid; gap: 14px; align-content: start; }
+.drawer-foot { border-top: 1px solid var(--line); padding: 14px 20px; display: grid; gap: 10px; }
+body.drawer-open { overflow: hidden; }
+@media (max-width: 760px) {
+  .wf-controls .btn.primary { margin-left: 0; }
+  .wf-delay { grid-template-columns: minmax(0, 1fr); }
+  .wchart { grid-template-columns: 40px minmax(0, 1fr); height: 200px; }
+  .xl { font-size: 0.62rem; }
+  .wcol { padding: 0 1px; }
+  .rtable thead { display: none; }
+  .rtable, .rtable tbody, .rtable tr, .rtable td { display: block; width: 100%; }
+  .rtable tr { border-top: 1px solid var(--line); padding: 8px 0; }
+  .rtable td { border: 0; padding: 4px 14px; display: flex; justify-content: space-between; gap: 12px; text-align: right; }
+  .rtable td[data-l]::before { content: attr(data-l); color: var(--muted); font-size: 0.8rem; text-align: left; flex: none; }
+  .rtable td[data-l=""]::before { content: none; }
+  .rtable td:first-child { display: block; text-align: left; }
+  .rtable td:first-child::before { content: none; }
+  .rtable td.act { justify-content: flex-start; }
+}
 </style>
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 </head>
@@ -540,6 +633,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
     <p class="side-label">Workspace</p>
     <nav class="tabs" role="tablist" aria-label="Sections" aria-orientation="vertical">
       <button class="tab" role="tab" id="tab-plan" data-tab="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="tab-label">90-day plan</span><span class="count" id="c-plan"></span></button>
+      <button class="tab" role="tab" id="tab-workforce" data-tab="workforce"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="tab-label">Workforce planning</span><span class="count" id="c-workforce"></span></button>
       <button class="tab" role="tab" id="tab-ops" data-tab="ops"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tab-label">Operations</span><span class="count" id="c-ops"></span></button>
       <button class="tab" role="tab" id="tab-recon" data-tab="recon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V10M12 20V4M18 20v-7"/></svg><span class="tab-label">Reconciliation</span><span class="count" id="c-recon"></span></button>
       <button class="tab" role="tab" id="tab-calendar" data-tab="calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tab-label">Obligations</span><span class="count" id="c-calendar"></span></button>
@@ -818,15 +912,121 @@ nav.tabs { background: none; border: 0; padding: 0; }
     { id: 'W2', tpl: 'offboarding', emp: 'E117', eff: '2026-10-09', links: [[], ['pay-E117'], ['dq-access-E117'], ['int-2'], []], done: ['Resignation letter on file; last day confirmed Sep 25', null, null, null, 'Termination sent in the Oct 9 carrier file; coverage ends Oct 31'] }
   ];
 
+  /* ---------- workforce & cost planner: data and model ---------- */
+  const HZ = Array.from({ length: 12 }, (_, i) => {
+    const y = 2026 + Math.floor((10 + i) / 12), m = (10 + i) % 12;
+    const last = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+    return { key: `${y}-${String(m + 1).padStart(2, '0')}`, start: iso(Date.UTC(y, m, 1)), end: iso(Date.UTC(y, m, last)), days: last,
+      label: new Date(Date.UTC(y, m, 1)).toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
+      long: new Date(Date.UTC(y, m, 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) };
+  });
+  const HZ_START = HZ[0].start, HZ_END = HZ[11].end, WF_BASELINE = '2026-10-13';
+  const WF_DEPTS = ['Engineering', 'Product', 'Design', 'Sales', 'Marketing', 'Support', 'Finance', 'People'];
+  const WF_LOCS = ['New York, NY', 'Austin, TX', 'Miami, FL', 'Denver, CO', 'San Francisco, CA', 'Chicago, IL', 'Raleigh, NC', 'Remote (US)'];
+  const WF_COMP = [['base', 'Base pay'], ['bonus', 'Bonus'], ['tax', 'Employer taxes (est.)'], ['ben', 'Benefits'], ['once', 'Recruiting & equipment']];
+  const WF_PRESET_RATES = { tax: 10, benefits: 900, recruiting: 3000, equipment: 1500 };
+  const addMonths = (d, n) => { const [y, m, dd] = d.split('-').map(Number); const last = new Date(Date.UTC(y, m - 1 + n + 1, 0)).getUTCDate(); return iso(Date.UTC(y, m - 1 + n, Math.min(dd, last))); };
+  const firstOfNext = d => { const [y, m] = d.split('-').map(Number); return iso(Date.UTC(y, m, 1)); };
+  const kmoney = x => { const a = Math.abs(x), s = x < 0 ? '−' : ''; return a >= 1e6 ? `${s}$${(a / 1e6).toFixed(2)}M` : a >= 1e3 ? `${s}$${Math.round(a / 1e3)}K` : `${s}$${Math.round(a)}`; };
+  const money0 = x => (x < 0 ? '−' : '') + '$' + Math.round(Math.abs(x)).toLocaleString('en-US');
+
+  // Current workforce at the Oct 13, 2026 baseline: approved comp, expected (not invoiced) benefits
+  const WF_CURRENT = EMP.filter(e => !CHANGES.some(c => c.emp === e.id && c.type === 'term')).map(e => {
+    const pay = CHANGES.find(c => c.emp === e.id && c.type === 'pay');
+    const en = ENROLL[e.id];
+    const tier = en ? en[0] : null;
+    return { id: e.id, name: e.name, dept: e.dept, loc: e.loc, salary: pay ? pay.annual : e.base, start: e.start,
+      tier, benMonthly: tier ? TIERS[tier].premium - 2 * TIERS[tier].ded : 0, benStart: en && en[1] ? en[1] : '2000-01-01',
+      note: e.id === 'E119' ? 'Signed offer $90,000 used; HRIS shows $92,000 (unresolved).' : '' };
+  });
+
+  const REQ_SEED_WF = [
+    { id: 'RQ201', role: 'Software Engineer', dept: 'Engineering', level: 'L4', loc: 'New York, NY', start: '2026-11-01', salary: 150000, status: 'Approved' },
+    { id: 'RQ202', role: 'Support Specialist', dept: 'Support', level: 'L2', loc: 'New York, NY', start: '2026-12-01', salary: 80000, status: 'Approved' },
+    { id: 'RQ203', role: 'Account Executive', dept: 'Sales', level: 'L3', loc: 'Miami, FL', start: '2027-01-01', salary: 110000, status: 'Proposed' },
+    { id: 'RQ204', role: 'Product Manager', dept: 'Product', level: 'L4', loc: 'New York, NY', start: '2027-03-01', salary: 160000, status: 'Proposed' }
+  ].map(r => ({ ...r, type: 'growth', include: false, locked: false, exact: false, bonus: 0, bonusMonth: '', benefits: null, recruiting: null, equipment: null, equity: 0, rationale: 'Fictional sample requisition.' }));
+
+  function wfPreset(name) {
+    const hires = JSON.parse(JSON.stringify(REQ_SEED_WF));
+    const inc = name === 'growth' ? ['RQ201', 'RQ202', 'RQ203', 'RQ204'] : ['RQ201', 'RQ202'];
+    hires.forEach(h => { h.include = inc.includes(h.id); });
+    if (name === 'lean') hires.find(h => h.id === 'RQ202').start = '2027-03-01';
+    return { hires, delay: 0, departures: [], rates: { ...WF_PRESET_RATES }, modified: false };
+  }
+
+  // A scenario becomes a config: rates + effective hires (delay applied, backfills generated) + departures
+  function wfConfig(sc) {
+    const hires = sc.hires.filter(h => h.include && h.status !== 'Cancelled').map(h => ({ ...h,
+      start: h.type === 'growth' && !h.locked && sc.delay > 0 ? addMonths(h.start, sc.delay) : h.start, saved: h.start }));
+    const backfills = sc.departures.filter(d => d.backfill).map(d => {
+      const emp = WF_CURRENT.find(e => e.id === d.emp);
+      return { id: 'BF-' + d.emp, role: d.role || ('Backfill for ' + emp.name), dept: emp.dept, level: '', loc: emp.loc, start: addMonths(firstOfNext(d.exit), d.vacant || 0), saved: null,
+        salary: d.salary === '' || d.salary == null ? null : +d.salary, type: 'backfill', status: 'Approved', include: true, locked: true, bonus: 0, bonusMonth: '', benefits: null, recruiting: null, equipment: null, equity: 0, linked: d.emp };
+    });
+    return { rates: sc.rates, hires, backfills, departures: sc.departures };
+  }
+
+  function wfPeople(cfg) {
+    const ppl = WF_CURRENT.map(e => { const d = cfg.departures.find(x => x.emp === e.id); return { ...e, kind: 'current', end: d ? d.exit : null }; });
+    [...cfg.hires, ...cfg.backfills].forEach(h => ppl.push({ id: h.id, name: h.role, dept: h.dept, loc: h.loc, salary: h.salary == null || h.salary === '' ? null : +h.salary, start: h.start, end: null, kind: 'hire', type: h.type,
+      bonus: +h.bonus || 0, bonusMonth: h.bonusMonth, benMonthly: h.benefits != null && h.benefits !== '' ? +h.benefits : cfg.rates.benefits,
+      benStart: t(h.start) === t(h.start.slice(0, 8) + '01') ? h.start : firstOfNext(h.start),
+      once: (h.recruiting != null && h.recruiting !== '' ? +h.recruiting : cfg.rates.recruiting) + (h.equipment != null && h.equipment !== '' ? +h.equipment : cfg.rates.equipment), equity: +h.equity || 0 }));
+    return ppl;
+  }
+
+  // Monthly cost & headcount for one config. Cents per person per component, then aggregate.
+  function wfCompute(cfg, dept) {
+    const ppl = wfPeople(cfg).filter(p => !dept || dept === 'All' || p.dept === dept);
+    const months = HZ.map(() => ({ base: 0, bonus: 0, tax: 0, ben: 0, once: 0, total: 0, hc: 0 }));
+    const per = {}; let equity = 0; const unpriced = [];
+    ppl.forEach(p => {
+      if (p.salary == null) unpriced.push(p.id);
+      per[p.id] = HZ.map(() => 0);
+      HZ.forEach((m, i) => {
+        const days = overlapDays(p.start, p.end || '9999-12-31', m.start, m.end);
+        const base = p.salary == null ? 0 : r2(p.salary / 12 * days / m.days);
+        const bonus = days && p.bonusMonth === m.key ? r2(p.bonus) : 0;
+        const tax = r2((base + bonus) * cfg.rates.tax / 100);
+        const covered = t(p.benStart) <= t(m.end) && t(p.start) <= t(m.end) && (!p.end || t(p.end) >= t(m.start));
+        const ben = covered ? r2(p.benMonthly) : 0;
+        const once = p.kind === 'hire' && t(p.start) >= t(m.start) && t(p.start) <= t(m.end) ? r2(p.once) : 0;
+        if (p.equity && days) equity += p.equity / 12 * days / m.days;
+        const mo = months[i];
+        mo.base += base; mo.bonus += bonus; mo.tax += tax; mo.ben += ben; mo.once += once;
+        const tot = base + bonus + tax + ben + once; mo.total += tot; per[p.id][i] = r2(tot);
+        if (t(p.start) <= t(m.end) && (!p.end || t(p.end) >= t(m.end))) mo.hc += 1;
+      });
+    });
+    months.forEach(m => WF_COMP.forEach(([k]) => { m[k] = r2(m[k]); }) || null);
+    months.forEach(m => { m.total = r2(m.total); });
+    const total = r2(months.reduce((s, m) => s + m.total, 0));
+    const opening = ppl.filter(p => t(p.start) <= t(WF_BASELINE) && (!p.end || t(p.end) > t(WF_BASELINE))).length;
+    const inHz = d => t(d) >= t(HZ_START) && t(d) <= t(HZ_END);
+    const starts = ppl.filter(p => p.kind === 'hire' && inHz(p.start));
+    const exits = ppl.filter(p => p.end && inHz(p.end)).length;
+    return { months, total, per, equity: r2(equity), unpriced, opening, ending: months[11].hc, startsGrowth: starts.filter(p => p.type === 'growth').length, startsBackfill: starts.filter(p => p.type === 'backfill').length, exits, ppl };
+  }
+
+  function wfFresh() {
+    const scen = { base: wfPreset('base'), lean: wfPreset('lean'), growth: wfPreset('growth') };
+    const budget = {}; const cfg = wfConfig(scen.base);
+    WF_DEPTS.forEach(d => { budget[d] = wfCompute(cfg, d).months.map(m => m.total); });
+    return { sel: 'base', dept: 'All', tab: 'hires', month: null, scen, budget, budgetAdj: [] };
+  }
+
   /* ---------- state (saved in this browser) ---------- */
   const STORE = 'people-ops-control-room-site-v2';
-  const KEPT = ['asOf', 'role', 'resolved', 'owner', 'log', 'reviews', 'fixes', 'requests', 'workflows', 'seq', 'introHidden', 'reopened'];
-  const fresh = () => ({ resolved: {}, owner: {}, log: [], reviews: {}, fixes: {}, reopened: {}, requests: JSON.parse(JSON.stringify(REQ_SEED)), workflows: JSON.parse(JSON.stringify(WF_SEED)), seq: { req: 106, wf: 3 } });
-  const state = Object.assign({ asOf: '2026-10-13', tab: 'plan', role: 'People Ops', srcFilter: 'all', showResolved: false, exceptionsOnly: true, resolving: null, formErr: '', rcOpen: {}, reqFilter: 'Active', newReq: false, newWf: null, openReq: null, introHidden: false }, fresh());
+  const KEPT = ['asOf', 'role', 'resolved', 'owner', 'log', 'reviews', 'fixes', 'requests', 'workflows', 'seq', 'introHidden', 'reopened', 'wfp'];
+  const fresh = () => ({ resolved: {}, owner: {}, log: [], reviews: {}, fixes: {}, reopened: {}, requests: JSON.parse(JSON.stringify(REQ_SEED)), workflows: JSON.parse(JSON.stringify(WF_SEED)), seq: { req: 106, wf: 3 }, wfp: wfFresh() });
+  const state = Object.assign({ asOf: '2026-10-13', tab: 'plan', role: 'People Ops', srcFilter: 'all', showResolved: false, exceptionsOnly: true, resolving: null, formErr: '', rcOpen: {}, reqFilter: 'Active', newReq: false, newWf: null, openReq: null, introHidden: false, wfDrawer: null }, fresh());
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
     if (saved) KEPT.forEach(k => { if (saved[k] !== undefined) state[k] = saved[k]; });
   } catch (_) {}
+  const wfValid = w => { try { return w && ['base', 'lean', 'growth'].every(k => w.scen[k] && Array.isArray(w.scen[k].hires) && Array.isArray(w.scen[k].departures) && w.scen[k].rates) && WF_DEPTS.every(d => Array.isArray(w.budget[d]) && w.budget[d].length === 12) && Array.isArray(w.budgetAdj); } catch (_) { return false; } };
+  if (!wfValid(state.wfp)) state.wfp = wfFresh();
   function snapshot() { const o = {}; KEPT.forEach(k => { o[k] = state[k]; }); return o; }
   function save() {
     try { localStorage.setItem(STORE, JSON.stringify(snapshot())); } catch (_) {}
@@ -844,6 +1044,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
   function stepCls(tpl, i) { const [title, owner] = TEMPLATES[tpl].steps[i]; return /I-9/.test(title) ? 'immig' : (STEP_CLS[owner] || null); }
   function clsOfId(id) {
     if (!id) return null;
+    if (/^wf-/.test(id)) return 'comp';
     const rq = state.requests.find(r => r.id === id); if (rq) return REQ_CLS[rq.cat] || null;
     const m = /^(W\d+)-s(\d+)$/.exec(id); if (m) { const wf = state.workflows.find(w => w.id === m[1]); return wf ? stepCls(wf.tpl, +m[2]) : null; }
     if (/^pay-|^dq-(offer|band|tax)/.test(id)) return 'comp';
@@ -1549,6 +1750,321 @@ nav.tabs { background: none; border: 0; padding: 0; }
     `;
   }
 
+  /* ---------- workforce & cost planner: screen ---------- */
+  const WF_SCEN_LABEL = { base: 'Base', lean: 'Lean', growth: 'Growth' };
+  const W = () => state.wfp;
+  const wfScen = () => W().scen[W().sel];
+  function wfBudget(dept) {
+    const b = W().budget; const ds = !dept || dept === 'All' ? WF_DEPTS : [dept];
+    return HZ.map((_, i) => r2(ds.reduce((s, d) => {
+      let v = b[d][i];
+      W().budgetAdj.forEach(a => { if ((a.dept === 'All' || a.dept === d) && (a.month === 'all' || a.month === HZ[i].key)) v = v * (1 + a.pct / 100); });
+      return s + v;
+    }, 0)));
+  }
+  function wfExplain(dept) {
+    const B = wfConfig(W().scen.base), S = wfConfig(wfScen());
+    const tot = c => wfCompute(c, dept).total;
+    const bIds = new Set(B.hires.map(h => h.id)), sIds = new Set(S.hires.map(h => h.id));
+    const common = id => bIds.has(id) && sIds.has(id);
+    const sOf = id => S.hires.find(h => h.id === id);
+    const c0 = B;
+    const c1 = { ...B, rates: S.rates };
+    const c2 = { ...c1, hires: B.hires.map(h => common(h.id) ? { ...sOf(h.id), start: h.start } : h) };
+    const c3 = { ...c2, hires: B.hires.map(h => common(h.id) ? sOf(h.id) : h) };
+    const c4 = { ...c3, hires: S.hires };
+    const c5 = S;
+    const v = [tot(c0), tot(c1), tot(c2), tot(c3), tot(c4), tot(c5)];
+    const added = S.hires.filter(h => !bIds.has(h.id)).map(h => h.id), removed = B.hires.filter(h => !sIds.has(h.id)).map(h => h.id);
+    return { diff: r2(v[5] - v[0]), rows: [
+      ['Additional or removed hires', r2(v[4] - v[3]), [added.length ? `Added ${added.join(', ')}` : '', removed.length ? `Removed ${removed.join(', ')}` : ''].filter(Boolean).join(' · ')],
+      ['Start-date changes', r2(v[3] - v[2]), wfScen().delay ? `Hiring delay of ${wfScen().delay} month${wfScen().delay > 1 ? 's' : ''} on eligible hires` : ''],
+      ['Compensation changes', r2(v[2] - v[1]), ''],
+      ['Departure and backfill assumptions', r2(v[5] - v[4]), S.departures.length ? `${S.departures.length} planned departure${S.departures.length > 1 ? 's' : ''}` : ''],
+      ['Changes to employer-cost assumptions', r2(v[1] - v[0]), '']
+    ] };
+  }
+
+  function wfStackChart(R, budget) {
+    const max = Math.max(...R.months.map(m => m.total), ...budget, 1) * 1.08;
+    const ticks = [0, max / 2, max].map(v => `<span style="bottom:${v / max * 100}%">${kmoney(v)}</span>`).join('');
+    const cols = R.months.map((m, i) => {
+      const segs = WF_COMP.map(([k], ci) => m[k] > 0 ? `<i class="seg s${ci + 1}" style="height:${m[k] / max * 100}%"></i>` : '').join('');
+      const sel = W().month === HZ[i].key;
+      return `<button type="button" class="wcol${sel ? ' on' : ''}" data-wfm="${i}" aria-label="${HZ[i].long}: forecast ${money0(m.total)}, budget ${money0(budget[i])}">
+        <span class="stack">${segs}</span><span class="bud" style="bottom:${budget[i] / max * 100}%"></span><span class="xl">${HZ[i].label}</span></button>`;
+    }).join('');
+    return `<div class="wchart"><div class="yax">${ticks}</div><div class="plot">${[0, .5, 1].map(f => `<span class="grid" style="bottom:${f * 100}%"></span>`).join('')}${cols}</div></div>`;
+  }
+  function wfHcChart(R, RB) {
+    const all = [...R.months.map(m => m.hc), ...(RB ? RB.months.map(m => m.hc) : [])];
+    const lo = Math.max(0, Math.min(...all) - 2), hi = Math.max(...all) + 2;
+    const y = v => 100 - (v - lo) / (hi - lo) * 100;
+    const path = ms => ms.map((m, i) => `${i ? 'L' : 'M'}${i * 100 / 12},${y(m.hc)} L${(i + 1) * 100 / 12},${y(m.hc)}`).join(' ');
+    return `<div class="wchart hc"><div class="yax">${[lo, Math.round((lo + hi) / 2), hi].map(v => `<span style="bottom:${100 - y(v)}%">${v}</span>`).join('')}</div>
+      <div class="plot"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        ${RB ? `<path d="${path(RB.months)}" class="hc-base"/>` : ''}<path d="${path(R.months)}" class="hc-sel"/></svg>
+        ${R.months.map((m, i) => `<button type="button" class="wcol ghost${W().month === HZ[i].key ? ' on' : ''}" data-wfm="${i}" data-hc="1" aria-label="${HZ[i].long}: ${m.hc} people${RB ? `, Base ${RB.months[i].hc}` : ''}"><span class="xl">${HZ[i].label}</span></button>`).join('')}
+      </div></div>`;
+  }
+
+  function wfHireCost(h) {
+    const sc = wfScen(); const cfg = wfConfig({ ...sc, hires: [{ ...h, include: true, status: h.status === 'Cancelled' ? 'Approved' : h.status }], departures: [] });
+    const p = wfCompute({ ...cfg, departures: [] }, 'All');
+    const id = cfg.hires[0] ? cfg.hires[0].id : null;
+    return { cost: id && p.per[id] ? r2(p.per[id].reduce((s, v) => s + v, 0)) : 0, inHz: id ? t(cfg.hires[0].start) <= t(HZ_END) : false, start: cfg.hires[0] ? cfg.hires[0].start : h.start };
+  }
+
+  function renderWorkforce() {
+    const wf = W(), sc = wfScen(), money = canSee('comp');
+    const R = wfCompute(wfConfig(sc), wf.dept), RB = wf.sel === 'base' ? null : wfCompute(wfConfig(wf.scen.base), wf.dept);
+    const budget = wfBudget(wf.dept), budTot = r2(budget.reduce((s, v) => s + v, 0));
+    const head = r2(budTot - R.total), over = head < 0, partial = R.unpriced.length > 0;
+    const diffBase = RB ? r2(R.total - RB.total) : 0;
+    const eligible = sc.hires.filter(h => h.include && h.status !== 'Cancelled' && h.type === 'growth' && !h.locked).length;
+    const mi = wf.month ? HZ.findIndex(m => m.key === wf.month) : -1;
+    const scenBtns = Object.keys(WF_SCEN_LABEL).map(k => `<button type="button" class="seg-btn" data-wfscen="${k}" aria-pressed="${wf.sel === k}">${WF_SCEN_LABEL[k]}${wf.scen[k].modified ? ' <em>Modified</em>' : ''}</button>`).join('');
+    const kpis = money ? `
+      <div class="stat"><span class="label">Estimated cash cost · 12 months</span><span class="value">${kmoney(R.total)}</span><span class="sub">${partial ? 'Partial: some records unpriced · ' : ''}${RB ? `${diffBase >= 0 ? '+' : '−'}${money0(Math.abs(diffBase))} vs Base` : 'This is the Base scenario'}</span></div>
+      <div class="stat"><span class="label">Budget headroom</span><span class="value ${budTot ? (over ? 'crit' : 'ok') : ''}">${budTot ? kmoney(Math.abs(head)) : '—'}</span><span class="sub">${budTot ? (Math.abs(head) < 0.5 ? 'On budget' : over ? 'Over budget' : 'Under budget') : 'Add a budget to see headroom.'}</span></div>` : '';
+    const hcKpis = `
+      <div class="stat"><span class="label">Ending headcount · Oct 31, 2027</span><span class="value">${R.ending}</span><span class="sub">${R.opening} opening + ${R.startsGrowth + R.startsBackfill} starts − ${R.exits} exit${R.exits === 1 ? '' : 's'}</span></div>
+      <div class="stat"><span class="label">Planned starts</span><span class="value">${R.startsGrowth + R.startsBackfill}</span><span class="sub">${R.startsGrowth} growth · ${R.startsBackfill} backfill</span></div>`;
+    const ex = money && RB ? wfExplain(wf.dept) : null;
+    const tip = 'Calculated in this order so overlapping effects are counted once: employer-cost assumptions, then compensation, then start dates, then added or removed hires, then departures and backfills.';
+
+    // detail tabs
+    const effMap = Object.fromEntries(wfConfig(sc).hires.map(h => [h.id, h]));
+    const allHires = [...sc.hires, ...wfConfig(sc).backfills];
+    const inMonth = h => { if (mi < 0) return true; const s = (effMap[h.id] || h).start; return s.slice(0, 7) === wf.month; };
+    const hireRows = allHires.filter(inMonth).map(h => {
+      const eff = effMap[h.id] || h; const bf = h.type === 'backfill' && h.linked;
+      const c = money ? wfHireCost(h) : null; const excluded = !bf && (!h.include || h.status === 'Cancelled');
+      const outHz = t(eff.start) > t(HZ_END);
+      return `<tr class="${excluded ? 'muted-row' : ''}">
+        <td data-l="Role"><b>${esc(h.role)}</b><div class="id">${h.id}${bf ? ` · backfill for ${esc(WF_CURRENT.find(e => e.id === h.linked).name)}` : ''}</div></td>
+        <td data-l="Department">${esc(h.dept)}</td><td data-l="Level · location">${esc(h.level || '—')} · ${esc(h.loc)}</td>
+        <td data-l="Status"><span class="pill ${h.status === 'Approved' ? 'ok' : h.status === 'Proposed' ? 'accent' : 'info'}">${h.status}</span>${excluded ? ' <span class="pill info">Excluded</span>' : ''}</td>
+        <td data-l="Effective start">${fmt(eff.start, true)}${eff.start !== h.start && !bf ? `<div class="id">saved ${fmt(h.start)}</div>` : ''}${outHz ? '<div class="id">Starts after this forecast period; excluded from its totals.</div>' : ''}</td>
+        ${money ? `<td data-l="Annual salary" class="num">${h.salary == null || h.salary === '' ? '<span class="pill warn">Unpriced</span>' : money0(h.salary)}</td><td data-l="In-period cost" class="num">${excluded ? '—' : money0(c.cost)}</td>` : ''}
+        <td data-l="" class="act">${money && !bf ? `<button class="btn link" data-wfedit="${h.id}">Edit</button><button class="btn link" data-wftoggle="${h.id}">${h.include ? 'Exclude' : 'Include'}</button>` : bf && money ? `<button class="btn link" data-wfdep="${h.linked}">Edit departure</button>` : ''}</td></tr>`;
+    }).join('');
+    const incl = sc.hires.filter(h => h.include && h.status !== 'Cancelled').length + sc.departures.filter(d => d.backfill).length;
+    const hiresTab = `${incl ? '' : '<p class="empty-note">No planned hires in this scenario. Current workforce costs are still included.</p>'}
+      <div class="table-wrap"><table class="rtable"><thead><tr><th>Role</th><th>Department</th><th>Level · location</th><th>Status</th><th>Effective start</th>${money ? '<th class="num">Annual salary</th><th class="num">In-period cost</th>' : ''}<th></th></tr></thead><tbody>${hireRows || `<tr><td colspan="8" class="empty">No hires start in ${HZ[mi].long}.</td></tr>`}</tbody></table></div>`;
+    const curRows = WF_CURRENT.filter(e => wf.dept === 'All' || e.dept === wf.dept).map(e => {
+      const d = sc.departures.find(x => x.emp === e.id); const c = R.per[e.id] || [];
+      const cost = mi >= 0 ? c[mi] : c.reduce((s, v) => s + v, 0);
+      return `<tr><td data-l="Employee"><b>${esc(e.name)}</b><div class="id">${e.id}${e.note && money ? ` · ${esc(e.note)}` : ''}</div></td><td data-l="Department">${esc(e.dept)}</td><td data-l="Location">${esc(e.loc)}</td>
+        <td data-l="Status">${d ? `<span class="pill warn">Departs ${fmt(d.exit)}</span>${d.backfill ? ` <span class="pill info">Backfill ${fmt(addMonths(firstOfNext(d.exit), d.vacant || 0))}</span>` : ''}` : '<span class="pill ok">Active</span>'}</td>
+        ${money ? `<td data-l="Annual salary" class="num">${money0(e.salary)}</td><td data-l="${mi >= 0 ? HZ[mi].label + ' cost' : '12-month cost'}" class="num">${money0(cost || 0)}</td>` : ''}
+        <td class="act" data-l="">${money ? `<button class="btn link" data-wfdep="${e.id}">${d ? 'Edit departure' : 'Plan departure'}</button>` : ''}</td></tr>`;
+    }).join('');
+    const curTab = `<p class="why">Departures are scenario-only planning assumptions. They never change the operational demo, and the model doesn't predict who will leave.</p>
+      <div class="table-wrap"><table class="rtable"><thead><tr><th>Employee</th><th>Department</th><th>Location</th><th>Status</th>${money ? `<th class="num">Annual salary</th><th class="num">${mi >= 0 ? HZ[mi].label + ' cost' : '12-month cost'}</th>` : ''}<th></th></tr></thead><tbody>${curRows}</tbody></table></div>`;
+    const monRows = HZ.map((m, i) => { const f = R.months[i].total, b = budget[i], v = r2(f - b);
+      return `<tr class="${mi === i ? 'hl' : ''}"><td data-l="Month">${m.long}</td>${money ? `<td data-l="Budget" class="num">${money0(b)}</td><td data-l="Forecast" class="num">${money0(f)}</td><td data-l="Forecast − budget" class="num ${v > 0.5 ? 'var-pos' : ''}">${Math.abs(v) < 0.5 ? '—' : (v > 0 ? '+' : '−') + money0(Math.abs(v))}</td>` : ''}<td data-l="Headcount" class="num">${R.months[i].hc}</td><td data-l="Actual" class="muted">Not available</td></tr>`; }).join('');
+    const monTab = `<div class="table-wrap"><table class="rtable"><thead><tr><th>Month</th>${money ? '<th class="num">Budget</th><th class="num">Forecast</th><th class="num">Forecast − budget</th>' : ''}<th class="num">Headcount</th><th>Actual</th></tr></thead><tbody>${monRows}</tbody></table></div>
+      ${money ? `<div class="card ref"><span class="kicker">Reference only</span><h3>Preliminary gross-pay register, October 1–15</h3><p class="muted">Register total ${money0(112000.01)} against ${money0(106616.68)} expected. It’s a preliminary register with known errors (see Reconciliation), so it is neither paid actuals nor fully loaded cost and isn’t used in this forecast.</p></div>
+      <div class="card ref"><span class="kicker">Budget history</span>${wf.budgetAdj.length ? `<ul class="hist">${wf.budgetAdj.map(a => `<li><b>${a.pct > 0 ? '+' : ''}${a.pct}%</b> · ${esc(a.dept)} · ${a.month === 'all' ? 'all months' : HZ.find(m => m.key === a.month).long}<br>${esc(a.note)} <span class="ts">${esc(a.ts)} · ${esc(a.by)} view</span></li>`).join('')}</ul>` : '<p class="muted">Illustrative budget, initialized from Base and frozen. No adjustments yet.</p>'}<div><button class="btn" data-wfopen="budget">Adjust budget</button></div></div>` : ''}`;
+    const tabs = [['hires', 'Planned hires'], ['current', 'Current workforce'], ['monthly', 'Monthly comparison']];
+
+    return `
+      <div class="panel-head">
+        <h2>Workforce &amp; cost planner</h2>
+        <p class="muted">See the cost and timing of your hiring plan before committing.</p>
+        <p class="why">Fictional planning model · USD · Baseline: Oct 13, 2026 · Forecast Nov 2026–Oct 2027. The scenario date control doesn’t move this forecast.</p>
+      </div>
+      <div class="wf-controls">
+        <div class="segctl" role="group" aria-label="Scenario">${scenBtns}</div>
+        <label class="ctl-inline">Department <select id="wf-dept"><option>All</option>${WF_DEPTS.map(d => `<option${wf.dept === d ? ' selected' : ''}>${d}</option>`).join('')}</select></label>
+        ${money ? `<button class="btn" data-wfopen="assumptions">Assumptions</button><button class="btn primary" data-wfopen="new">+ Planned hire</button>` : ''}
+      </div>
+      ${money ? `<div class="wf-delay"><label for="wf-delay">Delay eligible hires: <b>${sc.delay} month${sc.delay === 1 ? '' : 's'}</b></label><input id="wf-delay" type="range" min="0" max="6" step="1" value="${sc.delay}"><span class="why">${eligible} eligible growth hire${eligible === 1 ? '' : 's'} shift${eligible === 1 ? 's' : ''}. Current employees, locked starts and backfills don’t move.</span></div>` : ''}
+      ${money && over && budTot ? `<div class="alert crit"><b>Forecast exceeds budget by ${money0(-head)}.</b> Review the largest drivers below. <button class="btn" data-wfgo="drivers">Review drivers</button></div>` : ''}
+      ${money && partial ? `<div class="alert warn"><b>Estimate incomplete: ${R.unpriced.length} record${R.unpriced.length > 1 ? 's need' : ' needs'} cost assumptions.</b> Totals are partial.</div>` : ''}
+      <div class="strip">${kpis}${hcKpis}</div>
+      ${money ? `<div class="card">
+        <div class="section-head"><h3>Monthly cash cost vs budget</h3>${mi >= 0 ? `<button class="btn link" data-wfmonth="">Clear month selection (${HZ[mi].label})</button>` : '<span class="muted">Select a month to filter the table below</span>'}</div>
+        <div class="legend">${WF_COMP.map(([, l], ci) => `<span><i class="sw s${ci + 1}"></i>${l}</span>`).join('')}<span><i class="sw dash"></i>Budget</span></div>
+        ${wfStackChart(R, budget)}
+        ${R.equity ? `<p class="why">Noncash equity expense (estimate): ${money0(R.equity)} over the period, shown separately and excluded from cash cost and headroom.</p>` : ''}
+      </div>` : ''}
+      <div class="card">
+        <div class="section-head"><h3>Headcount at month end</h3><span class="legend">${RB ? `<span><i class="sw line sel"></i>${WF_SCEN_LABEL[wf.sel]}</span><span><i class="sw line base"></i>Base</span>` : `<span><i class="sw line sel"></i>${WF_SCEN_LABEL[wf.sel]}</span>`}</span></div>
+        ${wfHcChart(R, RB)}
+      </div>
+      ${ex ? `<div class="card" id="wf-drivers">
+        <div class="section-head"><h3>What changed from Base?</h3><span class="muted" title="${esc(tip)}">${ex.diff >= 0 ? '+' : '−'}${money0(Math.abs(ex.diff))} total · <u>how it’s split</u></span></div>
+        <ul class="drivers">${ex.rows.map(([l, v, d]) => `<li><span>${l}${d ? `<small>${esc(d)}</small>` : ''}</span><b class="${v > 0.5 ? 'var-pos' : v < -0.5 ? 'ok-text' : 'muted'}">${Math.abs(v) < 0.5 ? '—' : (v > 0 ? '+' : '−') + money0(Math.abs(v))}</b></li>`).join('')}</ul>
+        <p class="why">${esc(tip)}</p>
+      </div>` : money && wf.sel === 'base' ? '' : ''}
+      <div class="section">
+        <div class="filters" role="tablist" aria-label="Planner tables">${tabs.map(([k, l]) => `<button class="chip-btn" data-wftab="${k}" aria-pressed="${wf.tab === k}">${l}</button>`).join('')}</div>
+        ${wf.tab === 'hires' ? hiresTab : wf.tab === 'current' ? curTab : monTab}
+      </div>
+      ${practice('A planning workbook or the HRIS planning module, refreshed from approved requisitions and payroll each month. Finance owns the budget; People Ops owns the hiring assumptions and timing.',
+        'Agree assumptions with Finance, pressure-test timing with hiring managers, and explain variances before anyone asks.')}
+      ${wfDrawerHTML()}
+    `;
+  }
+
+  /* ---------- planner drawer ---------- */
+  function wfDrawerHTML() {
+    const dr = state.wfDrawer; if (!dr) return '';
+    const sc = wfScen(); let body = '', title = '', foot = '';
+    const f = dr.draft || {};
+    const num = (n, l, v, extra = '') => `<div class="field"><label for="wd-${n}">${l}</label><input id="wd-${n}" data-wd="${n}" type="number" inputmode="decimal" value="${v == null ? '' : esc(v)}" ${extra}></div>`;
+    const txt = (n, l, v) => `<div class="field"><label for="wd-${n}">${l}</label><input id="wd-${n}" data-wd="${n}" value="${esc(v || '')}"></div>`;
+    const sel = (n, l, opts, v) => `<div class="field"><label for="wd-${n}">${l}</label><select id="wd-${n}" data-wd="${n}">${opts.map(o => `<option${o === v ? ' selected' : ''}>${o}</option>`).join('')}</select></div>`;
+    if (dr.mode === 'hire') {
+      title = dr.isNew ? 'New planned hire' : `Edit ${f.id}`;
+      body = `<div class="form-grid">
+        <div class="field"><label>Requisition ID</label><input value="${esc(f.id)}" disabled></div>${txt('role', 'Role', f.role)}
+        ${sel('dept', 'Department', WF_DEPTS, f.dept)}${txt('level', 'Level', f.level)}
+        ${sel('loc', 'US location', WF_LOCS, f.loc)}<div class="field"><label for="wd-month">Start month</label><input id="wd-month" data-wd="month" type="month" value="${f.start.slice(0, 7)}"></div>
+        <div class="field"><label for="wd-exactday">Exact start day (optional)</label><input id="wd-exactday" data-wd="exactday" type="number" min="1" max="31" value="${f.exact ? +f.start.slice(8) : ''}" placeholder="1st by default"></div>
+        ${num('salary', 'Annual salary (USD)', f.salary, 'min="0" step="1000"')}
+        ${sel('type', 'Hire type', ['growth', 'backfill'], f.type)}${sel('status', 'Approval status', ['Proposed', 'Approved', 'On hold', 'Cancelled'], f.status)}
+        <label class="check full"><input type="checkbox" data-wd="include" ${f.include ? 'checked' : ''}> Include in this scenario</label>
+        <label class="check full"><input type="checkbox" data-wd="locked" ${f.locked ? 'checked' : ''}> Lock start date against the delay control</label>
+      </div>
+      <details class="overrides"><summary>Bonus, benefits and one-time cost overrides</summary><div class="form-grid">
+        ${num('bonus', 'Cash bonus (USD)', f.bonus)}<div class="field"><label for="wd-bonusMonth">Bonus paid in</label><select id="wd-bonusMonth" data-wd="bonusMonth"><option value="">None</option>${HZ.map(m => `<option value="${m.key}"${f.bonusMonth === m.key ? ' selected' : ''}>${m.long}</option>`).join('')}</select></div>
+        ${num('benefits', `Employer benefits / month (default ${money0(sc.rates.benefits)})`, f.benefits)}${num('recruiting', `Recruiting (default ${money0(sc.rates.recruiting)})`, f.recruiting)}
+        ${num('equipment', `Equipment (default ${money0(sc.rates.equipment)})`, f.equipment)}${num('equity', 'Equity expense / year (noncash)', f.equity)}
+      </div></details>
+      <div class="field"><label for="wd-rationale">Business rationale</label><textarea id="wd-rationale" data-wd="rationale">${esc(f.rationale || '')}</textarea></div>`;
+      const c = wfHireCost(f);
+      foot = `<div class="impact" id="wf-impact">${f.salary === '' || f.salary == null ? '<b>Unpriced</b> · add a salary to price this hire' : `<b>${money0(c.cost)}</b> in-period cost · ${c.inHz ? '+1 headcount from ' + fmt(c.start, true) : 'Starts after this forecast period; excluded from its cost and headcount totals.'}`}</div>`;
+    } else if (dr.mode === 'departure') {
+      const e = WF_CURRENT.find(x => x.id === dr.emp);
+      title = `Planned departure · ${e.name}`;
+      body = `<p class="why">Scenario-only assumption for ${WF_SCEN_LABEL[W().sel]}. It doesn’t change the operational demo.</p><div class="form-grid">
+        <div class="field"><label for="wd-exit">Last day</label><input id="wd-exit" data-wd="exit" type="date" min="${HZ_START}" max="${HZ_END}" value="${f.exit}"></div>
+        <label class="check full"><input type="checkbox" data-wd="backfill" ${f.backfill ? 'checked' : ''}> Plan a backfill</label>
+        ${num('vacant', 'Full vacant months before the backfill starts', f.vacant, 'min="0" max="6"')}${txt('role', 'Replacement role', f.role)}
+        ${num('salary', 'Replacement salary (USD)', f.salary, 'min="0" step="1000"')}</div>
+        <p class="why" id="wf-bfnote">${f.backfill ? `Backfill starts ${fmt(addMonths(firstOfNext(f.exit), +f.vacant || 0), true)}.` : 'No backfill: the role stays vacant.'}</p>
+        ${dr.existing ? '<div><button class="btn" data-wfdel="1">Remove this departure</button></div>' : ''}`;
+    } else if (dr.mode === 'assumptions') {
+      title = `Assumptions · ${WF_SCEN_LABEL[W().sel]}`;
+      body = `<div class="eq"><b>Estimated cash cost</b> = base pay + cash bonuses + estimated employer taxes + employer benefits + recruiting + equipment</div>
+        <ul class="hist"><li><b>Base pay</b>: annual salary ÷ 12 × active calendar days ÷ days in month.</li>
+        <li><b>Employer taxes</b>: a flat planning percentage of base and bonus. A disclosed estimate, not a statutory calculation; real rules and wage bases differ.</li>
+        <li><b>Benefits</b>: current staff use expected enrollment and premium less employee contributions (not the erroneous invoice). New hires start coverage the 1st of the month after their start, or that month if they start on the 1st; no partial-month proration.</li>
+        <li><b>Recruiting and equipment</b>: one-time, in the hire’s start month. New hires only.</li>
+        <li><b>Equity</b>: optional noncash expense, shown separately and excluded from cash and headroom.</li></ul>
+        <div class="form-grid">${num('tax', 'Employer tax estimate (%)', f.tax, 'min="0" max="30" step="0.5"')}${num('benefits', 'New-hire benefits / month (USD)', f.benefits)}${num('recruiting', 'Recruiting per hire (USD)', f.recruiting)}${num('equipment', 'Equipment per hire (USD)', f.equipment)}</div>
+        <p class="why">Fictional defaults, editable per scenario.</p>
+        <div><button class="btn" data-wfreset="1">Reset ${WF_SCEN_LABEL[W().sel]} to its preset</button></div>`;
+    } else if (dr.mode === 'budget') {
+      title = 'Adjust budget';
+      body = `<p class="why">The illustrative budget is frozen; scenario edits never move it. Adjustments are explicit and need a dated note.</p><div class="form-grid">
+        ${sel('dept', 'Department', ['All', ...WF_DEPTS], f.dept)}<div class="field"><label for="wd-month">Month</label><select id="wd-month" data-wd="month"><option value="all">All months</option>${HZ.map(m => `<option value="${m.key}"${f.month === m.key ? ' selected' : ''}>${m.long}</option>`).join('')}</select></div>
+        ${num('pct', 'Change (%)', f.pct, 'step="0.5"')}</div>
+        <div class="field"><label for="wd-note">Reason (required)</label><textarea id="wd-note" data-wd="note">${esc(f.note || '')}</textarea></div>`;
+    }
+    return `<div class="drawer-back" data-wfclose="1"></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="wf-dtitle">
+      <div class="drawer-head"><h3 id="wf-dtitle">${esc(title)}</h3><button class="btn ghost" data-wfclose="1" aria-label="Close">✕</button></div>
+      <div class="drawer-body">${body}</div>
+      <div class="drawer-foot">${foot}
+        ${dr.err ? `<p class="err" role="alert">${esc(dr.err)}</p>` : ''}
+        ${dr.confirm ? `<div class="alert warn"><b>You have unsaved changes.</b> <button class="btn" data-wfkeep="1">Keep editing</button> <button class="btn" data-wfdiscard="1">Discard</button></div>` : `<div class="actions" style="justify-content:flex-end"><button class="btn" data-wfclose="1">Cancel</button><button class="btn primary" data-wfsave="1">${dr.mode === 'hire' ? 'Save hire' : dr.mode === 'budget' ? 'Apply adjustment' : 'Save'}</button></div>`}
+      </div></aside>`;
+  }
+
+  function wfOpen(mode, arg) {
+    const sc = wfScen();
+    if (mode === 'new') {
+      const n = Math.max(204, ...Object.values(W().scen).flatMap(s => s.hires.map(h => +h.id.slice(2) || 0))) + 1;
+      state.wfDrawer = { mode: 'hire', isNew: true, draft: { id: 'RQ' + n, role: '', dept: W().dept !== 'All' ? W().dept : 'Engineering', level: '', loc: 'New York, NY', start: '2027-01-01', exact: false, salary: '', type: 'growth', status: 'Proposed', include: true, locked: false, bonus: 0, bonusMonth: '', benefits: null, recruiting: null, equipment: null, equity: 0, rationale: '' } };
+    } else if (mode === 'edit') state.wfDrawer = { mode: 'hire', draft: JSON.parse(JSON.stringify(sc.hires.find(h => h.id === arg))) };
+    else if (mode === 'departure') { const d = sc.departures.find(x => x.emp === arg); const e = WF_CURRENT.find(x => x.id === arg);
+      state.wfDrawer = { mode: 'departure', emp: arg, existing: !!d, draft: d ? { ...d } : { emp: arg, exit: '2026-11-30', backfill: true, vacant: 1, role: e.dept + ' replacement', salary: e.salary } }; }
+    else if (mode === 'assumptions') state.wfDrawer = { mode: 'assumptions', draft: { ...sc.rates } };
+    else if (mode === 'budget') state.wfDrawer = { mode: 'budget', draft: { dept: W().dept, month: 'all', pct: '', note: '' } };
+    state.wfDrawer.dirty = false; render();
+    const first = document.querySelector('.drawer input:not([disabled]), .drawer select'); if (first) first.focus();
+  }
+  function wfSave() {
+    const dr = state.wfDrawer, f = dr.draft, sc = wfScen(), now = nowStamp();
+    const fail = m => { dr.err = m; render(); };
+    if (dr.mode === 'hire') {
+      if (!f.role.trim()) return fail('Add a role name.');
+      if (f.salary !== '' && f.salary != null && !(+f.salary > 0)) return fail('Enter an annual salary greater than $0.');
+      if ((f.salary === '' || f.salary == null) && f.status === 'Approved') return fail('Approved hires need an annual salary greater than $0.');
+      const h = { ...f, salary: f.salary === '' || f.salary == null ? null : +f.salary, bonus: +f.bonus || 0 };
+      const i = sc.hires.findIndex(x => x.id === h.id); if (i >= 0) sc.hires[i] = h; else sc.hires.push(h);
+      logEvent(dr.isNew ? 'Planned hire added' : 'Planned hire edited', 'wf-' + h.id, `${WF_SCEN_LABEL[W().sel]}: ${h.id} ${h.role}, start ${fmt(h.start, true)}${h.salary ? ', ' + money0(h.salary) : ', unpriced'}`);
+    } else if (dr.mode === 'departure') {
+      if (!f.exit || t(f.exit) < t(HZ_START) || t(f.exit) > t(HZ_END)) return fail('Pick a last day between Nov 1, 2026 and Oct 31, 2027.');
+      if (f.backfill && f.salary !== '' && !(+f.salary > 0)) return fail('Enter a replacement salary greater than $0.');
+      const d = { emp: dr.emp, exit: f.exit, backfill: !!f.backfill, vacant: Math.max(0, Math.min(6, +f.vacant || 0)), role: f.role, salary: f.salary === '' ? null : +f.salary };
+      const i = sc.departures.findIndex(x => x.emp === dr.emp); if (i >= 0) sc.departures[i] = d; else sc.departures.push(d);
+      logEvent('Departure assumption', 'wf-' + dr.emp, `${WF_SCEN_LABEL[W().sel]}: ${dr.emp} leaves ${fmt(d.exit, true)}${d.backfill ? ', backfill after ' + d.vacant + ' vacant month(s)' : ', no backfill'}`);
+    } else if (dr.mode === 'assumptions') {
+      const r = { tax: +f.tax, benefits: +f.benefits, recruiting: +f.recruiting, equipment: +f.equipment };
+      if (Object.values(r).some(v => !isFinite(v) || v < 0)) return fail('Assumptions must be zero or more.');
+      sc.rates = r; logEvent('Assumptions changed', 'wf-rates', `${WF_SCEN_LABEL[W().sel]}: tax ${r.tax}%, benefits ${money0(r.benefits)}/mo, recruiting ${money0(r.recruiting)}, equipment ${money0(r.equipment)}`);
+    } else if (dr.mode === 'budget') {
+      const pct = parseFloat(f.pct);
+      if (!isFinite(pct) || pct === 0) return fail('Enter a non-zero percentage change.');
+      if (pct <= -100) return fail('A budget can’t go below zero.');
+      if (!String(f.note || '').trim()) return fail('Add a reason for the budget change.');
+      W().budgetAdj.push({ dept: f.dept, month: f.month, pct, note: f.note.trim(), ts: now, by: state.role });
+      logEvent('Budget adjusted', 'wf-budget', `${f.dept}, ${f.month === 'all' ? 'all months' : f.month}: ${pct > 0 ? '+' : ''}${pct}%. ${f.note.trim()}`);
+      state.wfDrawer = null; render(); return;
+    }
+    sc.modified = true; state.wfDrawer = null; render();
+  }
+  function wfDraftInput(el) {
+    const dr = state.wfDrawer; if (!dr) return; const f = dr.draft; const k = el.dataset.wd;
+    const v = el.type === 'checkbox' ? el.checked : el.value;
+    if (k === 'month' && dr.mode === 'hire') { if (!v) return; f.start = v + '-' + (f.exact ? f.start.slice(8) : '01'); }
+    else if (k === 'exactday') { const day = parseInt(v, 10); const [yy, mm] = f.start.split('-').map(Number); const last = new Date(Date.UTC(yy, mm, 0)).getUTCDate();
+      if (!v) { f.exact = false; f.start = f.start.slice(0, 8) + '01'; } else if (day >= 1) { f.exact = true; f.start = f.start.slice(0, 8) + String(Math.min(day, last)).padStart(2, '0'); } }
+    else f[k] = v;
+    dr.dirty = true; dr.err = '';
+    if (dr.mode === 'hire') { const box = document.getElementById('wf-impact'); if (box) { const c = wfHireCost(f); box.innerHTML = f.salary === '' || f.salary == null ? '<b>Unpriced</b> · add a salary to price this hire' : !(+f.salary > 0) ? '<span class="err">Enter an annual salary greater than $0.</span>' : `<b>${money0(c.cost)}</b> in-period cost · ${c.inHz ? '+1 headcount from ' + fmt(c.start, true) : 'Starts after this forecast period; excluded from its cost and headcount totals.'}`; } }
+    if (dr.mode === 'departure') { const n = document.getElementById('wf-bfnote'); if (n && f.exit) n.textContent = f.backfill ? `Backfill starts ${fmt(addMonths(firstOfNext(f.exit), +f.vacant || 0), true)}.` : 'No backfill: the role stays vacant.'; }
+  }
+  function wfClick(e) {
+    const g = s => e.target.closest(s);
+    let a;
+    if ((a = g('[data-wfscen]'))) { W().sel = a.dataset.wfscen; W().month = null; render(); return true; }
+    if ((a = g('[data-wftab]'))) { W().tab = a.dataset.wftab; render(); return true; }
+    if ((a = g('[data-wfm]'))) { const k = HZ[+a.dataset.wfm].key; W().month = W().month === k ? null : k; render(); return true; }
+    if ((a = g('[data-wfmonth]'))) { W().month = null; render(); return true; }
+    if ((a = g('[data-wfopen]'))) { wfOpen(a.dataset.wfopen); return true; }
+    if ((a = g('[data-wfedit]'))) { wfOpen('edit', a.dataset.wfedit); return true; }
+    if ((a = g('[data-wfdep]'))) { wfOpen('departure', a.dataset.wfdep); return true; }
+    if ((a = g('[data-wftoggle]'))) { const h = wfScen().hires.find(x => x.id === a.dataset.wftoggle); h.include = !h.include; wfScen().modified = true;
+      logEvent(h.include ? 'Hire included' : 'Hire excluded', 'wf-' + h.id, `${WF_SCEN_LABEL[W().sel]}: ${h.id} ${h.role}`); render(); return true; }
+    if ((a = g('[data-wfgo]'))) { const el = document.getElementById('wf-drivers'); if (el) el.scrollIntoView({ behavior: 'smooth' }); return true; }
+    if ((a = g('[data-wfsave]'))) { wfSave(); return true; }
+    if ((a = g('[data-wfclose]'))) { if (state.wfDrawer.dirty) { state.wfDrawer.confirm = true; render(); } else { state.wfDrawer = null; render(); } return true; }
+    if ((a = g('[data-wfkeep]'))) { state.wfDrawer.confirm = false; render(); return true; }
+    if ((a = g('[data-wfdiscard]'))) { state.wfDrawer = null; render(); return true; }
+    if ((a = g('[data-wfdel]'))) { const sc = wfScen(); sc.departures = sc.departures.filter(d => d.emp !== state.wfDrawer.emp); sc.modified = true;
+      logEvent('Departure removed', 'wf-' + state.wfDrawer.emp, `${WF_SCEN_LABEL[W().sel]}: ${state.wfDrawer.emp}`); state.wfDrawer = null; render(); return true; }
+    if ((a = g('[data-wfreset]'))) { if (!confirm(`Reset ${WF_SCEN_LABEL[W().sel]} to its preset? Your edits to this scenario will be lost.`)) return true;
+      W().scen[W().sel] = wfPreset(W().sel); logEvent('Scenario reset', 'wf-rates', `${WF_SCEN_LABEL[W().sel]} reset to preset`); state.wfDrawer = null; render(); return true; }
+    return false;
+  }
+  // Chart tooltip (hover, focus or tap)
+  function wfTip(el) {
+    const tip = document.getElementById('wf-tip') || Object.assign(document.body.appendChild(document.createElement('div')), { id: 'wf-tip', className: 'wf-tip' });
+    if (!el) { tip.hidden = true; return; }
+    const i = +el.dataset.wfm, sc = wfScen(); const R = wfCompute(wfConfig(sc), W().dept); const m = R.months[i]; const b = wfBudget(W().dept)[i];
+    if (el.dataset.hc) { const RB = W().sel !== 'base' ? wfCompute(wfConfig(W().scen.base), W().dept) : null;
+      tip.innerHTML = `<b>${HZ[i].long}</b><div>${WF_SCEN_LABEL[W().sel]}: ${m.hc} people</div>${RB ? `<div class="muted">Base: ${RB.months[i].hc}</div>` : ''}`; }
+    else tip.innerHTML = `<b>${HZ[i].long}</b>${WF_COMP.map(([k, l], ci) => `<div class="row"><span><i class="sw s${ci + 1}"></i>${l}</span><span>${money0(m[k])}</span></div>`).join('')}<div class="row tot"><span>Forecast</span><span>${money0(m.total)}</span></div><div class="row"><span>Budget</span><span>${money0(b)}</span></div>`;
+    const r = el.getBoundingClientRect(); tip.hidden = false;
+    const w = tip.offsetWidth; let x = r.left + r.width / 2 - w / 2 + window.scrollX; x = Math.max(8, Math.min(x, window.scrollX + document.documentElement.clientWidth - w - 8));
+    tip.style.left = x + 'px'; tip.style.top = (r.top + window.scrollY - tip.offsetHeight - 8) + 'px';
+  }
+
   function renderCounts(C) {
     const open = C.all.filter(i => !isResolved(i.id));
     const n = src => open.filter(i => src.includes(i.src) && i.sev !== 'info').length;
@@ -1563,6 +2079,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
     const lc = document.getElementById('c-lifecycle');
     const openSteps = state.workflows.reduce((n, wf) => n + TEMPLATES[wf.tpl].steps.filter((_, i) => !(seedDone(stepId(wf, i), wf.done[i]) || isResolved(stepId(wf, i)))).length, 0);
     lc.textContent = openSteps; lc.className = 'count';
+    const wc = document.getElementById('c-workforce'); { const sc = state.wfp.scen[state.wfp.sel]; const R = wfCompute(wfConfig(sc), 'All');
+      const over = canSee('comp') && R.total > wfBudget('All').reduce((s, v) => s + v, 0) + 0.5;
+      wc.textContent = R.ending; wc.className = 'count' + (over ? ' hot' : ''); wc.title = over ? 'Forecast over budget' : 'Ending headcount'; }
     const pl = document.getElementById('c-plan');
     const late = PLAN.filter(m => planStatus(m).label === 'Overdue').length;
     pl.textContent = `${PLAN.filter(m => planStatus(m).label === 'Done').length}/${PLAN.length}`;
@@ -1572,10 +2091,12 @@ nav.tabs { background: none; border: 0; padding: 0; }
   function render() {
     const C = compute();
     renderCounts(C);
+    const tipEl = document.getElementById('wf-tip'); if (tipEl) tipEl.hidden = true;
+    document.body.classList.toggle('drawer-open', !!state.wfDrawer && state.tab === 'workforce');
     document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === state.tab)));
     const panel = document.getElementById('panel');
     panel.setAttribute('aria-labelledby', 'tab-' + state.tab);
-    panel.innerHTML = ({ plan: renderPlan, ops: renderOps, recon: renderRecon, calendar: renderCalendar, quality: renderQuality, requests: renderRequests, lifecycle: renderLifecycle })[state.tab](C);
+    panel.innerHTML = ({ plan: renderPlan, workforce: renderWorkforce, ops: renderOps, recon: renderRecon, calendar: renderCalendar, quality: renderQuality, requests: renderRequests, lifecycle: renderLifecycle })[state.tab](C);
     const tabBtn = document.getElementById('tab-' + state.tab);
     document.getElementById('crumb').textContent = tabBtn.querySelector('.tab-label').textContent;
     document.getElementById('rollout').hidden = state.tab !== 'plan';
@@ -1614,6 +2135,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
     document.querySelectorAll('details.menu[open], details.tour[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-item')) d.open = false; });
     const tab = e.target.closest('.tab');
     if (tab) { setTab(tab.dataset.tab); return; }
+    if (state.tab === 'workforce' && wfClick(e)) return;
     const f = e.target.closest('[data-filter]');
     if (f) { state.srcFilter = f.dataset.filter; render(); return; }
     const rf = e.target.closest('[data-reqfilter]');
@@ -1634,7 +2156,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
     }
     if (act === 'reset') {
       if (!confirm('Clear everything you’ve done in this demo and start over?')) return;
-      Object.assign(state, fresh(), { asOf: '2026-10-13', role: 'People Ops', resolving: null, newReq: false, newWf: null, openReq: null });
+      Object.assign(state, fresh(), { asOf: '2026-10-13', role: 'People Ops', wfDrawer: null, resolving: null, newReq: false, newWf: null, openReq: null });
       render();
     }
     if (act === 'hide-intro') { state.introHidden = true; render(); }
@@ -1718,6 +2240,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
     render();
   });
   document.addEventListener('change', e => {
+    if (e.target.matches('[data-wd]')) { wfDraftInput(e.target); if (e.target.type === 'checkbox' && state.wfDrawer && state.wfDrawer.mode === 'departure') render(); return; }
+    if (e.target.id === 'wf-dept') { state.wfp.dept = e.target.value; state.wfp.month = null; render(); return; }
+    if (e.target.id === 'wf-delay') { const sc = state.wfp.scen[state.wfp.sel]; const v = +e.target.value; if (v !== sc.delay) { sc.delay = v; sc.modified = true; logEvent('Hiring delay changed', 'wf-delay', `${WF_SCEN_LABEL[state.wfp.sel]}: eligible hires delayed ${v} month${v === 1 ? '' : 's'}`); } render(); const d = document.getElementById('wf-delay'); if (d) d.focus(); return; }
     if (e.target.matches('[data-owner]')) { const id = e.target.dataset.owner; state.owner[id] = e.target.value; logEvent('Reassigned', id, `${titleOf(id)} → ${e.target.value}`); render(); }
     if (e.target.id === 'role') { state.role = e.target.value; logEvent('Switched view', '', `Viewing as ${state.role}`); render(); }
     if (e.target.id === 'show-resolved') { state.showResolved = e.target.checked; render(); }
@@ -1725,6 +2250,8 @@ nav.tabs { background: none; border: 0; padding: 0; }
     if (e.target.id === 'asof' && /^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { state.asOf = e.target.value; render(); }
   });
   document.addEventListener('input', e => {
+    if (e.target.matches('[data-wd]') && e.target.type !== 'checkbox' && e.target.tagName !== 'SELECT') { wfDraftInput(e.target); return; }
+    if (e.target.id === 'wf-delay') { const l = document.querySelector('label[for="wf-delay"] b'); if (l) l.textContent = `${e.target.value} month${e.target.value === '1' ? '' : 's'}`; return; }
     if (e.target.id === 'pb-q') document.getElementById('pb-results').innerHTML = playbookHTML(e.target.value);
   });
   function exportState() {
@@ -1740,6 +2267,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
       const data = JSON.parse(await file.text());
       if (data.app !== 'people-ops-control-room' || !data.state || !Array.isArray(data.state.requests)) throw new Error('not an export from this demo');
       KEPT.forEach(k => { if (data.state[k] !== undefined) state[k] = data.state[k]; });
+      if (!wfValid(state.wfp)) state.wfp = wfFresh();
       logEvent('Restored', '', `Restored from ${file.name}`); render();
     } catch (err) { alert('That file couldn’t be restored: ' + err.message); }
     e.target.value = '';
@@ -1747,7 +2275,12 @@ nav.tabs { background: none; border: 0; padding: 0; }
   document.addEventListener('toggle', e => {
     if (e.target.matches && e.target.matches('details[data-rc]')) state.rcOpen[e.target.dataset.rc] = e.target.open;
   }, true);
+  document.addEventListener('mouseover', e => { const el = e.target.closest && e.target.closest('[data-wfm]'); if (el) wfTip(el); });
+  document.addEventListener('focusin', e => { const el = e.target.closest && e.target.closest('[data-wfm]'); if (el) wfTip(el); });
+  document.addEventListener('mouseout', e => { const el = e.target.closest && e.target.closest('[data-wfm]'); if (el && !el.contains(e.relatedTarget)) wfTip(null); });
+  document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('[data-wfm]')) wfTip(null); });
   document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && state.wfDrawer) { if (state.wfDrawer.dirty) state.wfDrawer.confirm = true; else state.wfDrawer = null; render(); return; }
     const tab = e.target.closest && e.target.closest('.tab');
     if (!tab || !['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
     e.preventDefault();
@@ -1757,9 +2290,12 @@ nav.tabs { background: none; border: 0; padding: 0; }
     next.focus(); setTab(next.dataset.tab);
   });
 
+  // Analytics: record which sections a visitor opens (no-op if Clarity isn't installed)
+  function track(tab) { try { if (window.clarity) { window.clarity('event', 'tab_' + tab); window.clarity('set', 'last_tab', tab); } } catch (_) {} }
   function setTab(tab) {
-    state.tab = tab; state.resolving = null; state.formErr = '';
+    state.tab = tab; state.resolving = null; state.formErr = ''; state.wfDrawer = null;
     try { history.replaceState(null, '', '#' + tab); } catch (_) {}
+    track(tab);
     render();
     if (window.scrollY > 0) window.scrollTo({ top: 0 });
   }
@@ -1787,8 +2323,9 @@ nav.tabs { background: none; border: 0; padding: 0; }
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => applyTheme());
 
   const h = (location.hash || '').slice(1);
-  if (['plan', 'ops', 'recon', 'calendar', 'quality', 'requests', 'lifecycle'].includes(h)) state.tab = h;
+  if (['plan', 'workforce', 'ops', 'recon', 'calendar', 'quality', 'requests', 'lifecycle'].includes(h)) state.tab = h;
   render();
+  track(state.tab);
 })();
 </script>
 </body>
