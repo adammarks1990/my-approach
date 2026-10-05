@@ -623,6 +623,26 @@ body.drawer-open { overflow: hidden; }
   .rtable td:first-child::before { content: none; }
   .rtable td.act { justify-content: flex-start; }
 }
+
+/* Cards that act as links (fixes dead clicks) */
+.card-link { all: unset; box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+.steps li:has(> .card-link), .tour-steps li:has(> .card-link), .steps li.later { grid-template-rows: auto 1fr; align-content: stretch; }
+.steps li.later { display: flex; flex-direction: column; } .steps li.later .go { margin-top: auto; }
+.card-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.steps li:has(> .card-link), .tour-steps li:has(> .card-link) { position: relative; cursor: pointer; border: 1px solid var(--line); transition: border-color .15s, box-shadow .15s, transform .15s; }
+.tour-steps li:has(> .card-link) { border-color: transparent; }
+.steps li.here:has(> .card-link) { border-color: var(--accent); }
+.steps li:has(> .card-link):hover, .tour-steps li:has(> .card-link):hover, button.phase:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.08); transform: translateY(-1px); }
+.steps li:has(> .card-link:focus-visible), .tour-steps li:has(> .card-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card-link .go { margin-top: auto; padding-top: 6px; }
+.card-link .go, .steps li.later .go { font-style: normal; font-size: 0.8rem; font-weight: 600; color: var(--accent-ink); margin-top: 4px; }
+.steps li.later .go { color: var(--muted); font-weight: 500; }
+.steps li.later { box-shadow: none; background: transparent; border-style: dashed; }
+button.phase { font: inherit; color: inherit; text-align: left; cursor: pointer; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: var(--rl); padding: 18px 20px; box-shadow: var(--shadow); display: grid; gap: 6px; transition: border-color .15s, box-shadow .15s, transform .15s; }
+button.phase.here { border-color: var(--accent); background: var(--accent-soft); }
+button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cal-group:focus { outline: none; }
+.cal-group { scroll-margin-top: 80px; }
 </style>
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 </head>
@@ -681,10 +701,10 @@ body.drawer-open { overflow: hidden; }
         </div>
         <p class="muted">An interactive first-90-day plan for People Operations, with the working tools behind it. Scenario: the Oct 1–15 payroll, planned for release Oct 14.</p>
         <ol class="tour-steps">
-          <li><b>90-day plan</b><span>What gets done when, and what counts as proof that it’s done.</span></li>
-          <li><b>Operations</b><span>The Oct 15 payroll is blocked. See which findings are behind it and how they link.</span></li>
-          <li><b>Reconciliation</b><span>Fix Daniel Brooks’s missed promotion: request the correction, then verify the amount.</span></li>
-          <li><b>Requests</b><span>Submit an accommodation request and see how it’s routed privately.</span></li>
+          <li><button type="button" class="card-link" data-action="goto" data-tab="plan"><b>90-day plan</b><span>What gets done when, and what counts as proof that it’s done.</span><i class="go">Open →</i></button></li>
+          <li><button type="button" class="card-link" data-action="goto" data-tab="ops"><b>Operations</b><span>The Oct 15 payroll is blocked. See which findings are behind it and how they link.</span><i class="go">Open →</i></button></li>
+          <li><button type="button" class="card-link" data-action="goto" data-tab="recon"><b>Reconciliation</b><span>Fix Daniel Brooks’s missed promotion: request the correction, then verify the amount.</span><i class="go">Open →</i></button></li>
+          <li><button type="button" class="card-link" data-action="goto" data-tab="requests"><b>Requests</b><span>Submit an accommodation request and see how it’s routed privately.</span><i class="go">Open →</i></button></li>
         </ol>
       </section>
 
@@ -693,10 +713,10 @@ body.drawer-open { overflow: hidden; }
       <section class="rollout" id="rollout" aria-labelledby="rollout-h">
         <h2 id="rollout-h">Where these sit in the build order</h2>
         <ol class="steps">
-          <li class="here"><b>Days 1–30</b>Operations view, reconciliation, obligations calendar and data-quality checks. Protect people and get visibility while learning the operation.</li>
-          <li class="here"><b>Days 31–60</b>Request intake with private routing, written playbooks and verified lifecycle checklists. This is the standardization step.</li>
-          <li><b>Days 61–90</b>Metrics agreed with Finance, automated checks and alerts, and a review of access and role-based views.</li>
-          <li><b>After 90 days</b>Self-service and an AI assistant, once playbooks are reliable and request data shows the most common questions.</li>
+          <li class="here"><button type="button" class="card-link" data-action="goto" data-tab="ops"><b>Days 1–30</b>Operations view, reconciliation, obligations calendar and data-quality checks. Protect people and get visibility while learning the operation.<i class="go">Open Operations →</i></button></li>
+          <li class="here"><button type="button" class="card-link" data-action="goto" data-tab="requests"><b>Days 31–60</b>Request intake with private routing, written playbooks and verified lifecycle checklists. This is the standardization step.<i class="go">Open Requests →</i></button></li>
+          <li><button type="button" class="card-link" data-action="goto" data-tab="quality"><b>Days 61–90</b>Metrics agreed with Finance, automated checks and alerts, and a review of access and role-based views.<i class="go">Open Data &amp; controls →</i></button></li>
+          <li class="later"><b>After 90 days</b>Self-service and an AI assistant, once playbooks are reliable and request data shows the most common questions.<i class="go muted">Planned, not built yet</i></li>
         </ol>
         <p class="muted">Build or configure: most of this lives inside the existing HRIS, payroll provider, ticketing tool and Slack. The first step is finding which of these capabilities already exist and which are underused.</p>
       </section>
@@ -1567,10 +1587,10 @@ body.drawer-open { overflow: hidden; }
     const phaseHTML = [1, 2, 3].map(p => {
       const ms = PLAN.filter(m => m.phase === p);
       const done = ms.filter(m => planStatus(m).label === 'Done').length;
-      return `<div class="phase${p === cur ? ' here' : ''}"><span class="eyebrow">Phase ${p}${p === cur ? ' · now' : ''}</span><b>${esc(PHASES[p])}</b>
-        <span class="muted">${done} of ${ms.length} verified</span><div class="bar"><span style="width:${Math.round(done / ms.length * 100)}%"></span></div></div>`;
+      return `<button type="button" class="phase${p === cur ? ' here' : ''}" data-action="jump" data-target="phase-${p}" aria-label="Jump to phase ${p} milestones"><span class="eyebrow">Phase ${p}${p === cur ? ' · now' : ''}</span><b>${esc(PHASES[p])}</b>
+        <span class="muted">${done} of ${ms.length} verified</span><div class="bar"><span style="width:${Math.round(done / ms.length * 100)}%"></span></div></button>`;
     }).join('');
-    const rows = [1, 2, 3].map(p => `<div class="cal-group"><h3>${esc(PHASES[p])}</h3><ul class="items">${PLAN.filter(m => m.phase === p).map(m => {
+    const rows = [1, 2, 3].map(p => `<div class="cal-group" id="phase-${p}" tabindex="-1"><h3>${esc(PHASES[p])}</h3><ul class="items">${PLAN.filter(m => m.phase === p).map(m => {
       const st = planStatus(m); const res = state.resolved[m.id]; const ev = seedDone(m.id, m.done) || (res && res.note);
       const left = daysBetween(state.asOf, m.due);
       return `<li class="item${st.label === 'Done' ? ' is-resolved' : ''}">
@@ -2143,7 +2163,8 @@ body.drawer-open { overflow: hidden; }
     const a = e.target.closest('[data-action]');
     if (!a) return;
     const act = a.dataset.action;
-    if (act === 'goto') setTab(a.dataset.tab);
+    if (act === 'goto') { if (a.dataset.tab === state.tab) { const p = document.getElementById('panel'); if (p) p.scrollIntoView({ behavior: 'smooth' }); } else setTab(a.dataset.tab); }
+    if (act === 'jump') { const el = document.getElementById(a.dataset.target); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.focus({ preventScroll: true }); } }
     if (act === 'resolve') { state.resolving = a.dataset.id; state.formErr = ''; render(); }
     if (act === 'cancel') { state.reopening = null; }
     if (act === 'cancel') { state.resolving = null; state.formErr = ''; render(); }
