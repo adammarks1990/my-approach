@@ -14,7 +14,7 @@
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yrxwwyrec6");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: an operations console. Header with the as-of date, four tool tabs, one working surface per tool. */
 :root {
@@ -34,8 +34,8 @@
   --ok-soft: #E0F2E7;
   --info: #4A5A70;
   --info-soft: #E7EBF1;
-  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
-  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "IBM Plex Sans Condensed", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", Arial, sans-serif;
   --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --r: 6px;
 }
@@ -311,36 +311,21 @@ td .id { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted);
 
 /* ================= Clean workspace theme ================= */
 :root {
-  --bg: #F6F7F9; --surface: #FFFFFF; --surface-2: #F2F4F7; --line: #E6E8EC; --line-2: #EEF0F3;
-  --fg: #111827; --muted: #6B7280; --faint: #9CA3AF;
-  --accent: #E0562E; --accent-soft: #FDEEE8; --accent-ink: #B9401D;
-  --crit: #C2362B; --crit-soft: #FDECEA; --warn: #9A5B00; --warn-soft: #FEF4E2;
-  --ok: #16794C; --ok-soft: #E6F5EC; --info: #475467; --info-soft: #EEF1F5;
-  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --line-2: #E6EAF0; --faint: #8A95A5; --accent-ink: #2238A3;
   --r: 10px; --rl: 14px; --shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0F1115; --surface: #171A20; --surface-2: #1E222A; --line: #2A2F38; --line-2: #232830;
-    --fg: #EEF0F3; --muted: #9AA3AF; --faint: #6B7280;
-    --accent: #FF7A50; --accent-soft: #3A2119; --accent-ink: #FF9B78;
-    --crit: #FF8A80; --crit-soft: #3A1C1A; --warn: #F2B65C; --warn-soft: #362812;
-    --ok: #6FD39C; --ok-soft: #13301F; --info: #B4BCC8; --info-soft: #222833;
+    --line-2: #222C3A; --faint: #6B7789; --accent-ink: #B3C1FF;
     --shadow: none; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0F1115; --surface: #171A20; --surface-2: #1E222A; --line: #2A2F38; --line-2: #232830;
-  --fg: #EEF0F3; --muted: #9AA3AF; --faint: #6B7280;
-  --accent: #FF7A50; --accent-soft: #3A2119; --accent-ink: #FF9B78;
-  --crit: #FF8A80; --crit-soft: #3A1C1A; --warn: #F2B65C; --warn-soft: #362812;
-  --ok: #6FD39C; --ok-soft: #13301F; --info: #B4BCC8; --info-soft: #222833;
+  --line-2: #222C3A; --faint: #6B7789; --accent-ink: #B3C1FF;
   --shadow: none; color-scheme: dark;
 }
 body { font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
-.mono, .num { font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+.mono, .num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
 h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
 
 /* App shell */
