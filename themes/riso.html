@@ -751,14 +751,13 @@ body.deck-open { overflow: hidden; }
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style id="theme-riso">
-.theme-btn { display: none !important; }
 .content { padding-bottom: 104px !important; }
 .tp-bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 85; display: flex; gap: 2px; align-items: center; background: rgba(17,22,34,.92); color: #fff; padding: 5px; border-radius: 99px; font: 500 13px/1 system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.25); max-width: calc(100vw - 32px); overflow-x: auto; }
 .tp-bar span { padding: 0 10px 0 12px; opacity: .65; white-space: nowrap; }
 .tp-bar a { color: #fff; text-decoration: none; padding: 8px 12px; border-radius: 99px; white-space: nowrap; }
 .tp-bar a:hover { background: rgba(255,255,255,.12); }
 .tp-bar a[aria-current="page"] { background: #fff; color: #111; }
-:root:root:root, :root:root:root[data-theme="dark"] { color-scheme: light; --bg: #EEE4E1; --surface: #F8F2EF; --surface-2: #E8DDD9; --line: #D6C7C2; --line-2: #E2D6D2; --fg: #1F2A44; --muted: #5C5E72; --faint: #8E8C9C; --accent: #2F4FC0; --accent-soft: #DADFF6; --accent-ink: #24409F; --crit: #BF3428; --crit-soft: #F7DCD7; --warn: #8F5200; --warn-soft: #F8E5C8; --ok: #1F7A4A; --ok-soft: #DCEEDF; --info: #4A5068; --info-soft: #E4DCDD; --font-display: "Rubik", Arial, sans-serif; --font-body: "Rubik", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 6px; --rl: 10px; --shadow: none; }
+:root:root:root { color-scheme: light; --bg: #EEE4E1; --surface: #F8F2EF; --surface-2: #E8DDD9; --line: #D6C7C2; --line-2: #E2D6D2; --fg: #1F2A44; --muted: #5C5E72; --faint: #8E8C9C; --accent: #2F4FC0; --accent-soft: #DADFF6; --accent-ink: #24409F; --crit: #BF3428; --crit-soft: #F7DCD7; --warn: #8F5200; --warn-soft: #F8E5C8; --ok: #1F7A4A; --ok-soft: #DCEEDF; --info: #4A5068; --info-soft: #E4DCDD; --font-display: "Rubik", Arial, sans-serif; --font-body: "Rubik", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 6px; --rl: 10px; --shadow: none; }
 
 body { background: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27220%27%20height=%27220%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%20.2%20%200%200%200%200%20.15%20%200%200%200%200%20.2%20%200%200%200%20.22%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E"), #EEE4E1; }
 .side { background: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27220%27%20height=%27220%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%20.2%20%200%200%200%200%20.15%20%200%200%200%200%20.2%20%200%200%200%20.22%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E"), #E6DAD6; border-right: 0; }
@@ -785,7 +784,23 @@ h2, h3 { font-weight: 700; }
 .deck-thumb { background: radial-gradient(circle, rgba(255,108,47,.55) 1.6px, transparent 2px) 0 0 / 9px 9px, #FFD9C7; background-size: 9px 9px, auto; border: 0; } .deck-thumb i { background: #2F4FC0; }
 .slide h2.s-title, .slide.k-title h1 { font-family: "Rubik", Arial, sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; text-shadow: 3px 2px 0 rgba(255,108,47,.45); }
 .slide { --s-bg: #EEE4E1; --s-surface: #F8F2EF; --s-accent: #2F4FC0; font-family: "Rubik", Arial, sans-serif; }
+:root:root:root[data-theme="dark"] { color-scheme: dark; --bg: #191A24; --surface: #22232F; --surface-2: #2B2C3A; --line: #3A3B4D; --line-2: #303142; --fg: #F1E9E6; --muted: #AEA9B6; --faint: #7F7B8B; --accent: #8EA4FF; --accent-soft: #26305E; --accent-ink: #A9BAFF; --crit: #FF8B7E; --crit-soft: #43211F; --warn: #F5B562; --warn-soft: #42301A; --ok: #7ED6A2; --ok-soft: #183A29; --info: #BDB8C6; --info-soft: #2C2D3B; }
+:root[data-theme="dark"] body { background: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27220%27%20height=%27220%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%20%200%200%200%200%20.95%20%200%200%200%200%20.92%20%200%200%200%20.10%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E"), #191A24; }
+:root[data-theme="dark"] .side { background: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27220%27%20height=%27220%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%20%200%200%200%200%20.95%20%200%200%200%200%20.92%20%200%200%200%20.10%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E"), #15161F; }
+:root[data-theme="dark"] .card, :root[data-theme="dark"] .stat, :root[data-theme="dark"] .phase, :root[data-theme="dark"] .table-wrap, :root[data-theme="dark"] .items, :root[data-theme="dark"] .practice, :root[data-theme="dark"] .tour-steps li { background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27220%27%20height=%27220%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%20%200%200%200%200%20.95%20%200%200%200%200%20.92%20%200%200%200%20.10%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E") !important; background-color: #22232F !important; }
+:root[data-theme="dark"] .panel-head h2 { color: #F1E9E6; text-shadow: 3px 2px 0 rgba(255,108,47,.6); }
+:root[data-theme="dark"] .stat { border-top-color: #8EA4FF !important; }
+:root[data-theme="dark"] .stat .value { color: #8EA4FF; }
+:root[data-theme="dark"] .stat .value.crit { color: #FF8B7E; }
+:root[data-theme="dark"] .stat .value.warn { color: #F5B562; }
+:root[data-theme="dark"] .phase.here, :root[data-theme="dark"] button.phase.here { background-color: #4A2C24 !important; }
+:root[data-theme="dark"] .btn { border-color: #F1E9E6; }
+:root[data-theme="dark"] .btn.link, :root[data-theme="dark"] .btn.ghost { border-color: transparent; }
+:root[data-theme="dark"] .btn.primary { background: #2F4FC0; border-color: #2F4FC0; color: #fff; }
+:root[data-theme="dark"] .eyebrow, :root[data-theme="dark"] .kicker { color: #8EA4FF; }
+:root[data-theme="dark"] .intro { background-color: #22232F !important; }
 </style>
+<script>try{var s=localStorage.getItem('people-ops-control-room-theme');document.documentElement.dataset.theme=(s==='light'||s==='dark')?s:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
 </head>
 <body>
 <nav class="tp-bar" aria-label="Theme previews"><span>Theme preview</span><a href="../index.html">Original</a><a href="whiteboard.html">Whiteboard</a><a href="crest.html">Crest</a><a href="back-issue.html">Back Issue</a><a href="riso.html" aria-current="page">Riso</a></nav>

@@ -751,14 +751,13 @@ body.deck-open { overflow: hidden; }
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Kalam:wght@400;700&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style id="theme-whiteboard">
-.theme-btn { display: none !important; }
 .content { padding-bottom: 104px !important; }
 .tp-bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 85; display: flex; gap: 2px; align-items: center; background: rgba(17,22,34,.92); color: #fff; padding: 5px; border-radius: 99px; font: 500 13px/1 system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.25); max-width: calc(100vw - 32px); overflow-x: auto; }
 .tp-bar span { padding: 0 10px 0 12px; opacity: .65; white-space: nowrap; }
 .tp-bar a { color: #fff; text-decoration: none; padding: 8px 12px; border-radius: 99px; white-space: nowrap; }
 .tp-bar a:hover { background: rgba(255,255,255,.12); }
 .tp-bar a[aria-current="page"] { background: #fff; color: #111; }
-:root:root:root, :root:root:root[data-theme="dark"] { color-scheme: light; --bg: #FBFAF6; --surface: #FFFFFF; --surface-2: #F2EFE7; --line: #D9D4C7; --line-2: #E7E3D8; --fg: #23262B; --muted: #5B5F66; --faint: #8C8F95; --accent: #2F5BD3; --accent-soft: #DCE5FF; --accent-ink: #2448AE; --crit: #C3372D; --crit-soft: #FBE3E0; --warn: #8F5A00; --warn-soft: #FCEBCB; --ok: #2B7A3D; --ok-soft: #DDF1DF; --info: #4A5260; --info-soft: #EAE7DE; --font-display: "Kalam", "Comic Sans MS", cursive; --font-body: "Nunito", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 6px; --rl: 8px; --shadow: 2px 3px 0 rgba(35,38,43,.10); }
+:root:root:root { color-scheme: light; --bg: #FBFAF6; --surface: #FFFFFF; --surface-2: #F2EFE7; --line: #D9D4C7; --line-2: #E7E3D8; --fg: #23262B; --muted: #5B5F66; --faint: #8C8F95; --accent: #2F5BD3; --accent-soft: #DCE5FF; --accent-ink: #2448AE; --crit: #C3372D; --crit-soft: #FBE3E0; --warn: #8F5A00; --warn-soft: #FCEBCB; --ok: #2B7A3D; --ok-soft: #DDF1DF; --info: #4A5260; --info-soft: #EAE7DE; --font-display: "Kalam", "Comic Sans MS", cursive; --font-body: "Nunito", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 6px; --rl: 8px; --shadow: 2px 3px 0 rgba(35,38,43,.10); }
 
 body { background: radial-gradient(#DAD5C8 1.1px, transparent 1.4px) 0 0 / 22px 22px, #FBFAF6; }
 .side { background: rgba(255,255,255,.55); border-right: 2px dashed #C9C3B4; }
@@ -785,7 +784,25 @@ h2, h3, .section-head h2 { font-family: "Kalam", cursive; font-weight: 700; }
 .deck-thumb { background: #fff; border: 2px solid #23262B; }
 .slide h2.s-title, .slide.k-title h1 { font-family: "Kalam", cursive; font-weight: 700; }
 .slide { --s-bg: #FBFAF6; }
+:root:root:root[data-theme="dark"] { color-scheme: dark; --bg: #1E2925; --surface: #25312C; --surface-2: #2C3934; --line: #43514B; --line-2: #36433E; --fg: #EDEBE3; --muted: #AEB8B1; --faint: #808D86; --accent: #8FB4FF; --accent-soft: #2A3A5C; --accent-ink: #A9C4FF; --crit: #FF8B80; --crit-soft: #4A2421; --warn: #F2C26B; --warn-soft: #4A3818; --ok: #8BD9A0; --ok-soft: #1F3D2A; --info: #C2CBC5; --info-soft: #34403B; --shadow: 2px 3px 0 rgba(0,0,0,.25); }
+:root[data-theme="dark"] body { background: radial-gradient(#33413B 1.1px, transparent 1.4px) 0 0 / 22px 22px, #1E2925; }
+:root[data-theme="dark"] .side { background: rgba(0,0,0,.14); border-right-color: #4A5751; }
+:root[data-theme="dark"] .card, :root[data-theme="dark"] .table-wrap, :root[data-theme="dark"] .items, :root[data-theme="dark"] .practice { border-color: rgba(237,235,227,.75) !important; box-shadow: 3px 4px 0 rgba(0,0,0,.25); }
+:root[data-theme="dark"] .practice { background: #25312C; }
+:root[data-theme="dark"] .stat, :root[data-theme="dark"] .phase, :root[data-theme="dark"] .tour-steps li, :root[data-theme="dark"] .cards .card { color: #23262B !important; }
+:root[data-theme="dark"] .stat *, :root[data-theme="dark"] .phase *, :root[data-theme="dark"] .tour-steps li *, :root[data-theme="dark"] .cards .card h3, :root[data-theme="dark"] .cards .card b { color: #23262B; }
+:root[data-theme="dark"] .stat .label, :root[data-theme="dark"] .stat .sub, :root[data-theme="dark"] .cards .card .muted, :root[data-theme="dark"] .phase .muted, :root[data-theme="dark"] .tour-steps span { color: #3E4249 !important; }
+:root[data-theme="dark"] .stat .value.crit { color: #B3261E !important; }
+:root[data-theme="dark"] .stat .value.warn { color: #7A4A00 !important; }
+:root[data-theme="dark"] .cards .card .btn.link, :root[data-theme="dark"] .cards .card a, :root[data-theme="dark"] .tour-steps li a, :root[data-theme="dark"] .tour-steps li .btn.link, :root[data-theme="dark"] .phase .eyebrow, :root[data-theme="dark"] .cards .card .eyebrow { color: #1E3FA8 !important; }
+:root[data-theme="dark"] .cards .card .btn { background: #FFFFFF; color: #23262B; border-color: #23262B; box-shadow: 2px 2px 0 #23262B; }
+:root[data-theme="dark"] .btn { border-color: #EDEBE3; box-shadow: 2px 2px 0 #EDEBE3; }
+:root[data-theme="dark"] .btn.link, :root[data-theme="dark"] .btn.ghost { box-shadow: none; border-color: transparent; }
+:root[data-theme="dark"] .btn.primary { background: #2F5BD3; color: #fff; }
+:root[data-theme="dark"] .phase.here { outline-color: #EDEBE3; }
+:root[data-theme="dark"] .deck-thumb { border-color: #23262B; }
 </style>
+<script>try{var s=localStorage.getItem('people-ops-control-room-theme');document.documentElement.dataset.theme=(s==='light'||s==='dark')?s:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
 </head>
 <body>
 <nav class="tp-bar" aria-label="Theme previews"><span>Theme preview</span><a href="../index.html">Original</a><a href="whiteboard.html" aria-current="page">Whiteboard</a><a href="crest.html">Crest</a><a href="back-issue.html">Back Issue</a><a href="riso.html">Riso</a></nav>

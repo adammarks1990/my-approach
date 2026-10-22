@@ -751,14 +751,13 @@ body.deck-open { overflow: hidden; }
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style id="theme-crest">
-.theme-btn { display: none !important; }
 .content { padding-bottom: 104px !important; }
 .tp-bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 85; display: flex; gap: 2px; align-items: center; background: rgba(17,22,34,.92); color: #fff; padding: 5px; border-radius: 99px; font: 500 13px/1 system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.25); max-width: calc(100vw - 32px); overflow-x: auto; }
 .tp-bar span { padding: 0 10px 0 12px; opacity: .65; white-space: nowrap; }
 .tp-bar a { color: #fff; text-decoration: none; padding: 8px 12px; border-radius: 99px; white-space: nowrap; }
 .tp-bar a:hover { background: rgba(255,255,255,.12); }
 .tp-bar a[aria-current="page"] { background: #fff; color: #111; }
-:root:root:root, :root:root:root[data-theme="dark"] { color-scheme: light; --bg: #F5F2EC; --surface: #FFFFFF; --surface-2: #EFEBE3; --line: #E3DDD1; --line-2: #ECE7DD; --fg: #1B1F3B; --muted: #5D6276; --faint: #8F93A3; --accent: #2747D6; --accent-soft: #E3E8FF; --accent-ink: #1E37A8; --crit: #B3261E; --crit-soft: #FBE5E2; --warn: #935700; --warn-soft: #FCEBD2; --ok: #1E7A46; --ok-soft: #DFF2E6; --info: #4B5168; --info-soft: #ECEAF2; --font-display: "DM Serif Display", Georgia, serif; --font-body: "Instrument Sans", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 12px; --rl: 18px; --shadow: 0 1px 2px rgba(27,31,59,.05), 0 10px 28px rgba(27,31,59,.07); }
+:root:root:root { color-scheme: light; --bg: #F5F2EC; --surface: #FFFFFF; --surface-2: #EFEBE3; --line: #E3DDD1; --line-2: #ECE7DD; --fg: #1B1F3B; --muted: #5D6276; --faint: #8F93A3; --accent: #2747D6; --accent-soft: #E3E8FF; --accent-ink: #1E37A8; --crit: #B3261E; --crit-soft: #FBE5E2; --warn: #935700; --warn-soft: #FCEBD2; --ok: #1E7A46; --ok-soft: #DFF2E6; --info: #4B5168; --info-soft: #ECEAF2; --font-display: "DM Serif Display", Georgia, serif; --font-body: "Instrument Sans", Arial, sans-serif; --font-data: "IBM Plex Mono", monospace; --r: 12px; --rl: 18px; --shadow: 0 1px 2px rgba(27,31,59,.05), 0 10px 28px rgba(27,31,59,.07); }
 
 h1, h2, h3, .panel-head h2, .section-head h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; letter-spacing: -.005em; }
 .panel-head h2 { font-size: 2.7rem; line-height: 1.05; }
@@ -789,7 +788,20 @@ button.phase.here .eyebrow, button.phase.here .muted { color: #1B1F3B !important
 .slide.k-title p, .slide.k-title .s-kicker { color: #DCE3FF; }
 .slide.k-title .s-body { border-left-color: #F5C842; }
 .slide { --s-bg: #F5F2EC; --s-fg: #1B1F3B; }
+:root:root:root[data-theme="dark"] { color-scheme: dark; --bg: #12152B; --surface: #1A1E38; --surface-2: #22274A; --line: #2F3561; --line-2: #272C52; --fg: #EEF0FA; --muted: #A7ACC6; --faint: #777D9D; --accent: #8EA2FF; --accent-soft: #26306A; --accent-ink: #B0BEFF; --crit: #FF8B80; --crit-soft: #3D1F2A; --warn: #F2B860; --warn-soft: #3D2E1A; --ok: #74D39F; --ok-soft: #173527; --info: #B5BAD0; --info-soft: #262B4A; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.35); }
+:root[data-theme="dark"] .side { background: #161A33; border-right-color: #2F3561; }
+:root[data-theme="dark"] .tab[aria-selected="true"] { background: #EEF0FA !important; color: #12152B !important; }
+:root[data-theme="dark"] .tab[aria-selected="true"] .count { background: rgba(18,21,43,.12) !important; color: #12152B !important; }
+:root[data-theme="dark"] .intro { background-color: #2340C4 !important; }
+:root[data-theme="dark"] .tour-steps li { background: #1A1E38 !important; color: #EEF0FA; }
+:root[data-theme="dark"] .tour-steps li span { color: #C3C8E0 !important; }
+:root[data-theme="dark"] button.phase, :root[data-theme="dark"] .phase { background: #26306A !important; }
+:root[data-theme="dark"] button.phase.here, :root[data-theme="dark"] .phase.here { background: #F2A15C !important; color: #12152B !important; }
+:root[data-theme="dark"] button.phase.here b, :root[data-theme="dark"] button.phase.here .eyebrow, :root[data-theme="dark"] button.phase.here .muted { color: #12152B !important; }
+:root[data-theme="dark"] .btn.primary { background: #EEF0FA; border-color: #EEF0FA; color: #12152B; }
+:root[data-theme="dark"] .eyebrow, :root[data-theme="dark"] .kicker { color: #8EA2FF; }
 </style>
+<script>try{var s=localStorage.getItem('people-ops-control-room-theme');document.documentElement.dataset.theme=(s==='light'||s==='dark')?s:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
 </head>
 <body>
 <nav class="tp-bar" aria-label="Theme previews"><span>Theme preview</span><a href="../index.html">Original</a><a href="whiteboard.html">Whiteboard</a><a href="crest.html" aria-current="page">Crest</a><a href="back-issue.html">Back Issue</a><a href="riso.html">Riso</a></nav>
