@@ -630,6 +630,123 @@ button.phase.here { border-color: var(--accent); background: var(--accent-soft);
 button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .cal-group:focus { outline: none; }
 .cal-group { scroll-margin-top: 80px; }
+/* ================= Presentation decks ================= */
+.deck-shelf .cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.deck-card { align-content: start; }
+.deck-card h3 { margin: 0; font-size: 1rem; }
+.deck-card p { margin: 0; font-size: 0.875rem; }
+.deck-card .deck-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.deck-card .btn { justify-self: start; display: inline-flex; gap: 8px; align-items: center; }
+.deck-card .btn svg { width: 15px; height: 15px; }
+.deck-thumb { aspect-ratio: 16 / 9; border-radius: 8px; background: #F3F5F8; border: 1px solid #D8DEE7; padding: 10px 12px; display: grid; align-content: space-between; overflow: hidden; }
+.deck-thumb b { font-family: var(--font-display); font-size: 0.95rem; line-height: 1.2; color: #17202B; font-weight: 600; }
+.deck-thumb i { display: block; height: 3px; width: 34%; background: #2C47C9; border-radius: 2px; }
+.deck-thumb span { font-size: 0.62rem; color: #5B6778; font-family: var(--font-body); }
+
+body.deck-open { overflow: hidden; }
+.deck-view { position: fixed; inset: 0; z-index: 90; background: rgba(12, 17, 24, 0.86); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.deck-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; color: #E5EAF1; font-family: var(--font-body); font-size: 0.875rem; }
+.deck-bar b { font-family: var(--font-display); font-weight: 600; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.deck-bar .btn, .deck-nav .btn { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); color: #E5EAF1; box-shadow: none; }
+.deck-bar .btn:hover, .deck-nav .btn:hover { border-color: rgba(255,255,255,0.45); }
+.deck-nav .btn:disabled { opacity: 0.35; cursor: default; }
+.deck-stage { position: relative; display: grid; place-items: center; overflow: hidden; padding: 0 16px; }
+.deck-fit { position: relative; }
+.deck-nav { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 10px 16px 14px; color: #95A2B4; font-family: var(--font-data); font-size: 0.85rem; }
+.deck-dots { display: flex; gap: 6px; }
+.deck-dots button { width: 9px; height: 9px; border-radius: 99px; border: 0; padding: 0; background: rgba(255,255,255,0.25); cursor: pointer; }
+.deck-dots button[aria-current="true"] { background: #E5EAF1; }
+
+/* Slides: always the light theme, designed at 1280x720 (1pt = 1.333px) */
+.slide { --s-bg: #F3F5F8; --s-surface: #FFFFFF; --s-fg: #17202B; --s-muted: #5B6778; --s-accent: #2C47C9; --s-accent-soft: #E4E9FF; --s-line: #D8DEE7;
+  --s-crit: #B42D27; --s-crit-soft: #FBE8E6; --s-warn: #965500; --s-warn-soft: #FCEFD9; --s-ok: #1D7246; --s-ok-soft: #E0F2E7;
+  --s-base: #2C47C9; --s-lean: #6B7789; --s-growth: #7A3FC4;
+  position: absolute; top: 0; left: 0; width: 1280px; height: 720px; transform-origin: 0 0; background: var(--s-bg); color: var(--s-fg);
+  font-family: "IBM Plex Sans", Arial, sans-serif; font-size: 28px; line-height: 1.35; display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: 64px 80px 0; box-sizing: border-box; border-radius: 6px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+.slide * { box-sizing: border-box; }
+.slide h2.s-title { font-family: "IBM Plex Sans Condensed", Arial, sans-serif; font-size: 46px; line-height: 1.12; font-weight: 600; margin: 0 0 28px; letter-spacing: -0.01em; max-width: 1080px; }
+.slide .s-kicker { font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--s-accent); font-weight: 600; margin-bottom: 12px; }
+.slide .s-body { min-height: 0; }
+.slide .s-src { font-size: 20px; color: var(--s-muted); margin-top: 18px; }
+.slide .s-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-top: 1px solid var(--s-line); margin: 0 -80px; padding: 14px 80px 16px; font-size: 16px; color: var(--s-muted); background: var(--s-surface); }
+.slide .s-foot b { color: var(--s-fg); font-weight: 600; }
+.slide .s-foot .s-num { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.s-tag { display: inline-block; font-size: 17px; font-weight: 600; padding: 3px 12px; border-radius: 99px; white-space: nowrap; background: #E7EBF1; color: #4A5A70; }
+.s-tag.crit { background: var(--s-crit-soft); color: var(--s-crit); }
+.s-tag.warn { background: var(--s-warn-soft); color: var(--s-warn); }
+.s-tag.ok { background: var(--s-ok-soft); color: var(--s-ok); }
+.s-tag.accent { background: var(--s-accent-soft); color: var(--s-accent); }
+
+/* title */
+.slide.k-title { grid-template-rows: minmax(0, 1fr) auto; padding-top: 0; }
+.slide.k-title .s-body { display: grid; align-content: center; gap: 22px; border-left: 8px solid var(--s-accent); padding-left: 40px; margin-left: -40px; }
+.slide.k-title h1 { font-family: "IBM Plex Sans Condensed", Arial, sans-serif; font-size: 60px; line-height: 1.08; font-weight: 600; margin: 0; letter-spacing: -0.015em; max-width: 1000px; }
+.slide.k-title p { margin: 0; color: var(--s-muted); font-size: 28px; max-width: 980px; }
+.slide.k-title .s-meta { font-size: 20px; color: var(--s-muted); font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+/* executive finding */
+.s-finding { font-size: 30px; display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 0 32px; background: var(--s-surface); border: 1px solid var(--s-line); border-radius: 8px; padding: 34px 40px 34px 0; }
+.s-finding::before { content: ""; background: var(--s-accent); border-radius: 0 4px 4px 0; }
+.s-finding.crit::before { background: var(--s-crit); } .s-finding.warn::before { background: var(--s-warn); } .s-finding.ok::before { background: var(--s-ok); }
+.s-finding ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 18px; }
+.s-finding li { padding-left: 30px; position: relative; }
+.s-finding li::before { content: ""; position: absolute; left: 4px; top: 15px; width: 10px; height: 10px; border-radius: 2px; background: var(--s-muted); }
+.s-finding .s-tag { margin-bottom: 16px; }
+
+/* metric cards */
+.s-metrics { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 20px; }
+.s-metric { background: var(--s-surface); border: 1px solid var(--s-line); border-radius: 8px; padding: 26px 24px; display: grid; gap: 8px; align-content: start; border-top: 5px solid var(--s-line); }
+.s-metric.crit { border-top-color: var(--s-crit); } .s-metric.warn { border-top-color: var(--s-warn); } .s-metric.ok { border-top-color: var(--s-ok); } .s-metric.accent { border-top-color: var(--s-accent); }
+.s-metric .l { font-size: 22px; color: var(--s-muted); line-height: 1.25; }
+.s-metric .v { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 50px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; }
+.s-metric.crit .v { color: var(--s-crit); } .s-metric.warn .v { color: var(--s-warn); }
+.s-metric .d { font-size: 22px; color: var(--s-muted); line-height: 1.3; }
+
+/* tables (exception and decision) */
+.s-table { width: 100%; border-collapse: collapse; background: var(--s-surface); border: 1px solid var(--s-line); border-radius: 8px; overflow: hidden; font-size: 25px; line-height: 1.3; }
+.s-table th { text-align: left; font-size: 17px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--s-muted); font-weight: 600; padding: 14px 18px; border-bottom: 1px solid var(--s-line); background: #F8F9FB; }
+.s-table td { padding: 15px 20px; border-bottom: 1px solid var(--s-line); vertical-align: top; }
+.s-table tr:last-child td { border-bottom: 0; }
+.s-table td.n { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 23px; white-space: nowrap; text-align: right; }
+.s-table th.n { text-align: right; }
+.s-table td.nw { white-space: nowrap; }
+.s-table td.crit { color: var(--s-crit); } .s-table td.warn { color: var(--s-warn); }
+.s-table td small { display: block; font-size: 17px; color: var(--s-muted); }
+
+/* scenario comparison */
+.s-scen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.s-sc { background: var(--s-surface); border: 1px solid var(--s-line); border-radius: 8px; padding: 24px; display: grid; gap: 14px; align-content: start; border-top: 6px solid var(--c); }
+.s-sc.base { --c: var(--s-base); } .s-sc.lean { --c: var(--s-lean); } .s-sc.growth { --c: var(--s-growth); }
+.s-sc h3 { margin: 0; font-family: "IBM Plex Sans Condensed", Arial, sans-serif; font-size: 32px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+.s-sc h3::before { content: ""; width: 14px; height: 14px; border-radius: 99px; background: var(--c); }
+.s-sc .bar { height: 14px; background: #EDF0F5; border-radius: 99px; overflow: hidden; }
+.s-sc .bar span { display: block; height: 100%; background: var(--c); border-radius: 99px; }
+.s-sc dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 10px 12px; font-size: 23px; }
+.s-sc dt { color: var(--s-muted); } .s-sc dd { margin: 0; text-align: right; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 22px; }
+.s-sc p { margin: 0; font-size: 21px; color: var(--s-muted); line-height: 1.3; }
+.s-legend { font-size: 20px; color: var(--s-muted); margin-top: 16px; }
+
+/* milestone timeline */
+.s-tl { position: relative; display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: 18px; padding-top: 50px; }
+.s-tl::before { content: ""; position: absolute; left: 12px; right: 12px; top: 20px; height: 3px; background: var(--s-line); }
+.s-tl li { list-style: none; position: relative; display: grid; gap: 8px; align-content: start; }
+.s-tl li::before { content: ""; position: absolute; top: -40px; left: 0; width: 22px; height: 22px; border-radius: 99px; background: var(--s-surface); border: 4px solid var(--s-muted); }
+.s-tl li.ok::before { background: var(--s-ok); border-color: var(--s-ok); } .s-tl li.warn::before { border-color: var(--s-warn); background: var(--s-warn-soft); } .s-tl li.crit::before { background: var(--s-crit); border-color: var(--s-crit); } .s-tl li.accent::before { border-color: var(--s-accent); }
+.s-tl .dt { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 21px; color: var(--s-muted); }
+.s-tl b { font-size: 26px; line-height: 1.25; font-weight: 600; }
+.s-tl span.x { font-size: 21px; color: var(--s-muted); line-height: 1.3; }
+.s-tl ol { margin: 0; padding: 0; display: contents; }
+
+/* employee action cards */
+.s-actions { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 20px; }
+.s-act { background: var(--s-surface); border: 1px solid var(--s-line); border-radius: 8px; padding: 26px; display: grid; gap: 12px; align-content: start; }
+.s-act .who { font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--s-accent); font-weight: 600; }
+.s-act b { font-family: "IBM Plex Sans Condensed", Arial, sans-serif; font-size: 32px; line-height: 1.15; font-weight: 600; }
+.s-act p { margin: 0; font-size: 23px; color: var(--s-muted); line-height: 1.35; }
+.s-act .due { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 20px; color: var(--s-fg); border-top: 1px solid var(--s-line); padding-top: 12px; }
+@media (max-width: 640px) { .deck-bar .hide-sm { display: none; } }
+@media print { .deck-view { display: none; } }
 </style>
 <style>html,body{margin:0;padding:0}[hidden]{display:none!important}</style>
 </head>
@@ -716,6 +833,359 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
   </div>
 </div>
 
+<script>
+/* ================= Presentation decks =================
+   Nine 16:9 decks, each opened from the tab where its work lives. One takeaway per slide (the slide title),
+   at most one table or chart per slide. Fictional data, snapshot as of Oct 13, 2026. */
+(function () {
+  const AS_OF = 'Oct 13, 2026';
+  const E = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const TONE_LABEL = { crit: 'Open critical', warn: 'Pending', ok: 'Verified', accent: '', info: '' };
+
+  const DECKS = {
+    onboarding: {
+      kind: 'New hire onboarding deck', title: 'Your first week, step by step', audience: 'New hires starting in October 2026',
+      slides: [
+        { k: 'title', title: 'Your first week, step by step', sub: 'What happens from signed offer to first paycheck, who owns each step, and what we need from you.', meta: 'New hire onboarding · October 2026 starts' },
+        { k: 'finding', title: 'Every step of your first week has an owner and a way to confirm it is done', points: [
+          'Your onboarding checklist has 7 steps, owned by People Ops, Payroll, IT (information technology) and Benefits.',
+          'A step is checked off only with proof, such as an accepted payroll record or a signed device receipt.',
+          'If a step is stuck, the checklist says what is blocking it and who is fixing it.'] },
+        { k: 'timeline', title: 'Seven steps take you from signed offer to a correct first paycheck', items: [
+          ['Before day 1', 'Offer matches your record', 'Signed offer checked against the HRIS (human resources information system)'],
+          ['Day 1', 'Start time, place and manager confirmed', 'First-week plan sent before you arrive'],
+          ['Day 1', 'Systems and computer ready', 'Tools your manager approved; device signed for'],
+          ['By day 3', 'Form I-9 completed', 'Employment eligibility check, due by your third business day'],
+          ['First payday', 'Payroll record accepted', 'Your first check is reconciled before release']] },
+        { k: 'actions', title: 'Three things only you can do this week', cards: [
+          ['Day 1', 'Bring your I-9 documents', 'Bring original documents from the Form I-9 acceptable list. Section 2 must be completed by your third business day.', 'Due: business day 3'],
+          ['Week 1', 'Enroll in benefits', 'Your enrollment invite arrives on day 1. Coverage starts the first of the month after you start.', 'Due: before the invite deadline'],
+          ['Before payday', 'Check your pay preview', 'Compare it with your signed offer. If they differ, open a Payroll request and we will fix it before release.', 'Response: 2 business days']] },
+        { k: 'table', title: 'One request form routes your question to the right owner', cols: ['Topic', 'Owner', 'Response target'], num: [2], rows: [
+          ['Pay or pay preview', 'Payroll', '2 business days'], ['Benefits and dependents', 'Benefits', '3 business days'], ['System access', 'IT', '1 business day'],
+          ['Onboarding questions', 'People Ops', '2 business days'], ['Accommodation or leave (private)', 'People Ops, assigned partner only', '2 business days']],
+          src: 'Private cases are visible only to the assigned People Ops partner.' }
+      ]
+    },
+    allhands: {
+      kind: 'All-hands / town hall update', title: 'People Ops update for the all-hands', audience: 'All employees',
+      slides: [
+        { k: 'title', title: 'People Ops update: day 13 of 90', sub: 'What we are fixing first, dates you need before year end, and how to get help.', meta: 'All-hands · ' + AS_OF },
+        { k: 'finding', title: 'Starting with Oct 15, every payroll is checked before it is released', points: [
+          'Each pay register is compared with the last run plus every approved change.',
+          'Payroll is released only when no critical items are open.',
+          'If your pay looks wrong, open a Payroll request. You will hear back within 2 business days.'] },
+        { k: 'metrics', title: 'Where People Ops stands on day 13', cards: [
+          ['Plan milestones verified', '1 of 12', 'Each one closes only with evidence', 'accent'],
+          ['Requests open', '5', 'Across 4 owners', ''],
+          ['Past response target', '1', 'Being worked today', 'warn'],
+          ['Open enrollment', 'Nov 2–16', 'Guide arrives Oct 26', '']] },
+        { k: 'timeline', title: 'Five dates to know before year end', items: [
+          ['Oct 23', 'Change cutoff for the Oct 30 payroll', 'Later changes need Payroll review'],
+          ['Oct 26', 'Open enrollment guide sent', 'Read it before the window opens'],
+          ['Nov 2–16', 'Open enrollment window', 'Choose or confirm your 2027 plan'],
+          ['Dec 1', 'Handbook review', 'Acknowledge updated policies'],
+          ['Feb 1, 2027', 'Form W-2 available', 'Your annual wage and tax statement']] },
+        { k: 'actions', title: 'Three things to do before Nov 16', cards: [
+          ['Everyone', 'Check your emergency contact', 'Open your profile in the HRIS (human resources information system) and confirm it is current.', 'Takes 2 minutes'],
+          ['Everyone', 'Read the enrollment guide', 'It arrives Oct 26 and covers 2027 plans, costs and how to add dependents.', 'Arrives Oct 26'],
+          ['Everyone', 'Use one request form', 'Questions go to the right owner with a response target. Sensitive cases route privately.', 'Any time']] }
+      ]
+    },
+    status: {
+      kind: 'Project or sprint status review', title: '90-day plan: phase 1 status', audience: 'Manager and project sponsors',
+      slides: [
+        { k: 'title', title: '90-day plan: phase 1 status review', sub: 'Stabilize the essentials, days 1–30. Status of each milestone and the decisions needed this week.', meta: 'Status review · ' + AS_OF },
+        { k: 'finding', tone: 'crit', title: 'Phase 1 has 1 of 5 milestones verified, and the Oct 15 payroll release is blocked', points: [
+          'The system map is done and saved with evidence (verified Oct 8).',
+          'Payroll reconciliation found 7 critical items that must be fixed before the Oct 14 release.',
+          'The obligations calendar, data-quality pass and owner assignments are due Oct 16 to Oct 30.'] },
+        { k: 'timeline', title: 'One milestone is verified, one is blocked and three are due by Oct 30', items: [
+          ['Oct 9', 'Map every system, admin and integration', 'Verified Oct 8', 'ok'],
+          ['Oct 14', 'Reconcile payroll before release', 'Blocked by 7 critical items', 'crit'],
+          ['Oct 16', 'Publish the obligations calendar', 'In progress', 'warn'],
+          ['Oct 23', 'First data-quality pass', '8 findings open', 'warn'],
+          ['Oct 30', 'Confirm owners for inherited work', 'In progress', 'warn']] },
+        { k: 'table', title: 'Five payroll exceptions explain why the register is $5,383 above expected', cols: ['Employee', 'Exception', 'Difference'], num: [2], rows: [
+          ['Daniel Brooks (E104)', 'Promotion effective Oct 1 not applied', ['−$416.67', 'crit']],
+          ['Omar Haddad (E110)', 'Pay changed with nothing approved', ['+$1,500.00', 'crit']],
+          ['Ben Carter (E116)', 'Paid after last day, Sep 26', ['+$4,250.00', 'crit']],
+          ['Aisha Bello (E117)', 'Paid full period; last day Oct 9', ['+$2,800.00', 'crit']],
+          ['Camila Duarte (E119)', 'Missing from the register', ['−$2,750.00', 'crit']]],
+          src: 'Source: Oct 1–15 preliminary register vs Sep 30 run plus 8 approved changes. Over- and underpayments offset in the net figure.' },
+        { k: 'table', title: 'Four decisions are needed before Oct 20', cols: ['Decision', 'Recommendation', 'Owner', 'By'], nw: [3], rows: [
+          ['Release the Oct 15 payroll?', 'Hold until the 7 critical items are fixed', 'Payroll', 'Oct 14'],
+          ['Omar Haddad’s extra $1,500', 'Find the approval or remove it before release', 'Payroll', 'Oct 14'],
+          ['Form 5500 for the 2025 plan', 'Confirm with the broker whether the plan must file', 'Benefits', 'Oct 15'],
+          ['2027 medical renewal', 'Decide with the broker so enrollment materials can ship', 'Benefits', 'Oct 20']] },
+        { k: 'metrics', title: 'Payroll and People Ops carry most of the 31 open items', cards: [
+          ['Payroll', '12', 'open items', ''], ['People Ops', '10', 'open items', ''], ['Benefits', '7', 'open items', ''], ['IT', '2', 'open items', '']],
+          src: '15 of the 31 open items are critical. Counts as of ' + AS_OF + '.' }
+      ]
+    },
+    stakeholder: {
+      kind: 'Client or stakeholder update', title: 'Oct 15 payroll: update for Finance', audience: 'Finance and leadership',
+      slides: [
+        { k: 'title', title: 'Oct 15 payroll: release update for Finance', sub: 'What the reconciliation found, what is causing it, and the decisions we need by Oct 14.', meta: 'Stakeholder update · ' + AS_OF },
+        { k: 'finding', tone: 'crit', title: 'We recommend holding the Oct 15 release until 7 critical items are fixed', points: [
+          'The preliminary register is $5,383.33 above what last run plus approved changes predicts.',
+          'That net figure hides larger errors in both directions, including one new hire who would not be paid.',
+          'Fixes are scoped and owned. Release can follow the same day they are verified.'] },
+        { k: 'metrics', title: 'The register is $5,383.33 above the expected total', cards: [
+          ['Sep 30 run', '$96,492', 'Computed baseline', ''], ['Approved changes', '+$10,125', '8 changes on file', ''],
+          ['Expected Oct 15', '$106,617', 'Baseline plus changes', 'accent'], ['Register Oct 15', '$112,000', '+$5,383 unexplained', 'crit']],
+          src: 'Gross pay only. Taxes, 401(k) retirement contributions and garnishments are reconciled in the provider’s reports.' },
+        { k: 'table', title: 'Three root causes account for 10 of the findings', cols: ['Root cause', 'Linked findings', 'Fix', 'Owner'], num: [1], rows: [
+          ['New hire record rejected by payroll (Camila Duarte)', '5', 'Add the tax jurisdiction, resend, rerun the check', 'Payroll'],
+          ['Offboarding stopped partway (Aisha Bello)', '3', 'Reassign 3 shared drives; prorate final check to Oct 9', 'IT, Payroll'],
+          ['Weekly carrier file failed (Kwame Mensah)', '2', 'Resend the Oct 2 file; confirm spouse coverage billing', 'Benefits']] },
+        { k: 'timeline', title: 'Release can still land on Oct 15 if fixes are verified by Oct 14', items: [
+          ['Oct 13', 'Fix root causes', 'Owners working today', 'warn'],
+          ['Oct 14', 'Release decision', 'Only with no critical items open', 'warn'],
+          ['Oct 15', 'Payday', 'Reconciled register released', ''],
+          ['Oct 20', 'Benefits invoice due', '$17,860 after 4 mismatches are checked', ''],
+          ['Oct 23', 'Cutoff for Oct 30 run', 'Next reconciliation starts', '']] }
+      ]
+    },
+    qbr: {
+      kind: 'QBR / business review', title: 'Quarterly business review: people costs', audience: 'Leadership and Finance',
+      slides: [
+        { k: 'title', title: 'QBR (quarterly business review): headcount and people costs', sub: '12-month forecast from Nov 2026 to Oct 2027, three hiring scenarios, and the decisions in front of us.', meta: 'QBR · baseline ' + AS_OF },
+        { k: 'finding', tone: 'warn', title: 'The Base plan fits the budget; Growth adds 2 hires and runs $243,367 over', points: [
+          'Base: 2 approved hires, 20 people by Oct 2027, on budget.',
+          'Growth: adds the 2 proposed hires (Account Executive and Product Manager), 22 people.',
+          'Lean: moves the Support Specialist start to Mar 2027 and saves $24,700.'] },
+        { k: 'metrics', title: 'We start the forecast with 18 people and 2 approved hires', cards: [
+          ['Opening headcount', '18', 'As of Oct 13, 2026', ''], ['Base 12-month cost', '$3.14M', 'Cash cost, Nov–Oct', 'accent'],
+          ['Approved hires', '2', 'Engineering and Support', ''], ['Proposed hires', '2', 'Awaiting a decision', 'warn']],
+          src: 'Fictional planning model. Employer taxes estimated at 10%; benefits at $900 per month per hire.' },
+        { k: 'scenarios', title: 'Growth costs $243,367 more than Base over 12 months', max: 3.38, scen: [
+          ['base', 'Base', 3.14, [['12-month cost', '$3.14M'], ['vs budget', 'On budget'], ['Ending headcount', '20'], ['Planned starts', '2']], 'Approved hires only.'],
+          ['lean', 'Lean', 3.11, [['12-month cost', '$3.11M'], ['vs budget', '$25K under'], ['Ending headcount', '20'], ['Planned starts', '2']], 'Support Specialist starts Mar 2027.'],
+          ['growth', 'Growth', 3.38, [['12-month cost', '$3.38M'], ['vs budget', '$243K over'], ['Ending headcount', '22'], ['Planned starts', '4']], 'Adds the 2 proposed hires.']] },
+        { k: 'table', title: 'Two proposed hires decide which scenario we fund', cols: ['Requisition', 'Role', 'Start', 'Salary', 'Status'], num: [3], rows: [
+          ['RQ201', 'Software Engineer · New York', 'Nov 1, 2026', '$150,000', ['Approved', 'accent']],
+          ['RQ202', 'Support Specialist · New York', 'Dec 1, 2026', '$80,000', ['Approved', 'accent']],
+          ['RQ203', 'Account Executive · Miami', 'Jan 1, 2027', '$110,000', ['Proposed', 'warn']],
+          ['RQ204', 'Product Manager · New York', 'Mar 1, 2027', '$160,000', ['Proposed', 'warn']]] }
+      ]
+    },
+    investor: {
+      kind: 'Pitch or investor deck', title: 'Board update: headcount plan', audience: 'Board and investors',
+      slides: [
+        { k: 'title', title: 'Headcount plan and people costs for the next 12 months', sub: 'The hiring plan we are asking the board to fund, what it costs, and the controls in place first.', meta: 'Board update · ' + AS_OF },
+        { k: 'finding', title: 'The decision: fund Base (2 hires, on budget) or Growth (4 hires, $243,367 over)', points: [
+          'Both plans keep the current team of 18 and the 2 approved hires.',
+          'Growth adds an Account Executive in Miami (Jan 2027) and a Product Manager in New York (Mar 2027).',
+          'Over 12 months, Growth costs $3.38M against $3.14M for Base.'] },
+        { k: 'scenarios', title: 'Growth adds 2 people by Oct 2027 for $243,367 more', max: 3.38, scen: [
+          ['base', 'Base', 3.14, [['12-month cost', '$3.14M'], ['Ending headcount', '20'], ['Hires', '2']], 'Funded in the current budget.'],
+          ['lean', 'Lean', 3.11, [['12-month cost', '$3.11M'], ['Ending headcount', '20'], ['Hires', '2']], 'Delays one hire to Mar 2027.'],
+          ['growth', 'Growth', 3.38, [['12-month cost', '$3.38M'], ['Ending headcount', '22'], ['Hires', '4']], 'Needs $243,367 above budget.']] },
+        { k: 'metrics', title: 'Today the team costs about $107K in gross pay per pay period', cards: [
+          ['Team size', '18', 'After 2 departures and 3 starts', ''], ['Gross pay per period', '$106.6K', 'Expected for Oct 1–15', ''],
+          ['Medical invoice', '$17,860', 'October, before corrections', ''], ['Employer taxes', '~10%', 'Planning estimate', '']],
+          src: 'Pay is semi-monthly. Figures are fictional and exclude equity.' },
+        { k: 'timeline', title: 'Controls are being put in place before we add headcount', items: [
+          ['Oct 15', 'Every payroll reconciled before release', 'First run blocked by 7 items', 'crit'],
+          ['Oct 16', 'Obligations calendar with owners', 'In progress', 'warn'],
+          ['Dec 11', 'Metric definitions agreed with Finance', 'Planned', ''],
+          ['Dec 18', 'Nightly data checks and sync alerts', 'Planned', ''],
+          ['Dec 22', 'Role-based access to pay data', 'Planned', '']] }
+      ]
+    },
+    sales: {
+      kind: 'Sales deck for a specific prospect', title: 'Candidate pitch: Account Executive, Miami', audience: 'Finalist for requisition RQ203',
+      slides: [
+        { k: 'title', title: 'Account Executive, Miami: what the role offers you', sub: 'Prepared for one finalist. The role, the package, and exactly what happens between offer and first paycheck.', meta: 'Candidate pitch · requisition RQ203' },
+        { k: 'finding', tone: 'warn', title: 'This role is proposed for Jan 1, 2027 and needs budget approval before we can make an offer', points: [
+          'We are sharing the plan early so you can decide with full information.',
+          'Approval depends on the Growth hiring plan, which leadership is reviewing now.',
+          'If it is approved, you will have a written offer within one week.'] },
+        { k: 'metrics', title: 'The package: $110,000 base, medical from your first full month', cards: [
+          ['Base salary', '$110,000', 'Level L3, Miami', 'accent'], ['Medical, employee only', '$108/mo', 'Your share; company pays the rest', ''],
+          ['Coverage starts', '1st of month', 'After your start date', ''], ['Proposed start', 'Jan 1, 2027', 'Pending approval', 'warn']],
+          src: 'Fictional figures. Employee share shown as two $54 deductions per month.' },
+        { k: 'timeline', title: 'From signed offer to a correct first paycheck, every step is checked', items: [
+          ['Offer', 'Signed offer matches your record', 'Checked before day 1'],
+          ['Day 1', 'Sales tools ready', 'Salesforce, Gong and Slack'],
+          ['By day 3', 'Form I-9 completed', 'Employment eligibility check'],
+          ['Month 2', 'Medical coverage starts', 'First of the month after you start'],
+          ['First payday', 'Pay reconciled before release', 'Against your signed offer']] },
+        { k: 'actions', title: 'You would work with three people from day one', cards: [
+          ['Your manager', 'Sales leadership', 'Sets your territory, first-quarter goals and first-week plan.', 'Meets you on day 1'],
+          ['Your People Ops partner', 'One point of contact', 'Owns your onboarding checklist and answers pay or benefits questions.', 'Response: 2 business days'],
+          ['IT', 'Tools and access', 'Has your accounts and laptop ready before you arrive.', 'Ready on day 1']] }
+      ]
+    },
+    battlecard: {
+      kind: 'Competitive battlecard', title: 'Hiring battlecard: Account Executive offers', audience: 'Recruiters and hiring managers',
+      slides: [
+        { k: 'title', title: 'Hiring battlecard: Account Executive offers in Miami', sub: 'How our offer compares, the objections we hear, and how to answer them with facts.', meta: 'Battlecard · illustrative benchmarks, not market data' },
+        { k: 'finding', title: 'Lead with low medical cost and a verified first paycheck, not with commission promises', points: [
+          'Our base of $110,000 sits between the two illustrative competitors.',
+          'Employee-only medical costs the hire $108 per month.',
+          'We can show exactly how pay is checked before every release.'] },
+        { k: 'table', title: 'Our offer is strongest on benefits cost and pay accuracy', cols: ['Factor', 'Our offer', 'Competitor A', 'Competitor B'], rows: [
+          ['Base salary', '$110,000', '$105,000', '$118,000'],
+          ['Medical, employee only', '$108 per month', '$160 per month', '$95 per month'],
+          ['Coverage starts', '1st of next month', 'After 60 days', '1st of next month'],
+          ['Payroll checked before release', 'Every run', 'Not stated', 'Not stated'],
+          ['Start date', 'Jan 1, 2027 (pending)', 'Immediate', 'Flexible']],
+          src: 'Competitor figures are illustrative placeholders. Replace them with verified offer data before use.' },
+        { k: 'table', title: 'Answer each objection with a fact the candidate can check', cols: ['What we hear', 'What to say'], rows: [
+          ['“Competitor B pays more base.”', 'Compare total cost of coverage too: our medical share is lower and starts sooner than Competitor A.'],
+          ['“Why can’t you start me now?”', 'The role is pending budget approval. We will confirm in writing within one week of approval.'],
+          ['“How do I know my pay will be right?”', 'Every payroll is reconciled against signed offers and approved changes before release.']] },
+        { k: 'actions', title: 'Do three things in every final-round call', cards: [
+          ['Recruiter', 'Name the status plainly', 'Say the role is proposed and pending approval. Do not promise a start date.', 'Every call'],
+          ['Recruiter', 'Use checkable facts', 'Quote salary, medical share and coverage start. Avoid claims you cannot show.', 'Every call'],
+          ['Hiring manager', 'Share the first-week plan', 'Walk through tools, territory and who they meet on day 1.', 'Final round']] }
+      ]
+    },
+    campaign: {
+      kind: 'Campaign recap', title: 'Open enrollment campaign recap', audience: 'Benefits, People Ops and Finance',
+      slides: [
+        { k: 'title', title: '2027 open enrollment: campaign recap', sub: 'Plan, launch dates and the measures we will report once the window closes on Nov 16.', meta: 'Campaign recap · pre-launch as of ' + AS_OF },
+        { k: 'finding', tone: 'warn', title: 'The campaign has not launched; the guide ships Oct 26 once the 2027 renewal is decided', points: [
+          'The renewal decision with the broker is due Oct 20.',
+          'Enrollment runs Nov 2 to Nov 16. Results on this deck stay pending until then.',
+          'We set the recap measures now so the results are reported the same way every year.'] },
+        { k: 'timeline', title: 'Five dates take the campaign from decision to recap', items: [
+          ['Oct 20', 'Renewal decision', 'With the broker', 'warn'],
+          ['Oct 26', 'Guide sent to employees', 'Plans, costs, how to add dependents', 'warn'],
+          ['Nov 2', 'Window opens', 'Enrollment in the benefits platform', ''],
+          ['Nov 16', 'Window closes', 'Changes after this need a qualifying event', ''],
+          ['Nov 30', 'Recap published', 'Measures below filled in', '']] },
+        { k: 'metrics', title: 'We will measure completion, accuracy and carrier errors', cards: [
+          ['Eligible employees', '18', 'Current team', ''], ['Enrolled in medical today', '15', 'Including 1 starting Nov 1', ''],
+          ['Completion rate', 'Pending', 'Reported Nov 30', 'warn'], ['Carrier file errors', 'Pending', 'Target: zero', 'warn']] },
+        { k: 'table', title: 'Fix four benefits mismatches before the window opens', cols: ['Employee', 'Mismatch', 'Owner'], rows: [
+          ['Kwame Mensah (E106)', ['Enrolled employee + spouse; carrier bills employee only', 'crit'], 'Benefits'],
+          ['Priya Raman (E103)', ['Deduction is $54; employee + spouse should be $160', 'crit'], 'Payroll'],
+          ['Ben Carter (E116)', ['Billed for October; coverage ended Sep 30', 'crit'], 'Benefits'],
+          ['Sam Whitaker (E120)', ['Enrolled Oct 1; not on the carrier invoice', 'crit'], 'Benefits']],
+          src: 'Source: October carrier invoice vs HRIS enrollment vs Oct 15 register deductions.' }
+      ]
+    }
+  };
+
+  const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>';
+
+  function deckShelf(ids, opts) {
+    opts = opts || {};
+    const cards = ids.map(id => {
+      const d = DECKS[id];
+      return `<div class="card deck-card">
+        <div class="deck-thumb" aria-hidden="true"><i></i><b>${E(d.title)}</b><span>${d.slides.length} slides · 16:9</span></div>
+        <span class="eyebrow">${E(d.kind)}</span>
+        <p class="muted">For: ${E(d.audience)}</p>
+        <button type="button" class="btn" data-deck="${id}">${ICON}Open deck</button>
+      </div>`;
+    }).join('');
+    return `<div class="section deck-shelf"${opts.id ? ` id="${opts.id}"` : ''}><div class="section-head"><h2>${E(opts.title || 'Presentation decks')}</h2><span class="muted">${E(opts.note || '16:9 slides built from this tab’s data · fictional · as of ' + AS_OF)}</span></div>${opts.lead || ''}<div class="cards">${cards}</div></div>`;
+  }
+
+  function tag(v) { return Array.isArray(v) ? v : [v, '']; }
+  function slideBody(s) {
+    if (s.k === 'title') return `<div class="s-body"><div class="s-kicker">${E(s.meta)}</div><h1>${E(s.title)}</h1><p>${E(s.sub)}</p></div>`;
+    let body = '';
+    if (s.k === 'finding') body = `<div class="s-finding ${s.tone || ''}"><div>${s.tone ? `<span class="s-tag ${s.tone}">${TONE_LABEL[s.tone]}</span>` : ''}<ul>${s.points.map(p => `<li>${E(p)}</li>`).join('')}</ul></div></div>`;
+    if (s.k === 'metrics') body = `<div class="s-metrics" style="--n:${s.cards.length}">${s.cards.map(([l, v, d, t]) => `<div class="s-metric ${t || ''}"><span class="l">${E(l)}</span><span class="v">${E(v)}</span><span class="d">${E(d)}</span></div>`).join('')}</div>`;
+    if (s.k === 'table') body = `<table class="s-table"><thead><tr>${s.cols.map((c, i) => `<th${(s.num || []).includes(i) ? ' class="n"' : ''}>${E(c)}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r => `<tr>${r.map((c, i) => { const [v, t] = tag(c); const isN = (s.num || []).includes(i); const pill = Array.isArray(c) && !isN && /^(Approved|Proposed|Open|Pending|Verified)$/.test(v); return `<td class="${isN ? 'n ' : ''}${(s.nw || []).includes(i) ? 'nw ' : ''}${pill ? '' : t}">${pill ? `<span class="s-tag ${t}">${E(v)}</span>` : E(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table>`;
+    if (s.k === 'scenarios') body = `<div class="s-scen">${s.scen.map(([k, name, val, rows, note]) => `<div class="s-sc ${k}"><h3>${E(name)}</h3><div class="bar" role="img" aria-label="${E(name)}: $${val}M"><span style="width:${Math.round(val / s.max * 100)}%"></span></div><dl>${rows.map(([a, b]) => `<dt>${E(a)}</dt><dd>${E(b)}</dd>`).join('')}</dl><p>${E(note)}</p></div>`).join('')}</div><p class="s-legend">Scenario colors identify plans only. Blue is the baseline, gray is lean, purple is growth; none means good or bad.</p>`;
+    if (s.k === 'timeline') body = `<ol class="s-tl" style="--n:${s.items.length}">${s.items.map(([dt, b, x, t]) => `<li class="${t || ''}"><span class="dt">${E(dt)}</span><b>${E(b)}</b><span class="x">${E(x)}</span>${t && TONE_LABEL[t] ? `<span><span class="s-tag ${t}">${t === 'crit' ? 'Blocked' : t === 'warn' ? 'Pending' : 'Verified'}</span></span>` : ''}</li>`).join('')}</ol>`;
+    if (s.k === 'actions') body = `<div class="s-actions" style="--n:${s.cards.length}">${s.cards.map(([who, b, p, due]) => `<div class="s-act"><span class="who">${E(who)}</span><b>${E(b)}</b><p>${E(p)}</p><span class="due">${E(due)}</span></div>`).join('')}</div>`;
+    return `<h2 class="s-title">${E(s.title)}</h2><div class="s-body">${body}${s.src ? `<p class="s-src">${E(s.src)}</p>` : ''}</div>`;
+  }
+  function slideHTML(d, i) {
+    const s = d.slides[i];
+    return `<section class="slide k-${s.k}" aria-label="Slide ${i + 1} of ${d.slides.length}: ${E(s.title)}">${slideBody(s)}
+      <div class="s-foot"><span><b>People Ops</b> · ${E(d.kind)}</span><span>Fictional data · ${AS_OF}</span><span class="s-num">${i + 1} / ${d.slides.length}</span></div></section>`;
+  }
+
+  let cur = null, idx = 0, returnFocus = null, root = null;
+  function fit() {
+    if (!root) return;
+    const stage = root.querySelector('.deck-stage'), fitEl = root.querySelector('.deck-fit'), sl = root.querySelector('.slide');
+    const w = stage.clientWidth - 32, h = stage.clientHeight - 8;
+    const k = Math.max(0.1, Math.min(w / 1280, h / 720));
+    fitEl.style.width = 1280 * k + 'px'; fitEl.style.height = 720 * k + 'px';
+    sl.style.transform = `scale(${k})`;
+  }
+  function paint() {
+    const d = DECKS[cur];
+    root.querySelector('.deck-fit').innerHTML = slideHTML(d, idx);
+    root.querySelector('[data-deckpos]').textContent = `${idx + 1} / ${d.slides.length}`;
+    root.querySelector('[data-decknav="prev"]').disabled = idx === 0;
+    root.querySelector('[data-decknav="next"]').disabled = idx === d.slides.length - 1;
+    root.querySelectorAll('.deck-dots button').forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
+    root.querySelector('.deck-live').textContent = `Slide ${idx + 1} of ${d.slides.length}: ${d.slides[idx].title}`;
+    fit();
+  }
+  function open(id, from) {
+    if (!DECKS[id]) return;
+    cur = id; idx = 0; returnFocus = from || document.activeElement;
+    const d = DECKS[id];
+    root = document.createElement('div');
+    root.className = 'deck-view'; root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-label', d.title);
+    root.innerHTML = `<div class="deck-bar"><div style="min-width:0;display:grid"><b>${E(d.title)}</b><span class="hide-sm" style="color:#95A2B4">${E(d.kind)} · for ${E(d.audience)}</span></div>
+        <div style="display:flex;gap:8px"><button type="button" class="btn hide-sm" data-decknav="print">Print / PDF</button><button type="button" class="btn" data-decknav="close" aria-label="Close deck">Close ✕</button></div></div>
+      <div class="deck-stage"><div class="deck-fit"></div></div>
+      <div class="deck-nav"><button type="button" class="btn" data-decknav="prev" aria-label="Previous slide">←</button>
+        <div class="deck-dots">${d.slides.map((_, i) => `<button type="button" data-deckgo="${i}" aria-label="Go to slide ${i + 1}"></button>`).join('')}</div>
+        <span data-deckpos></span><button type="button" class="btn" data-decknav="next" aria-label="Next slide">→</button></div>
+      <div class="deck-live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>`;
+    document.body.appendChild(root); document.body.classList.add('deck-open');
+    paint();
+    root.querySelector('[data-decknav="close"]').focus();
+    if (window.clarity) try { window.clarity('event', 'deck_open_' + id); } catch (e) { /* analytics optional */ }
+  }
+  function close() {
+    if (!root) return;
+    root.remove(); root = null; cur = null; document.body.classList.remove('deck-open');
+    if (returnFocus && document.contains(returnFocus)) returnFocus.focus();
+    else if (returnFocus && returnFocus.dataset && returnFocus.dataset.deck) { const b = document.querySelector(`[data-deck="${returnFocus.dataset.deck}"]`); if (b) b.focus(); }
+  }
+  function go(n) { const d = DECKS[cur]; idx = Math.max(0, Math.min(d.slides.length - 1, n)); paint(); }
+  function printDeck() {
+    const d = DECKS[cur];
+    const w = window.open('', '_blank'); if (!w) return;
+    const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${E(d.title)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><style>${css}
+      @page { size: 1280px 720px; margin: 0; } body { margin: 0; background: #fff; } .pg { position: relative; width: 1280px; height: 720px; page-break-after: always; break-after: page; } .pg .slide { box-shadow: none; border-radius: 0; }</style></head>
+      <body>${d.slides.map((_, i) => `<div class="pg">${slideHTML(d, i)}</div>`).join('')}<script>document.fonts.ready.then(() => setTimeout(() => window.print(), 300));<\/script></body></html>`);
+    w.document.close();
+  }
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest && e.target.closest('[data-deck], [data-decknav], [data-deckgo]');
+    if (!t) { if (root && e.target === root.querySelector('.deck-stage')) close(); return; }
+    e.stopPropagation();
+    if (t.dataset.deck) return open(t.dataset.deck, t);
+    if (t.dataset.deckgo) return go(+t.dataset.deckgo);
+    const a = t.dataset.decknav;
+    if (a === 'close') close(); else if (a === 'prev') go(idx - 1); else if (a === 'next') go(idx + 1); else if (a === 'print') printDeck();
+  }, true);
+  document.addEventListener('keydown', e => {
+    if (!root) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key) && !e.target.closest('button')) { e.preventDefault(); go(idx + 1); }
+    else if (['ArrowRight', 'PageDown'].includes(e.key)) { e.preventDefault(); go(idx + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(idx - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(DECKS[cur].slides.length - 1); }
+    else if (e.key === 'Tab') { const f = [...root.querySelectorAll('button:not(:disabled)')]; const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); } }
+    e.stopPropagation();
+  }, true);
+  window.addEventListener('resize', fit);
+
+  window.DECKS = DECKS;
+  window.deckShelf = deckShelf;
+  window.openDeck = open;
+})();
+</script>
 <script>
 (() => {
   /* ---------- helpers ---------- */
@@ -1392,6 +1862,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       <div class="section-head"><h2>Other open items</h2></div>` : ''}
       ${itemList(filtered, { empty: 'Nothing open for this filter.' })}
       <div class="section"><div class="section-head"><h2>Activity log</h2><span class="muted">Saved in this browser</span></div>${logHTML}</div>
+      ${deckShelf(['stakeholder'])}
       ${practice('One shared view that collects flags from the checks below. It can start as a saved board in the existing ticketing tool or a shared sheet fed by scheduled reports. The value is a single list with owners and dates, not new software.',
         'Set priorities each morning, assign owners, resolve exceptions, and decide when payroll is safe to release.')}
     `;
@@ -1522,6 +1993,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
         <p class="muted">Every recurring deadline in one place, each with an owner and proof of completion. Sample work-authorization review alerts appear at 180, 90 and 30 days before expiration, so nothing depends on someone remembering.</p>
       </div>
       ${html}
+      ${deckShelf(['campaign'])}
       ${practice('A shared calendar with a standard template per obligation (owner, source requirement, where proof is saved), plus reminders to Slack. Work authorization dates come from the HRIS. Dates follow IRS, SSA and USCIS rules under the assumptions noted on each item; actual filings depend on the plans, states and countries involved and get confirmed with advisers.',
         'Confirm requirements with counsel and the broker, complete or verify each filing, and decide what to do on any work authorization case.')}
     `;
@@ -1607,6 +2079,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       </div>
       <div class="phase-strip">${phaseHTML}</div>
       ${rows}
+      ${deckShelf(['allhands', 'status'])}
       ${practice('A milestone list in the team’s project tool, reviewed weekly with the manager. Evidence links point to the saved report, policy or system change.',
         'Set the order, agree outcomes with Finance and IT, and decide when a milestone is actually done.')}
     `;
@@ -1751,6 +2224,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       </div>
       <div class="cards">${tplCards}</div>
       ${form}
+      ${deckShelf(['onboarding'], { id: 'onboarding-materials', title: 'Onboarding materials', note: 'What new hires see in week one · matches the 7-step onboarding checklist', lead: '<p class="muted" style="margin:0">Send the deck with the first-week plan. <button type="button" class="btn link" data-action="new-wf" data-tpl="onboarding">Start an onboarding checklist</button></p>' })}
       <div class="section"><div class="section-head"><h2>Active checklists</h2><span class="muted">${state.workflows.length} in progress</span></div>${wfHTML}</div>
       ${practice('Templates in the HRIS or onboarding tool where possible, with each step assigned to a named owner and evidence linked from the task. Offboarding steps trigger from the HRIS last-day field.',
         'Own the templates, check that evidence is real rather than a ticked box, and fix the process behind any step that keeps slipping.')}
@@ -1910,6 +2384,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
         <div class="filters" role="tablist" aria-label="Planner tables">${tabs.map(([k, l]) => `<button class="chip-btn" data-wftab="${k}" aria-pressed="${wf.tab === k}">${l}</button>`).join('')}</div>
         ${wf.tab === 'hires' ? hiresTab : wf.tab === 'current' ? curTab : monTab}
       </div>
+      ${deckShelf(['qbr', 'investor', 'sales', 'battlecard'])}
       ${practice('A planning workbook or the HRIS planning module, refreshed from approved requisitions and payroll each month. Finance owns the budget; People Ops owns the hiring assumptions and timing.',
         'Agree assumptions with Finance, pressure-test timing with hiring managers, and explain variances before anyone asks.')}
       ${wfDrawerHTML()}
