@@ -18,6 +18,6 @@ It's a single self-contained `index.html`. Everything runs in the browser, and p
 
 ## Notes
 
-All names, figures and policies are fictional. Filing dates use stated assumptions and are not legal or tax advice. This is an independent case study, not affiliated with or endorsed by Whop.
+All names, figures and policies are fictional. Filing dates use stated assumptions and are not legal or tax advice.
 
 Prepared by Adam Marks.
