@@ -518,9 +518,11 @@ nav.tabs { background: none; border: 0; padding: 0; }
 }
 
 /* ---------- Workforce & cost planner ---------- */
-:root { --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --budline: #3A3F48; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --budline: #E6E8EC; } }
-:root[data-theme="dark"] { --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --budline: #E6E8EC; }
+:root { --s1:#0B4A63; --s2:#19708A; --s3:#3E98AE; --s4:#7FBCCB; --s5:#BCDCE5; --budline: #3A3F48; --sc-base:#2C47C9; --sc-lean:#6B7789; --sc-growth:#7A3FC4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --s1:#2A86A3; --s2:#46A0B8; --s3:#6CB8CB; --s4:#98D0DC; --s5:#C6E6EE; --budline: #E6E8EC; --sc-base:#8FA3FF; --sc-lean:#A8B5C7; --sc-growth:#B794F6; } }
+:root[data-theme="dark"] { --s1:#2A86A3; --s2:#46A0B8; --s3:#6CB8CB; --s4:#98D0DC; --s5:#C6E6EE; --budline: #E6E8EC; --sc-base:#8FA3FF; --sc-lean:#A8B5C7; --sc-growth:#B794F6; }
+.sc-base { --sc: var(--sc-base); } .sc-lean { --sc: var(--sc-lean); } .sc-growth { --sc: var(--sc-growth); }
+.sw.sc { background: var(--sc); border-radius: 99px; width: 8px; height: 8px; }
 .wf-controls { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; }
 .wf-controls .btn.primary { margin-left: auto; }
 .segctl { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 2px; }
@@ -542,7 +544,7 @@ nav.tabs { background: none; border: 0; padding: 0; }
 .sw.s1, .seg.s1 { background: var(--s1); } .sw.s2, .seg.s2 { background: var(--s2); } .sw.s3, .seg.s3 { background: var(--s3); } .sw.s4, .seg.s4 { background: var(--s4); } .sw.s5, .seg.s5 { background: var(--s5); }
 .sw.dash { width: 16px; height: 0; border-top: 2px dashed var(--budline); border-radius: 0; }
 .sw.line { width: 16px; height: 0; border-radius: 0; }
-.sw.line.sel { border-top: 2px solid var(--accent); } .sw.line.base { border-top: 2px dashed var(--muted); }
+.sw.line.sel { border-top: 2px solid var(--sc, var(--accent)); } .sw.line.base { border-top: 2px dashed var(--sc-base); }
 .wchart { display: grid; grid-template-columns: 48px minmax(0, 1fr); height: 240px; padding-bottom: 22px; }
 .wchart.hc { height: 170px; }
 .yax { position: relative; font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -560,8 +562,8 @@ nav.tabs { background: none; border: 0; padding: 0; }
 .xl { position: absolute; bottom: -20px; left: 0; right: 0; text-align: center; font-size: 0.72rem; color: var(--muted); }
 .wcol.on .xl { color: var(--accent-ink); font-weight: 600; }
 .hc .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.hc-sel { fill: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
-.hc-base { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.hc-sel { fill: none; stroke: var(--sc, var(--accent)); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.hc-base { fill: none; stroke: var(--sc-base); stroke-width: 2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
 .wcol.ghost { z-index: 1; }
 .wf-tip { position: absolute; z-index: 60; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.14); padding: 10px 12px; font-size: 0.8rem; min-width: 200px; pointer-events: none; display: grid; gap: 3px; }
 .wf-tip .row { display: flex; justify-content: space-between; gap: 14px; font-variant-numeric: tabular-nums; }
@@ -1375,9 +1377,9 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       </div>
       <div class="strip">
         <div class="stat"><span class="label">Payroll · Oct 15</span>
-          <span class="value ${payCrit.length ? 'crit' : 'ok'}">${payCrit.length ? 'Release blocked' : 'Ready to release'}</span>
+          <span class="value ${payCrit.length ? 'crit' : 'warn'}">${payCrit.length ? 'Release blocked' : 'Ready to release'}</span>
           <span class="sub">${payCrit.length ? `${payCrit.length} critical item${payCrit.length > 1 ? 's' : ''} before Oct 14 release` : 'No critical payroll items open'}</span></div>
-        <div class="stat"><span class="label">Critical open</span><span class="value ${crit ? 'crit' : 'ok'}">${crit}</span><span class="sub">of ${open.length} open items</span></div>
+        <div class="stat"><span class="label">Critical open</span><span class="value ${crit ? 'crit' : ''}">${crit}</span><span class="sub">of ${open.length} open items</span></div>
         <div class="stat"><span class="label">Due within 7 days</span><span class="value">${week}</span><span class="sub">including overdue</span></div>
         <div class="stat"><span class="label">Resolved</span><span class="value">${resolvedCount}</span><span class="sub">each with a dated note</span></div>
       </div>
@@ -1536,7 +1538,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       <div class="table-wrap"><table>
         <thead><tr><th>Rule</th><th>Systems compared</th><th class="num">Records checked</th><th class="num">Open findings</th></tr></thead>
         <tbody>${rules.map(r => { const n = r.findings.filter(f => !isResolved(f.id)).length; const s = r.findings[0] && r.findings[0].sev;
-          return `<tr><td>${esc(r.name)}</td><td class="muted">${esc(r.systems)}</td><td class="num">${r.checked}</td><td class="num">${n ? `<span class="pill ${s}">${n}</span>` : '<span class="pill ok">0</span>'}</td></tr>`; }).join('')}</tbody>
+          return `<tr><td>${esc(r.name)}</td><td class="muted">${esc(r.systems)}</td><td class="num">${r.checked}</td><td class="num">${n ? `<span class="pill ${s}">${n}</span>` : '<span class="pill info">0</span>'}</td></tr>`; }).join('')}</tbody>
         <tfoot><tr><td colspan="3">Total open findings</td><td class="num">${total}</td></tr></tfoot>
       </table></div>
       <div class="section">
@@ -1681,7 +1683,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       </div>
       <div class="strip">
         <div class="stat"><span class="label">Open requests</span><span class="value">${active.length}</span><span class="sub">across ${new Set(active.map(reqOwner)).size} owners</span></div>
-        <div class="stat"><span class="label">Past response target</span><span class="value ${overdue ? 'crit' : 'ok'}">${overdue}</span><span class="sub">as of ${fmt(state.asOf)}</span></div>
+        <div class="stat"><span class="label">Past response target</span><span class="value ${overdue ? 'crit' : ''}">${overdue}</span><span class="sub">as of ${fmt(state.asOf)}</span></div>
         <div class="stat"><span class="label">Private cases open</span><span class="value">${restrictedOpen}</span><span class="sub">subject hidden in the queue</span></div>
         <div class="stat"><span class="label">Closed</span><span class="value">${reqs.length - active.length}</span><span class="sub">each with a resolution note</span></div>
       </div>
@@ -1808,7 +1810,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
     const path = ms => ms.map((m, i) => `${i ? 'L' : 'M'}${i * 100 / 12},${y(m.hc)} L${(i + 1) * 100 / 12},${y(m.hc)}`).join(' ');
     return `<div class="wchart hc"><div class="yax">${[lo, Math.round((lo + hi) / 2), hi].map(v => `<span style="bottom:${100 - y(v)}%">${v}</span>`).join('')}</div>
       <div class="plot"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        ${RB ? `<path d="${path(RB.months)}" class="hc-base"/>` : ''}<path d="${path(R.months)}" class="hc-sel"/></svg>
+        ${RB ? `<path d="${path(RB.months)}" class="hc-base"/>` : ''}<path d="${path(R.months)}" class="hc-sel sc-${W().sel}"/></svg>
         ${R.months.map((m, i) => `<button type="button" class="wcol ghost${W().month === HZ[i].key ? ' on' : ''}" data-wfm="${i}" data-hc="1" aria-label="${HZ[i].long}: ${m.hc} people${RB ? `, Base ${RB.months[i].hc}` : ''}"><span class="xl">${HZ[i].label}</span></button>`).join('')}
       </div></div>`;
   }
@@ -1828,10 +1830,10 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
     const diffBase = RB ? r2(R.total - RB.total) : 0;
     const eligible = sc.hires.filter(h => h.include && h.status !== 'Cancelled' && h.type === 'growth' && !h.locked).length;
     const mi = wf.month ? HZ.findIndex(m => m.key === wf.month) : -1;
-    const scenBtns = Object.keys(WF_SCEN_LABEL).map(k => `<button type="button" class="seg-btn" data-wfscen="${k}" aria-pressed="${wf.sel === k}">${WF_SCEN_LABEL[k]}${wf.scen[k].modified ? ' <em>Modified</em>' : ''}</button>`).join('');
+    const scenBtns = Object.keys(WF_SCEN_LABEL).map(k => `<button type="button" class="seg-btn" data-wfscen="${k}" aria-pressed="${wf.sel === k}"><i class="sw sc sc-${k}" aria-hidden="true"></i>${WF_SCEN_LABEL[k]}${wf.scen[k].modified ? ' <em>Modified</em>' : ''}</button>`).join('');
     const kpis = money ? `
       <div class="stat"><span class="label">Estimated cash cost · 12 months</span><span class="value">${kmoney(R.total)}</span><span class="sub">${partial ? 'Partial: some records unpriced · ' : ''}${RB ? `${diffBase >= 0 ? '+' : '−'}${money0(Math.abs(diffBase))} vs Base` : 'This is the Base scenario'}</span></div>
-      <div class="stat"><span class="label">Budget headroom</span><span class="value ${budTot ? (over ? 'crit' : 'ok') : ''}">${budTot ? kmoney(Math.abs(head)) : '—'}</span><span class="sub">${budTot ? (Math.abs(head) < 0.5 ? 'On budget' : over ? 'Over budget' : 'Under budget') : 'Add a budget to see headroom.'}</span></div>` : '';
+      <div class="stat"><span class="label">Budget headroom</span><span class="value ${budTot ? (over ? 'crit' : '') : ''}">${budTot ? kmoney(Math.abs(head)) : '—'}</span><span class="sub">${budTot ? (Math.abs(head) < 0.5 ? 'On budget' : over ? 'Over budget' : 'Under budget') : 'Add a budget to see headroom.'}</span></div>` : '';
     const hcKpis = `
       <div class="stat"><span class="label">Ending headcount · Oct 31, 2027</span><span class="value">${R.ending}</span><span class="sub">${R.opening} opening + ${R.startsGrowth + R.startsBackfill} starts − ${R.exits} exit${R.exits === 1 ? '' : 's'}</span></div>
       <div class="stat"><span class="label">Planned starts</span><span class="value">${R.startsGrowth + R.startsBackfill}</span><span class="sub">${R.startsGrowth} growth · ${R.startsBackfill} backfill</span></div>`;
@@ -1849,7 +1851,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       return `<tr class="${excluded ? 'muted-row' : ''}">
         <td data-l="Role"><b>${esc(h.role)}</b><div class="id">${h.id}${bf ? ` · backfill for ${esc(WF_CURRENT.find(e => e.id === h.linked).name)}` : ''}</div></td>
         <td data-l="Department">${esc(h.dept)}</td><td data-l="Level · location">${esc(h.level || '—')} · ${esc(h.loc)}</td>
-        <td data-l="Status"><span class="pill ${h.status === 'Approved' ? 'ok' : h.status === 'Proposed' ? 'accent' : 'info'}">${h.status}</span>${excluded ? ' <span class="pill info">Excluded</span>' : ''}</td>
+        <td data-l="Status"><span class="pill ${h.status === 'Approved' ? 'accent' : h.status === 'Proposed' ? 'warn' : 'info'}">${h.status}</span>${excluded ? ' <span class="pill info">Excluded</span>' : ''}</td>
         <td data-l="Effective start">${fmt(eff.start, true)}${eff.start !== h.start && !bf ? `<div class="id">saved ${fmt(h.start)}</div>` : ''}${outHz ? '<div class="id">Starts after this forecast period; excluded from its totals.</div>' : ''}</td>
         ${money ? `<td data-l="Annual salary" class="num">${h.salary == null || h.salary === '' ? '<span class="pill warn">Unpriced</span>' : money0(h.salary)}</td><td data-l="In-period cost" class="num">${excluded ? '—' : money0(c.cost)}</td>` : ''}
         <td data-l="" class="act">${money && !bf ? `<button class="btn link" data-wfedit="${h.id}">Edit</button><button class="btn link" data-wftoggle="${h.id}">${h.include ? 'Exclude' : 'Include'}</button>` : bf && money ? `<button class="btn link" data-wfdep="${h.linked}">Edit departure</button>` : ''}</td></tr>`;
@@ -1861,7 +1863,7 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
       const d = sc.departures.find(x => x.emp === e.id); const c = R.per[e.id] || [];
       const cost = mi >= 0 ? c[mi] : c.reduce((s, v) => s + v, 0);
       return `<tr><td data-l="Employee"><b>${esc(e.name)}</b><div class="id">${e.id}${e.note && money ? ` · ${esc(e.note)}` : ''}</div></td><td data-l="Department">${esc(e.dept)}</td><td data-l="Location">${esc(e.loc)}</td>
-        <td data-l="Status">${d ? `<span class="pill warn">Departs ${fmt(d.exit)}</span>${d.backfill ? ` <span class="pill info">Backfill ${fmt(addMonths(firstOfNext(d.exit), d.vacant || 0))}</span>` : ''}` : '<span class="pill ok">Active</span>'}</td>
+        <td data-l="Status">${d ? `<span class="pill warn">Departs ${fmt(d.exit)}</span>${d.backfill ? ` <span class="pill info">Backfill ${fmt(addMonths(firstOfNext(d.exit), d.vacant || 0))}</span>` : ''}` : '<span class="pill info">Active</span>'}</td>
         ${money ? `<td data-l="Annual salary" class="num">${money0(e.salary)}</td><td data-l="${mi >= 0 ? HZ[mi].label + ' cost' : '12-month cost'}" class="num">${money0(cost || 0)}</td>` : ''}
         <td class="act" data-l="">${money ? `<button class="btn link" data-wfdep="${e.id}">${d ? 'Edit departure' : 'Plan departure'}</button>` : ''}</td></tr>`;
     }).join('');
@@ -1896,12 +1898,12 @@ button.phase:focus-visible { outline: 2px solid var(--accent); outline-offset: 2
         ${R.equity ? `<p class="why">Noncash equity expense (estimate): ${money0(R.equity)} over the period, shown separately and excluded from cash cost and headroom.</p>` : ''}
       </div>` : ''}
       <div class="card">
-        <div class="section-head"><h3>Headcount at month end</h3><span class="legend">${RB ? `<span><i class="sw line sel"></i>${WF_SCEN_LABEL[wf.sel]}</span><span><i class="sw line base"></i>Base</span>` : `<span><i class="sw line sel"></i>${WF_SCEN_LABEL[wf.sel]}</span>`}</span></div>
+        <div class="section-head"><h3>Headcount at month end</h3><span class="legend">${RB ? `<span><i class="sw line sel sc-${wf.sel}"></i>${WF_SCEN_LABEL[wf.sel]}</span><span><i class="sw line base"></i>Base</span>` : `<span><i class="sw line sel sc-${wf.sel}"></i>${WF_SCEN_LABEL[wf.sel]}</span>`}</span></div>
         ${wfHcChart(R, RB)}
       </div>
       ${ex ? `<div class="card" id="wf-drivers">
         <div class="section-head"><h3>What changed from Base?</h3><span class="muted" title="${esc(tip)}">${ex.diff >= 0 ? '+' : '−'}${money0(Math.abs(ex.diff))} total · <u>how it’s split</u></span></div>
-        <ul class="drivers">${ex.rows.map(([l, v, d]) => `<li><span>${l}${d ? `<small>${esc(d)}</small>` : ''}</span><b class="${v > 0.5 ? 'var-pos' : v < -0.5 ? 'ok-text' : 'muted'}">${Math.abs(v) < 0.5 ? '—' : (v > 0 ? '+' : '−') + money0(Math.abs(v))}</b></li>`).join('')}</ul>
+        <ul class="drivers">${ex.rows.map(([l, v, d]) => `<li><span>${l}${d ? `<small>${esc(d)}</small>` : ''}</span><b class="${v > 0.5 ? 'var-pos' : 'muted'}">${Math.abs(v) < 0.5 ? '—' : (v > 0 ? '+' : '−') + money0(Math.abs(v))}</b></li>`).join('')}</ul>
         <p class="why">${esc(tip)}</p>
       </div>` : money && wf.sel === 'base' ? '' : ''}
       <div class="section">
